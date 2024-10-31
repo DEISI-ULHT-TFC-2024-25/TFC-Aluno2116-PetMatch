@@ -13,7 +13,7 @@ class Associacao {
   String site;
   int nif; //id
   //preferencias
-  List<Funcionalidades?> statusArray = [];
+  List<Funcionalidades?> funcionalidades = [];
 
   // Construtor da classe
   Associacao({
@@ -28,10 +28,7 @@ class Associacao {
     required this.morada,
     required this.site,
     required this.nif,
-
-    // TODO descobrir como passar o array das funcionalidades
-
-
+    required this.funcionalidades,
   });
 
   factory Associacao.fromMap(Map<String, dynamic> map) {
@@ -47,11 +44,9 @@ class Associacao {
       morada: map['morada'],
       site: map['site'],
       nif: map['nif'],
-
-      //TODO ver como ler o list
+      funcionalidades: [],
     );
   }
-
 
   // Método para converter o objeto User em um mapa (útil para converter o objeto em JSON)
   Map<String, dynamic> toMap() {
@@ -66,12 +61,7 @@ class Associacao {
       'morada': morada,
       'site': site,
       'nif': nif,
-
-      // TODO mudar a considerar o novo array
-      
+      'funcionalidades': funcionalidades
     };
   }
-
-  // Método para imprimir informações do utilizador (opcional)
-  
 }

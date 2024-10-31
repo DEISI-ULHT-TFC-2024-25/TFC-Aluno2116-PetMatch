@@ -42,9 +42,7 @@ class RegistrationScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => userType == 'Utilizador'
-                        ? Criarutilizador()
-                        : Criarassociacao(),
+                    builder: (context) => userType == 'Utilizador' ? Criarutilizador() : Criarassociacao(),
                   ),
                 );
               },

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tinder_para_caes/screens/homeScreen.dart';
+import 'screens/login.dart';
+import 'screens/registo.dart';
+import 'screens/homeScreen.dart';
 
 void main() {
   runApp(MyApp());
