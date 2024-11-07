@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tinder_para_caes/screens/escolherUtiliAssoci.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -39,8 +40,13 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const Spacer(),
             ElevatedButton(
-              onPressed: () {},
-              child: const Text('Efectuar Registo...'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EscolherUtiliAssoci()),
+                );
+              },
+              child: Text('Efectuar Registo'),
             ),
           ],
         ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'registo.dart';
+import 'package:tinder_para_caes/screens/criarAssociacao.dart';
+import 'package:tinder_para_caes/screens/criarUtilizador.dart';
 
-class HomeScreen extends StatelessWidget {
+
+class EscolherUtiliAssoci extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +18,7 @@ class HomeScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => RegistrationScreen(userType: 'Utilizador')),
+                  MaterialPageRoute(builder: (context) => Criarutilizador()),
                 );
               },
               child: Text('Utilizador'),
@@ -26,7 +28,7 @@ class HomeScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => RegistrationScreen(userType: 'Associação')),
+                  MaterialPageRoute(builder: (context) => Criarassociacao()),
                 );
               },
               child: Text('Associação'),
