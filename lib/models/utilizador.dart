@@ -1,25 +1,25 @@
 class Utilizador {
     int nif; //id dos utilizadores
-    String nomeCompleto;
-    int telemovel;
-    bool maiorDeIdade;
-    int sexo; //0 - Femnino, 1 - Masculino, 2 - Outros
+    String fullName;
+    int cellphone;
+    bool isAdult;
+    int gender; //0 - Femnino, 1 - Masculino, 2 - Outros
     String email;
-    String morada;
-    String codigoPostal;
-    String passe;
+    String address;
+    String zipCode;
+    String password;
     
     // Construtor da classe
     Utilizador({
     required this.nif,
-    required this.nomeCompleto,
-    required this.telemovel,
-    required this.maiorDeIdade,
-    required this.sexo,
+    required this.fullName,
+    required this.cellphone,
+    required this.isAdult,
+    required this.gender,
     required this.email,
-    required this.morada,
-    required this.codigoPostal,
-    required this.passe,
+    required this.address,
+    required this.zipCode,
+    required this.password,
     }) ;
 
 

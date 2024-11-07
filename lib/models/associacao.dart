@@ -1,15 +1,15 @@
 import 'funcionalidades.dart';
 
 class Associacao {
-  String nome;
+  String name;
   String sigla;
-  String emailGeral;
-  String emailParaAlgumaCoisa;
-  int telemovelPrincipal;
-  int telemovelSecundario;
-  String localidade;
-  bool mostrarMorada;
-  String morada;
+  String generalEmail;
+  String secundaryEmail;
+  int mainCellphone;
+  int secundaryCellphone;
+  String local;
+  bool showAddress;
+  String address;
   String site;
   int nif; //id
   //preferencias
@@ -17,15 +17,15 @@ class Associacao {
 
   // Construtor da classe
   Associacao({
-    required this.nome,
+    required this.name,
     required this.sigla,
-    required this.emailGeral,
-    required this.emailParaAlgumaCoisa,
-    required this.telemovelPrincipal,
-    required this.telemovelSecundario,
-    required this.localidade,
-    required this.mostrarMorada,
-    required this.morada,
+    required this.generalEmail,
+    required this.secundaryEmail,
+    required this.mainCellphone,
+    required this.secundaryCellphone,
+    required this.local,
+    required this.showAddress,
+    required this.address,
     required this.site,
     required this.nif,
     required this.funcionalidades,
@@ -33,15 +33,15 @@ class Associacao {
 
   factory Associacao.fromMap(Map<String, dynamic> map) {
     return Associacao(
-      nome: map['nome'],
+      name: map['nome'],
       sigla: map['sigla'],
-      emailGeral: map['emailGeral'],
-      emailParaAlgumaCoisa: map['emailParaAlgumaCoisa'],
-      telemovelPrincipal: map['telemovelPrincipal'],
-      telemovelSecundario: map['telemovelSecundario'],
-      localidade: map['localidade'],
-      mostrarMorada: map['mostrarMorada'],
-      morada: map['morada'],
+      generalEmail: map['emailGeral'],
+      secundaryEmail: map['emailParaAlgumaCoisa'],
+      mainCellphone: map['telemovelPrincipal'],
+      secundaryCellphone: map['telemovelSecundario'],
+      local: map['localidade'],
+      showAddress: map['mostrarMorada'],
+      address: map['morada'],
       site: map['site'],
       nif: map['nif'],
       funcionalidades: [],
@@ -51,14 +51,14 @@ class Associacao {
   // Método para converter o objeto User em um mapa (útil para converter o objeto em JSON)
   Map<String, dynamic> toMap() {
     return {
-      'nome': nome,
-      'emailGeral': emailGeral,
-      'emailParaAlgumaCoisa': emailParaAlgumaCoisa,
-      'telemovelPrincipal': telemovelPrincipal,
-      'telemovelSecundario': telemovelSecundario,
-      'localidade': localidade,
-      'mostrarMorada': mostrarMorada,
-      'morada': morada,
+      'nome': name,
+      'emailGeral': generalEmail,
+      'emailParaAlgumaCoisa': secundaryEmail,
+      'telemovelPrincipal': mainCellphone,
+      'telemovelSecundario': secundaryCellphone,
+      'localidade': local,
+      'mostrarMorada': showAddress,
+      'morada': address,
       'site': site,
       'nif': nif,
       'funcionalidades': funcionalidades
