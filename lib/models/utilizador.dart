@@ -1,3 +1,5 @@
+import 'associacao.dart';
+
 class Utilizador {
     int nif; //id dos utilizadores
     String fullName;
@@ -6,8 +8,11 @@ class Utilizador {
     int gender; //0 - Femnino, 1 - Masculino, 2 - Outros
     String email;
     String address;
+    String zone;
     String zipCode;
     String password;
+
+    List<Associacao?> associacoesEmQueEstaEnvolvido = [];
     
     // Construtor da classe
     Utilizador({
@@ -18,8 +23,10 @@ class Utilizador {
     required this.gender,
     required this.email,
     required this.address,
+    required this.zone,
     required this.zipCode,
     required this.password,
+    required this.associacoesEmQueEstaEnvolvido,
     }) ;
 
 

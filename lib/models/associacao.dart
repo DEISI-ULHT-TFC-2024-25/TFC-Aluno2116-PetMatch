@@ -31,6 +31,11 @@ class Associacao {
     required this.funcionalidades,
   });
 
+  //Associacao.simple()
+  //  : name = "0",
+  //    local = "0";
+
+
   factory Associacao.fromMap(Map<String, dynamic> map) {
     return Associacao(
       name: map['nome'],
