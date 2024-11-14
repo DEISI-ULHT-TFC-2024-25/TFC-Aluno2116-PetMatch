@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:tinder_para_caes/models/animais.dart';
+import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/models/associacao.dart';
 import 'package:tinder_para_caes/models/utilizador.dart';
-import 'package:tinder_para_caes/unitTests/homeScreens.dart';
 
 class Utilizadorhomescreen extends StatelessWidget {
   // Função para filtrar associações sugeridas com base na localidade do usuário
   List<Associacao> getSugestoesAssociacoes() {
-    return Homescreens().todasAssociacoes.where((associacao) =>
-    associacao.local == Utilizador.local&&
-        !Utilizador.associacoesEmQueEstaEnvolvido.contains(associacao)
+    return Associacao.todasAssociacoes.where((associacao) =>
+    associacao.local == Utilizador.user.local &&
+        !Utilizador.user.associacoesEmQueEstaEnvolvido.contains(associacao)
     ).toList();
   }
 
@@ -20,7 +19,7 @@ class Utilizadorhomescreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home - ${Utilizador.name}"),
+        title: Text("Home Page - ${Utilizador.user.fullName}"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -35,14 +34,24 @@ class Utilizadorhomescreen extends StatelessWidget {
             SizedBox(height: 8.0),
             Expanded(
               child: ListView.builder(
-                itemCount: usuario.associacoes.length,
+                itemCount: Utilizador.user.associacoesEmQueEstaEnvolvido.length,
                 itemBuilder: (context, index) {
-                  final associacao = usuario.associacoes[index];
+                  final associacao = Utilizador.user.associacoesEmQueEstaEnvolvido[index];
+
+                  // MARTELADA
+                  var assocName = "";
+                  var local = "";
+                  if(associacao != null) {
+                    assocName = associacao.name;
+                    local = associacao.local;
+                  }
+                  // FIM DA MARTELADA
+
                   return Card(
                     margin: EdgeInsets.symmetric(vertical: 4.0),
                     child: ListTile(
-                      title: Text(associacao.nome),
-                      subtitle: Text("Localidade: ${associacao.localidade}"),
+                      title: Text(assocName),
+                      subtitle: Text("Localidade: ${local}"),
                     ),
                   );
                 },
@@ -64,12 +73,12 @@ class Utilizadorhomescreen extends StatelessWidget {
                   return Card(
                     margin: EdgeInsets.symmetric(vertical: 4.0),
                     child: ListTile(
-                      title: Text(associacao.nome),
-                      subtitle: Text("Localidade: ${associacao.localidade}"),
+                      title: Text(associacao.name),
+                      subtitle: Text("Localidade: ${associacao.local}"),
                       trailing: Icon(Icons.add),
                       onTap: () {
                         // Aqui você pode adicionar lógica para associar ao usuário
-                        print("Adicionar ${associacao.nome}");
+                        print("Adicionar ${associacao.name}");
                       },
                     ),
                   );

@@ -17,7 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const Text("Caso não tenha ainda efetuado o registo", style: TextStyle(fontSize: 16)),
+            const Text("Bem vindo", style: TextStyle(fontSize: 16)),
             const SizedBox(height: 10),
             const TextField(
               decoration: InputDecoration(

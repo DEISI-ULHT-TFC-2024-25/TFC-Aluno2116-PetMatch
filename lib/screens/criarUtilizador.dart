@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tinder_para_caes/screens/utilizadorHomeScreen.dart';
 
 class Criarutilizador extends StatefulWidget {
   @override
@@ -77,7 +78,10 @@ class UtilizadorFormScreenState extends State<Criarutilizador> {
               alignment: Alignment.bottomRight,
               child: ElevatedButton(
                 onPressed: () {
-                  // Lógica para submeter o formulário
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Utilizadorhomescreen()),
+                  );
                 },
                 child: Text('Submeter'),
               ),

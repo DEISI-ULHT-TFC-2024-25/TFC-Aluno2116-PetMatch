@@ -1,4 +1,4 @@
-class Utilizador {
+class Animal {
   int chip; //id dos utilizadores
   String fullName;
   int age;
@@ -11,7 +11,7 @@ class Utilizador {
   //fotos..
 
   // Construtor da classe
-  Utilizador({
+  Animal({
     required this.chip,
     required this.fullName,
     required this.age,

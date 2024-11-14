@@ -8,7 +8,7 @@ class Utilizador {
     int gender; //0 - Femnino, 1 - Masculino, 2 - Outros
     String email;
     String address;
-    String zone;
+    String local;
     String zipCode;
     String password;
 
@@ -23,7 +23,7 @@ class Utilizador {
     required this.gender,
     required this.email,
     required this.address,
-    required this.zone,
+    required this.local,
     required this.zipCode,
     required this.password,
     required this.associacoesEmQueEstaEnvolvido,
@@ -64,8 +64,25 @@ class Utilizador {
     };
     }*/
 
+// Exemplo de dados do utilizador e associações
+    static final Utilizador user = new Utilizador(
+        nif: 1234567,
+        fullName: "Pedro Alves",
+        cellphone: 999999999,
+        isAdult: true,
+        gender: 1,
+        email: "pedro.alves@ulusofona.pt",
+        address: "Campo Grande 376",
+        local: "Lisboa",
+        zipCode: "123456-123",
+        password: "123abc",
 
+        associacoesEmQueEstaEnvolvido: [
+            Associacao(name: "Associação A", local: "Lisboa", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: []),
+            Associacao(name: "Associação B", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: []),
+            Associacao(name: "Associação C", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: []),
+            Associacao(name: "Associação D", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: []),
+
+        ],
+    );
 }
-
-
-
