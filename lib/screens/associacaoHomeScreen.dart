@@ -1,0 +1,94 @@
+import 'package:flutter/material.dart';
+import 'package:tinder_para_caes/models/animal.dart';
+import 'package:tinder_para_caes/models/associacao.dart';
+import 'package:tinder_para_caes/models/utilizador.dart';
+
+// Função para retornar uma associação pelo nome
+Associacao procurarAssociacaoPorNome(String nomeProcurado, List<Associacao> associacoes) {
+  return associacoes.firstWhere(
+        (associacao) => associacao.name.toLowerCase() == nomeProcurado.toLowerCase(),
+  );
+}
+
+class Associacaohomescreen extends StatelessWidget {
+
+  //ecra exemplo para a associaçao h
+
+  Associacao associacaoImaginaria= procurarAssociacaoPorNome("Associação H", Associacao.todasAssociacoes);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar( //ecra feito para associação h
+        title: Text("Home Page - ${associacaoImaginaria.name}"),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Lista de Associações Associadas
+            Text(
+              "Associações Associadas",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8.0),
+            Expanded(
+              child: ListView.builder(
+                itemCount: Utilizador.user.associacoesEmQueEstaEnvolvido.length,
+                itemBuilder: (context, index) {
+                  final associacao = Utilizador.user.associacoesEmQueEstaEnvolvido[index];
+
+                  // MARTELADA
+                  var assocName = "";
+                  var local = "";
+                  if(associacao != null) {
+                    assocName = associacao.name;
+                    local = associacao.local;
+                  }
+                  // FIM DA MARTELADA
+
+                  return Card(
+                    margin: EdgeInsets.symmetric(vertical: 4.0),
+                    child: ListTile(
+                      title: Text(assocName),
+                      subtitle: Text("Localidade: ${local}"),
+                    ),
+                  );
+                },
+              ),
+            ),
+            SizedBox(height: 16.0),
+
+            // Lista de Sugestões de Associações
+            Text(
+              "Sugestões de Associações",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8.0),
+            Expanded(
+              child: ListView.builder(
+                itemCount: sugestoesAssociacoes.length,
+                itemBuilder: (context, index) {
+                  final associacao = sugestoesAssociacoes[index];
+                  return Card(
+                    margin: EdgeInsets.symmetric(vertical: 4.0),
+                    child: ListTile(
+                      title: Text(associacao.name),
+                      subtitle: Text("Localidade: ${associacao.local}"),
+                      trailing: Icon(Icons.add),
+                      onTap: () {
+                        // Aqui você pode adicionar lógica para associar ao usuário
+                        print("Adicionar ${associacao.name}");
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
