@@ -77,6 +77,13 @@ class Associacao {
     };
   }
 
+  // Função para adicionar animais
+  void adicionarAnimais(Associacao assoc, Animal anim) {
+    return assoc.animais.add(anim);
+  }
+
+
+
   // Lista completa de associações para sugestões (em uma aplicação real, isso viria de uma API)
   static final List<Associacao> todasAssociacoes = [
     Associacao(name: "Associação E", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: []),
