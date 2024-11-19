@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tinder_para_caes/screens/associacaoHomeScreen.dart';
 
 class Criarassociacao extends StatefulWidget {
   @override
@@ -69,9 +70,12 @@ class _CriarAssociacaoFormScreenState extends State<Criarassociacao> {
               alignment: Alignment.bottomRight,
               child: ElevatedButton(
                 onPressed: () {
-                  // Lógica para submeter o formulário
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Associacaohomescreen()),
+                  );
                 },
-                child: Text('Submeter Registo'),
+                child: Text("Submeter"),
               ),
             ),
           ],

@@ -8,6 +8,8 @@ TODO:
 5 ecrã do registo do animais 
 
 
+Ver se faz sentido uma classe para os pedidos as associções para passear os caes  
+
 
 
 TO DO LATER:

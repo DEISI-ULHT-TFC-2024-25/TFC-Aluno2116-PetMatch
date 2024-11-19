@@ -77,7 +77,7 @@ class Utilizadorhomescreen extends StatelessWidget {
                       subtitle: Text("Localidade: ${associacao.local}"),
                       trailing: Icon(Icons.add),
                       onTap: () {
-                        // Aqui você pode adicionar lógica para associar ao usuário
+                        // adicionar lógica para o usuário
                         print("Adicionar ${associacao.name}");
                       },
                     ),

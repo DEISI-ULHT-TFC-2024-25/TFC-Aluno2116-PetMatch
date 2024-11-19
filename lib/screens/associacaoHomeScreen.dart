@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/models/associacao.dart';
 import 'package:tinder_para_caes/models/utilizador.dart';
+import 'package:tinder_para_caes/screens/allAnimalsScreen.dart';
+import 'package:tinder_para_caes/screens/adicionarAnimalScreen.dart';
 
 // Função para retornar uma associação pelo nome
 Associacao procurarAssociacaoPorNome(String nomeProcurado, List<Associacao> associacoes) {
@@ -18,6 +20,9 @@ class Associacaohomescreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Animal?> animaisExibidos = associacaoImaginaria.animais.take(9).toList();
+    List<Animal?> animais= associacaoImaginaria.animais;
+
     return Scaffold(
       appBar: AppBar( //ecra feito para associação h
         title: Text("Home Page - ${associacaoImaginaria.name}"),
@@ -29,62 +34,108 @@ class Associacaohomescreen extends StatelessWidget {
           children: [
             // Lista de Associações Associadas
             Text(
-              "Associações Associadas",
+              "Os seus pedidos",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8.0),
             Expanded(
               child: ListView.builder(
-                itemCount: Utilizador.user.associacoesEmQueEstaEnvolvido.length,
+                itemCount: associacaoImaginaria.pedidosRealizados.length,
                 itemBuilder: (context, index) {
-                  final associacao = Utilizador.user.associacoesEmQueEstaEnvolvido[index];
+                  final pedido = associacaoImaginaria.pedidosRealizados[index];
 
-                  // MARTELADA
-                  var assocName = "";
-                  var local = "";
-                  if(associacao != null) {
-                    assocName = associacao.name;
-                    local = associacao.local;
+                  String utilizadorName = "";
+                  String oQuePretendeFazer = "";
+                  Animal? animal = null;
+                  if(pedido != null) {
+                    utilizadorName = pedido.utilizadorQueRealizaOpedido.fullName;
+                    animal = pedido.animalRequesitado;
+                    oQuePretendeFazer = pedido.oQuePretendeFazer;
                   }
-                  // FIM DA MARTELADA
-
                   return Card(
                     margin: EdgeInsets.symmetric(vertical: 4.0),
                     child: ListTile(
-                      title: Text(assocName),
-                      subtitle: Text("Localidade: ${local}"),
-                    ),
+                      title: Text(utilizadorName),
+                      subtitle: Column(
+                        children: [
+                          Text("Animal para qual o pedido foi efetuado: ${animal}",
+                            maxLines: 3, // Número máximo de linhas que o texto pode ocupar
+                            overflow: TextOverflow.ellipsis, // Adiciona "..." caso o texto ultrapasse o limite),
+                            ),
+
+                          Text("Pedido enviado para: ${oQuePretendeFazer}"),
+                        ],
+                      ),
+
+                    )
+
                   );
                 },
               ),
             ),
             SizedBox(height: 16.0),
+//--------------------------------------------------------------------------------------------------
 
-            // Lista de Sugestões de Associações
+
+      // Lista de Sugestões de Associações
             Text(
-              "Sugestões de Associações",
+              "Os seus patudos visiveis ao publico",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
+
             SizedBox(height: 8.0),
             Expanded(
-              child: ListView.builder(
-                itemCount: sugestoesAssociacoes.length,
+              child: GridView.builder(
+                padding: const EdgeInsets.all(8.0),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3, // 3 itens por linha
+                  crossAxisSpacing: 8.0,
+                  mainAxisSpacing: 8.0,
+                ),
+                itemCount: animaisExibidos.length,
                 itemBuilder: (context, index) {
-                  final associacao = sugestoesAssociacoes[index];
+
                   return Card(
-                    margin: EdgeInsets.symmetric(vertical: 4.0),
-                    child: ListTile(
-                      title: Text(associacao.name),
-                      subtitle: Text("Localidade: ${associacao.local}"),
-                      trailing: Icon(Icons.add),
-                      onTap: () {
-                        // Aqui você pode adicionar lógica para associar ao usuário
-                        print("Adicionar ${associacao.name}");
-                      },
+                    color: Colors.redAccent,
+                    child: Center(
+                      child: Text(
+                        animaisExibidos[index]!.fullName,
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   );
                 },
               ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AllAnimalsScreen(animais: animais),
+                        ),
+                      );
+                    },
+                    child: Text("Ver Todos"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => AdicionarAnimalScreen()),
+                      );
+                    },
+                    child: Text("Adicionar Animal"),
+                  ),
+                ],
+              ),
+
             ),
           ],
         ),

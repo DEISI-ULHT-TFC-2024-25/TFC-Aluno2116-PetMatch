@@ -1,4 +1,5 @@
 import 'package:tinder_para_caes/models/animal.dart';
+import 'package:tinder_para_caes/models/pedido.dart';
 
 import 'funcionalidades.dart';
 
@@ -16,7 +17,12 @@ class Associacao {
   int nif; //id
   //preferencias
   List<Funcionalidades?> funcionalidades = [];
+  //animais da associação
   List<Animal?> animais = [];
+
+  //notificação de pedidos feitos a utilizadores
+  List<Pedido?> pedidosRealizados = [];
+
 
   // Construtor da classe
   Associacao({
@@ -55,7 +61,7 @@ class Associacao {
       nif: map['nif'],
       funcionalidades: [],
       animais: [],
-      //TODO completar
+
     );
   }
 
@@ -73,7 +79,7 @@ class Associacao {
       'site': site,
       'nif': nif,
       'funcionalidades': funcionalidades
-      //TODO completar
+
     };
   }
 
