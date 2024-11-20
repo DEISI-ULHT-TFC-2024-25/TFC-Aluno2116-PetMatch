@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'package:flutter/services.dart';
+
 class Animal {
   int chip; //id dos utilizadores
   String fullName;
@@ -29,6 +32,12 @@ class Animal {
     required this.numeroDePasseiosDados,
   });
 
+
+  Future<List<String>> loadDogBreeds() async {
+    final String response = await rootBundle.loadString('assets/dog_breeds.json');
+    return List<String>.from(json.decode(response));
+  }
+  
 
   // Lista completa de animais para sugestões
   static final List<Animal> todosAnimais = [

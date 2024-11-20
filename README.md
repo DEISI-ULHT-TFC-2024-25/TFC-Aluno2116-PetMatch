@@ -1,15 +1,20 @@
 # tinder_para_caes
 
 TODO: 
-1 (DONE)ecran utilizador home - duas listas as associações ja associadas(array com objetos da classe) e sugestões consuante a localidade (inventadas)
-2 (DONE)fazer filtro de pesquiza pelas zonas
-3 (DONE)classe do animal ( adicionar enum com especie) -feito
-4 ecrã home da associação - lista de animais (array com tres exemplos falsos) + botão para adicionar animal
-5 ecrã do registo do animais 
-
-
-Ver se faz sentido uma classe para os pedidos as associções para passear os caes  
-
+Ecras
+- login 
+- criar associação
+- criar utilizador
+- home page associaçao
+- home page utilizador 
+- adicionnar cao na associaçáo 
+- ver lista completa dos caes
+- pagina de perfil do cao (prespectva do utilizador e mais tarde da associação)
+- pagina de perfil da associação (prespectiva do utilizador)
+- adicionar o seu proprio cao (para mais tare poder ir passear com outros )
+- pagina de pedido para passear o cao 
+- preencher dados de responsabilidade 
+- pagina para abrir os pedidos efectuados pelos uutilizadores 
 
 
 TO DO LATER:
