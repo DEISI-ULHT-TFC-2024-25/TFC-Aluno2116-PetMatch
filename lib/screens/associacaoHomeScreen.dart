@@ -18,7 +18,7 @@ class Associacaohomescreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Associacao assoE = Associacao.todasAssociacoes.first;
+    Associacao assoE = Associacao.procurarAssociacao(0);
     List<Animal> animaisExibidos = assoE.animais;
     List<Animal> animais= assoE.animais;
 /*

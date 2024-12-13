@@ -20,9 +20,6 @@ class Pedido {
 
   });
 
-  static final List<Pedido> todosOsPedidos = [
-    Pedido(utilizadorQueRealizaOpedido: Utilizador.user, oQuePretendeFazer: Funcionalidades.passeiosDosCandeos, animalRequesitado: Animal.todosAnimais.first, associacao: Associacao.procurarAssociacao(0), confirmouTodosOsRequisitos: true),
-  ];
 
   static List<Pedido> getTodosPedidos(){
     List<Pedido> todosOsPedidos = [
@@ -33,3 +30,7 @@ class Pedido {
   }
 
 }
+
+List<Pedido> todosOsPedidos = [
+  Pedido(utilizadorQueRealizaOpedido: Utilizador.user, oQuePretendeFazer: Funcionalidades.passeiosDosCandeos, animalRequesitado: Animal.todosAnimais.first, associacao: Associacao.procurarAssociacao(0), confirmouTodosOsRequisitos: true),
+];
