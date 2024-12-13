@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/screens/associacaoHomeScreen.dart';
+import 'package:tinder_para_caes/models/associacao.dart';
 
 class Criarassociacao extends StatefulWidget {
   @override

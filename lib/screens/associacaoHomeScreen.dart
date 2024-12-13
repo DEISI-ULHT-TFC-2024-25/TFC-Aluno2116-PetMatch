@@ -4,28 +4,33 @@ import 'package:tinder_para_caes/models/associacao.dart';
 import 'package:tinder_para_caes/models/utilizador.dart';
 import 'package:tinder_para_caes/screens/allAnimalsScreen.dart';
 import 'package:tinder_para_caes/screens/adicionarAnimalScreen.dart';
+import 'package:tinder_para_caes/models/funcionalidades.dart';
+
 
 // Função para retornar uma associação pelo nome
-Associacao procurarAssociacaoPorNome(String nomeProcurado, List<Associacao> associacoes) {
-  return associacoes.firstWhere(
-        (associacao) => associacao.name.toLowerCase() == nomeProcurado.toLowerCase(),
-  );
-}
 
 class Associacaohomescreen extends StatelessWidget {
 
   //ecra exemplo para a associaçao h
 
-  Associacao associacaoImaginaria= procurarAssociacaoPorNome("Associação H", Associacao.todasAssociacoes);
+  /*Associacao associacaoImaginaria = Associacao.procurarAssociacaoPorNome("Associação H");
+*/
 
   @override
   Widget build(BuildContext context) {
-    List<Animal?> animaisExibidos = associacaoImaginaria.animais.take(9).toList();
-    List<Animal?> animais= associacaoImaginaria.animais;
+    Associacao assoE = Associacao.todasAssociacoes.first;
+    List<Animal> animaisExibidos = assoE.animais;
+    List<Animal> animais= assoE.animais;
+/*
+    if(associacaoImaginaria != null){
+      List<Animal> animaisExibidos = associacaoImaginaria.animais.take(9).toList();
+      List<Animal> animais= associacaoImaginaria.animais;
+    }
+ */
 
     return Scaffold(
       appBar: AppBar( //ecra feito para associação h
-        title: Text("Home Page - ${associacaoImaginaria.name}"),
+        title: Text("Home Page - ${assoE.name}"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -34,18 +39,18 @@ class Associacaohomescreen extends StatelessWidget {
           children: [
             // Lista de Associações Associadas
             Text(
-              "Os seus pedidos",
+              "Notificações",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8.0),
             Expanded(
               child: ListView.builder(
-                itemCount: associacaoImaginaria.pedidosRealizados.length,
+                itemCount: assoE.pedidosRealizados.length,
                 itemBuilder: (context, index) {
-                  final pedido = associacaoImaginaria.pedidosRealizados[index];
+                  final pedido = assoE.pedidosRealizados[index];
 
                   String utilizadorName = "";
-                  String oQuePretendeFazer = "";
+                  Funcionalidades? oQuePretendeFazer = null;
                   Animal? animal = null;
                   if(pedido != null) {
                     utilizadorName = pedido.utilizadorQueRealizaOpedido.fullName;
@@ -58,12 +63,12 @@ class Associacaohomescreen extends StatelessWidget {
                       title: Text(utilizadorName),
                       subtitle: Column(
                         children: [
-                          Text("Animal para qual o pedido foi efetuado: ${animal}",
+                          Text("Animal para qual o houve interesse: ${animal}",
                             maxLines: 3, // Número máximo de linhas que o texto pode ocupar
                             overflow: TextOverflow.ellipsis, // Adiciona "..." caso o texto ultrapasse o limite),
                             ),
 
-                          Text("Pedido enviado para: ${oQuePretendeFazer}"),
+                          Text("Notificação nova para: ${oQuePretendeFazer}"),
                         ],
                       ),
 

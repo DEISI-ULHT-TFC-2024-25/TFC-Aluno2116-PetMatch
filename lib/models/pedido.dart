@@ -1,10 +1,11 @@
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/models/associacao.dart';
 import 'package:tinder_para_caes/models/utilizador.dart';
+import 'package:tinder_para_caes/models/funcionalidades.dart';
 
 class Pedido {
   Utilizador utilizadorQueRealizaOpedido;
-  String oQuePretendeFazer;
+  Funcionalidades oQuePretendeFazer;
   Animal animalRequesitado;
   Associacao associacao;
   bool confirmouTodosOsRequisitos;
@@ -18,4 +19,17 @@ class Pedido {
     required this.confirmouTodosOsRequisitos,
 
   });
+
+  static final List<Pedido> todosOsPedidos = [
+    Pedido(utilizadorQueRealizaOpedido: Utilizador.user, oQuePretendeFazer: Funcionalidades.passeiosDosCandeos, animalRequesitado: Animal.todosAnimais.first, associacao: Associacao.procurarAssociacao(0), confirmouTodosOsRequisitos: true),
+  ];
+
+  static List<Pedido> getTodosPedidos(){
+    List<Pedido> todosOsPedidos = [
+      Pedido(utilizadorQueRealizaOpedido: Utilizador.user, oQuePretendeFazer: Funcionalidades.passeiosDosCandeos, animalRequesitado: Animal.todosAnimais.first, associacao: Associacao.procurarAssociacao(0), confirmouTodosOsRequisitos: true),
+    ];
+
+    return todosOsPedidos;
+  }
+
 }

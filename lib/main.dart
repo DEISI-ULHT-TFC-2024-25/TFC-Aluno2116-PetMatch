@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/loginScreen.dart';
-import 'screens/escolherUtiliAssoci.dart';
+
 
 void main() {
   runApp(MyApp());

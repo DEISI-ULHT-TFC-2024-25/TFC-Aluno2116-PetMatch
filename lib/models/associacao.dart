@@ -16,12 +16,12 @@ class Associacao {
   String site;
   int nif; //id
   //preferencias
-  List<Funcionalidades?> funcionalidades = [];
+  List<Funcionalidades> funcionalidades = [];
   //animais da associação
-  List<Animal?> animais = [];
+  List<Animal> animais = [];
 
   //notificação de pedidos feitos a utilizadores
-  List<Pedido?> pedidosRealizados = [];
+  List<Pedido> pedidosRealizados = [];
 
 
   // Construtor da classe
@@ -39,11 +39,62 @@ class Associacao {
     required this.nif,
     required this.funcionalidades,
     required this.animais,
+    required this.pedidosRealizados,
   });
 
   //Associacao.simple()
   //  : name = "0",
   //    local = "0";
+
+  // Lista completa de associações para sugestões (em uma aplicação real, isso viria da base de dados)
+  static final List<Associacao> todasAssociacoes = [
+    Associacao(name: "Associação E", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:Pedido.todosOsPedidos),
+    Associacao(name: "Associação F", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
+    Associacao(name: "Associação G", local: "Portimão", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
+    Associacao(name: "Associação H", local: "Lisboa", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [],animais: [Animal.todosAnimais.first],pedidosRealizados:[]),
+    Associacao(name: "Associação I", local: "Lisboa", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
+    Associacao(name: "Associação J", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
+    Associacao(name: "Associação K", local: "Lisboa", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
+    Associacao(name: "Associação L", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
+  ];
+
+  static Associacao procurarAssociacao(int id) {
+    if (id < 0 || id >= todasAssociacoes.length) {
+      throw Exception("Índice $id fora dos limites.");
+    }
+    return todasAssociacoes[id];
+  }
+
+  static Associacao procurarAssociacao_old(int id) {
+    List<Associacao> Associacoes = [
+      Associacao(name: "Associação E", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:Pedido.getTodosPedidos()),
+      Associacao(name: "Associação F", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
+      Associacao(name: "Associação G", local: "Portimão", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
+      Associacao(name: "Associação H", local: "Lisboa", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [],animais: [Animal.todosAnimais.first],pedidosRealizados:[]),
+      Associacao(name: "Associação I", local: "Lisboa", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
+      Associacao(name: "Associação J", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
+      Associacao(name: "Associação K", local: "Lisboa", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
+      Associacao(name: "Associação L", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
+    ];
+
+    return Associacoes[id];
+  }
+
+  // Função para filtrar associações sugeridas com base na localidade do usuário
+  static List<Associacao> getSugestoesAssociacoes(String local) {
+    return todasAssociacoes.where((associacao) =>
+    associacao.local == local
+    ).toList();
+  }
+
+
+  /*static Associacao procurarAssociacaoPorNome(String nome) {
+    return todasAssociacoes.firstWhere(
+          (associacao) => associacao.name == nome,
+          orElse: () => throw Exception("Associação com o nome '$nome' não encontrada."),
+    );
+  }*/
+
 
 
   factory Associacao.fromMap(Map<String, dynamic> map) {
@@ -61,6 +112,7 @@ class Associacao {
       nif: map['nif'],
       funcionalidades: [],
       animais: [],
+      pedidosRealizados: []
 
     );
   }
@@ -79,7 +131,6 @@ class Associacao {
       'site': site,
       'nif': nif,
       'funcionalidades': funcionalidades
-
     };
   }
 
@@ -87,20 +138,5 @@ class Associacao {
   void adicionarAnimais(Associacao assoc, Animal anim) {
     return assoc.animais.add(anim);
   }
-
-
-
-  // Lista completa de associações para sugestões (em uma aplicação real, isso viria de uma API)
-  static final List<Associacao> todasAssociacoes = [
-    Associacao(name: "Associação E", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: []),
-    Associacao(name: "Associação F", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: []),
-    Associacao(name: "Associação G", local: "Portimão", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: []),
-    Associacao(name: "Associação H", local: "Lisboa", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [],animais: [Animal.todosAnimais.first] ),
-    Associacao(name: "Associação I", local: "Lisboa", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: []),
-    Associacao(name: "Associação J", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: []),
-    Associacao(name: "Associação K", local: "Lisboa", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: []),
-    Associacao(name: "Associação L", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: []),
-  ];
-
 
 }

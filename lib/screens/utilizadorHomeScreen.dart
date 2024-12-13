@@ -3,19 +3,23 @@ import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/models/associacao.dart';
 import 'package:tinder_para_caes/models/utilizador.dart';
 
-class Utilizadorhomescreen extends StatelessWidget {
-  // Função para filtrar associações sugeridas com base na localidade do usuário
+
+
+/*// Função para filtrar associações sugeridas com base na localidade do usuário
   List<Associacao> getSugestoesAssociacoes() {
-    return Associacao.todasAssociacoes.where((associacao) =>
+    return associacoesExistentes.where((associacao) =>
     associacao.local == Utilizador.user.local &&
         !Utilizador.user.associacoesEmQueEstaEnvolvido.contains(associacao)
     ).toList();
-  }
+  }*/
+
+class Utilizadorhomescreen extends StatelessWidget {
+
 
   @override
   Widget build(BuildContext context) {
     // Obtenção das sugestões com base na localidade
-    final sugestoesAssociacoes = getSugestoesAssociacoes();
+    List<Associacao> sugestoesAssociacoes = Associacao.getSugestoesAssociacoes(Utilizador.user.local);
 
     return Scaffold(
       appBar: AppBar(

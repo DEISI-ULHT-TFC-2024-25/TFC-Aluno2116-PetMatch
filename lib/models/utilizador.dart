@@ -12,7 +12,7 @@ class Utilizador {
     String zipCode;
     String password;
 
-    List<Associacao?> associacoesEmQueEstaEnvolvido = [];
+    List<Associacao> associacoesEmQueEstaEnvolvido = [];
     
     // Construtor da classe
     Utilizador({
@@ -78,10 +78,10 @@ class Utilizador {
         password: "123abc",
 
         associacoesEmQueEstaEnvolvido: [
-            Associacao(name: "Associação A", local: "Lisboa", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: []),
-            Associacao(name: "Associação B", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: []),
-            Associacao(name: "Associação C", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: []),
-            Associacao(name: "Associação D", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: []),
+            Associacao(name: "Associação A", local: "Lisboa", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
+            Associacao(name: "Associação B", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
+            Associacao(name: "Associação C", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
+            Associacao(name: "Associação D", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
 
         ],
     );
