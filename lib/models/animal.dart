@@ -25,10 +25,10 @@ class Animal {
     required this.gender,
     required this.legalOwner,
     required this.allergies,
-    required this.size, //TODO fazer enumerados cosuante a especie - small, medium, large and giant
+    required this.size,
     required this.behavior,
     required this.breed,
-    required this.species, //fazer enumerados - especies
+    required this.species,
     required this.numeroDePasseiosDados,
   });
 
