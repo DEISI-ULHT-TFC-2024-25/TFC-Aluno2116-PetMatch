@@ -26,11 +26,13 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
 
   Future<void> _carregarRacas() async {
     try {
-      final file = File('dogsBreeds.txt');
+
+      final file = File('lib/dogBreeds.txt');
       final racas = await file.readAsLines();
       setState(() {
         _racas = racas;
       });
+
     } catch (e) {
       print("Erro ao carregar o arquivo de raças: $e");
     }

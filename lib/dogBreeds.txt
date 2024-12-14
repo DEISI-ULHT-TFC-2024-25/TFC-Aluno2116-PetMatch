@@ -1,0 +1,102 @@
+Labrador Retriever
+Pastor Alemão
+Bulldog Francês
+Yorkshire Terrier
+Golden Retriever
+Boxer
+Poodle (Caniche)
+Chihuahua
+Shih Tzu
+Rottweiler
+Beagle
+Dachshund (Teckel)
+Cocker Spaniel Inglês
+Schnauzer Miniatura
+Pug
+Border Collie
+Maltês
+Bichon Frisé
+Staffordshire Bull Terrier
+Jack Russell Terrier
+Husky Siberiano
+West Highland White Terrier
+Bulldog Inglês
+Spitz Alemão (Lulu da Pomerânia)
+Dálmata
+Akita Inu
+Boston Terrier
+Shar Pei
+Lhasa Apso
+Cavalier King Charles Spaniel
+American Staffordshire Terrier
+Shiba Inu
+Weimaraner
+Samoieda
+Setter Irlandês
+Basenji
+Bull Terrier
+Galgo Inglês
+Cão de Água Português
+Cão da Serra da Estrela
+Cão de Castro Laboreiro
+Rafeiro do Alentejo
+Podengo Português
+Perdigueiro Português
+Cão da Serra de Aires
+Cão de Fila de São Miguel
+Barbado da Terceira
+Cão de Gado Transmontano
+Cão do Barrocal Algarvio
+Pastor Belga Malinois
+Pastor Belga Tervuren
+Pastor Belga Groenendael
+Pastor Belga Laekenois
+Cane Corso
+Dogue Alemão
+Mastim Napolitano
+Mastim Espanhol
+Mastim dos Pirenéus
+São Bernardo
+Terra Nova
+Leonberger
+Kuvasz
+Komondor
+Pastor Maremano-Abruzês
+Pastor Caucasiano
+Pastor da Ásia Central
+Pastor Australiano
+Kelpie Australiano
+Pastor Branco Suíço
+Pastor Holandês
+Pastor de Shetland
+Collie
+Bearded Collie
+Old English Sheepdog
+Welsh Corgi Pembroke
+Welsh Corgi Cardigan
+Boiadeiro Australiano
+Boiadeiro Bernês
+Boiadeiro de Appenzell
+Boiadeiro de Entlebuch
+Boiadeiro Suíço
+Boiadeiro de Flandres
+Boiadeiro de Montanha dos Pirenéus
+Boiadeiro de Montanha da Baviera
+Alaskan Klee Kai
+Terrier Cairn
+Retriever de Nova Escócia (Nova Scotia Duck Tolling Retriever)
+Lagotto Romagnolo
+Petit Basset Griffon Vendéen
+Coonhound Redbone
+Bedlington Terrier
+Cão do Faraó (Pharaoh Hound)
+Keeshond (Spitz Lobo Holandês)
+Pastor de Picardia (Berger Picard)
+Thai Ridgeback
+Podengo Ibicenco (Ibizan Hound)
+Cão Lapão Finlandês (Finnish Lapphund)
+Schipperke
+Cão de Lundehund Norueguês (Norwegian Lundehund)
+Cão de Caça Plott (Plott Hound)
+Vallhund Sueco (Swedish Vallhund)
+Cão Leopardo da Catahoula (Catahoula Leopard Dog)
