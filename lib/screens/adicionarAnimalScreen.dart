@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:io';
 
+import 'package:tinder_para_caes/models/animal.dart';
+
 class AdicionarAnimalScreen extends StatefulWidget {
   @override
   _AdicionarAnimalScreenState createState() => _AdicionarAnimalScreenState();
@@ -15,28 +17,29 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
   bool _castrado = false;
   String? _porte;
   String? _especie;
-  List<String> _racas = [];
+  List<String> racas = [];
   List<String> _racasFiltradas = [];
+
+
 
   @override
   void initState() {
     super.initState();
-    _carregarRacas();
+    _initializeDogBreeds(); // Inicializa a leitura
   }
 
-  Future<void> _carregarRacas() async {
+  Future<void> _initializeDogBreeds() async {
     try {
-
-      final file = File('lib/dogBreeds.txt');
-      final racas = await file.readAsLines();
+      final dogBreeds = await Animal.loadDogBreeds(); // Carrega a lista de raças
       setState(() {
-        _racas = racas;
+        racas = dogBreeds; // Atualiza o estado com a lista carregada
       });
-
     } catch (e) {
-      print("Erro ao carregar o arquivo de raças: $e");
+      print('Erro ao carregar as raças: $e');
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +160,7 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
                 ),
                 onChanged: (String value) {
                   setState(() {
-                    _racasFiltradas = _racas
+                    _racasFiltradas = racas
                         .where((raca) => raca.toLowerCase().contains(value.toLowerCase()))
                         .toList();
                   });
@@ -192,7 +195,7 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
                     );
                   }
                 },
-                child: Text("Salvar"),
+                child: Text("Registar animal"),
               ),
             ],
           ),

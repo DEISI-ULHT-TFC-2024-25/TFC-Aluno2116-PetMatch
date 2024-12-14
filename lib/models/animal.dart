@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 class Animal {
   int chip; //id dos utilizadores
@@ -33,10 +34,13 @@ class Animal {
   });
 
 
-  Future<List<String>> loadDogBreeds() async {
-    final String response = await rootBundle.loadString('assets/dog_breeds.json');
-    return List<String>.from(json.decode(response));
+  static Future<List<String>> loadDogBreeds() async {
+    final String response = await rootBundle.loadString('assets/dogBreeds.txt');
+    return response.split('\n').map((line) => line.trim()).toList();
+
   }
+
+
   
 
   // Lista completa de animais para sugestões
