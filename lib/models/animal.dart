@@ -7,7 +7,7 @@ class Animal {
   String fullName;
   int age;
   bool sterilized;
-  int gender; //0 - Femnino, 1 - Masculino, 2 - Outros
+  int gender; //0 - Femnino, 1 - Masculino,
   String legalOwner;
   String allergies;
   String size;

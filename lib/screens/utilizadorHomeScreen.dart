@@ -2,20 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/models/associacao.dart';
 import 'package:tinder_para_caes/models/utilizador.dart';
-
-
-
-/*// Função para filtrar associações sugeridas com base na localidade do usuário
-  List<Associacao> getSugestoesAssociacoes() {
-    return associacoesExistentes.where((associacao) =>
-    associacao.local == Utilizador.user.local &&
-        !Utilizador.user.associacoesEmQueEstaEnvolvido.contains(associacao)
-    ).toList();
-  }*/
+import 'package:tinder_para_caes/screens/vizualizarAssociacaoScreen.dart';
 
 class Utilizadorhomescreen extends StatelessWidget {
-
-
   @override
   Widget build(BuildContext context) {
     // Obtenção das sugestões com base na localidade
@@ -45,7 +34,7 @@ class Utilizadorhomescreen extends StatelessWidget {
                   // MARTELADA
                   var assocName = "";
                   var local = "";
-                  if(associacao != null) {
+                  if (associacao != null) {
                     assocName = associacao.name;
                     local = associacao.local;
                   }
@@ -56,6 +45,14 @@ class Utilizadorhomescreen extends StatelessWidget {
                     child: ListTile(
                       title: Text(assocName),
                       subtitle: Text("Localidade: ${local}"),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => vizualizarAssociacaoScreen(),
+                          ),
+                        );
+                      },
                     ),
                   );
                 },
@@ -81,8 +78,12 @@ class Utilizadorhomescreen extends StatelessWidget {
                       subtitle: Text("Localidade: ${associacao.local}"),
                       trailing: Icon(Icons.add),
                       onTap: () {
-                        // adicionar lógica para o usuário
-                        print("Adicionar ${associacao.name}");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => vizualizarAssociacaoScreen(),
+                          ),
+                        );
                       },
                     ),
                   );
@@ -95,3 +96,5 @@ class Utilizadorhomescreen extends StatelessWidget {
     );
   }
 }
+
+

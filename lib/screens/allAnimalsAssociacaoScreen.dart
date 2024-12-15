@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/models/animal.dart';
 
-class AllAnimalsScreen extends StatelessWidget {
+class AllAnimalsAssociacaoScreen extends StatelessWidget {
   final List<Animal?> animais;
 
-  AllAnimalsScreen({required this.animais});
+  AllAnimalsAssociacaoScreen({required this.animais});
 
   @override
   Widget build(BuildContext context) {
