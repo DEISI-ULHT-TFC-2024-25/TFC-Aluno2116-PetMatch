@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/models/animal.dart';
+import 'package:tinder_para_caes/screens/animalDetailsScreen.dart';
 
 class AllAnimalsAssociacaoScreen extends StatelessWidget {
   final List<Animal?> animais;
@@ -33,6 +34,18 @@ class AllAnimalsAssociacaoScreen extends StatelessWidget {
                   Text("Sexo: ${animal.gender}"),
                   Text("Castrado: ${animal.sterilized ? "Sim" : "Não"}"),
                   Text("Número de Passeios: ${animal.numeroDePasseiosDados}"),
+                  SizedBox(height: 12),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AnimalDetailsScreen(),
+                        ),
+                      );
+                    },
+                    child: Text("Ver Detalhes"),
+                  ),
                 ],
               ),
             ),
@@ -42,4 +55,3 @@ class AllAnimalsAssociacaoScreen extends StatelessWidget {
     );
   }
 }
-
