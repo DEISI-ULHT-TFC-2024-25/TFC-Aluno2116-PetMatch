@@ -125,7 +125,9 @@ class vizualizarAssociacaoScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 10),
                         if (needs.isNotEmpty)
-                          ...needs.map((need) => Text("- $need")),
+                          ...needs.map((need) => Text("- $need"))
+                        else
+                          Text("De momento não existem informações"),
                         SizedBox(height: 20),
                         Container(
                           height: 150,

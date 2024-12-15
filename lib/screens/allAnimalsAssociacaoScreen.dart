@@ -44,7 +44,7 @@ class AllAnimalsAssociacaoScreen extends StatelessWidget {
                         ),
                       );
                     },
-                    child: Text("Ver Detalhes"),
+                    child: Text("Ver mais informações"),
                   ),
                 ],
               ),
