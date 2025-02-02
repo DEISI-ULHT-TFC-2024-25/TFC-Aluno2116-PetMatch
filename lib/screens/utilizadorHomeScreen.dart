@@ -49,7 +49,7 @@ class Utilizadorhomescreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => vizualizarAssociacaoScreen(),
+                            builder: (context) => VizualizarAssociacaoScreen(),
                           ),
                         );
                       },
@@ -81,7 +81,7 @@ class Utilizadorhomescreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => vizualizarAssociacaoScreen(),
+                            builder: (context) => VizualizarAssociacaoScreen(),
                           ),
                         );
                       },

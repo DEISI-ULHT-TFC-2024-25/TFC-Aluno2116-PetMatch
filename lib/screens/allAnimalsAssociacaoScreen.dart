@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/screens/animalDetailsScreen.dart';
+import 'package:tinder_para_caes/screens/adicionarAnimalScreen.dart'; // Tela para adicionar animais
 
 class AllAnimalsAssociacaoScreen extends StatelessWidget {
   final List<Animal?> animais;
+  final bool isAssociacao; // Verificação para mostrar o botão de adicionar
 
-  AllAnimalsAssociacaoScreen({required this.animais});
+  AllAnimalsAssociacaoScreen({required this.animais, required this.isAssociacao});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +37,7 @@ class AllAnimalsAssociacaoScreen extends StatelessWidget {
                   Text("Castrado: ${animal.sterilized ? "Sim" : "Não"}"),
                   Text("Número de Passeios: ${animal.numeroDePasseiosDados}"),
                   SizedBox(height: 12),
-                  ElevatedButton(
+                  ElevatedButton.icon(
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -44,7 +46,8 @@ class AllAnimalsAssociacaoScreen extends StatelessWidget {
                         ),
                       );
                     },
-                    child: Text("Ver mais informações"),
+                    icon: Icon(Icons.visibility), // Ícone de olho para detalhes
+                    label: Text("Ver mais informações 👀"),
                   ),
                 ],
               ),
@@ -52,6 +55,22 @@ class AllAnimalsAssociacaoScreen extends StatelessWidget {
           );
         },
       ),
+
+      // Apenas Associações podem adicionar animais
+      floatingActionButton: isAssociacao
+          ? FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AdicionarAnimalScreen(),
+            ),
+          );
+        },
+        child: Text("➕", style: TextStyle(fontSize: 24)), // Botão com emoji de +
+        tooltip: "Adicionar Animal",
+      )
+          : null,
     );
   }
 }

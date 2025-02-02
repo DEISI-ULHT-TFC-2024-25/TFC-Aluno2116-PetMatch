@@ -123,7 +123,7 @@ class Associacaohomescreen extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AllAnimalsAssociacaoScreen(animais: animais),
+                          builder: (context) => AllAnimalsAssociacaoScreen(animais: animais, isAssociacao: assoE.associacao,),
                         ),
                       );
                     },

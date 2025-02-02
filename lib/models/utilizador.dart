@@ -13,6 +13,7 @@ class Utilizador {
     String password;
 
     List<Associacao> associacoesEmQueEstaEnvolvido = [];
+    bool associacao = false;
     
     // Construtor da classe
     Utilizador({

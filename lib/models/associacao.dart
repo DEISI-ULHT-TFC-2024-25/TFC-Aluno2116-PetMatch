@@ -27,6 +27,7 @@ class Associacao {
   //Eventos
   List<Eventos> eventos =[];
   List<String> necessidades = [];
+  bool associacao = true;
 
 
   // Construtor da classe
