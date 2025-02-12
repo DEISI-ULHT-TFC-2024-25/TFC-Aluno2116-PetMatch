@@ -6,7 +6,7 @@ class AnimalDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    Animal animalExemplo = Animal.todosAnimais[3];
+    Animal animalExemplo = Animal.todosAnimais[2];
 
     final String fullName = animalExemplo.fullName;
     final int age = animalExemplo.age;

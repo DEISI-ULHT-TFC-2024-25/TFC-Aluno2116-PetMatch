@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:tinder_para_caes/documents/tornarSocio.dart';
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/models/associacao.dart';
 import 'package:tinder_para_caes/models/eventos.dart';
 import 'package:tinder_para_caes/screens/allAnimalsAssociacaoScreen.dart';
 import 'package:tinder_para_caes/documents/passearCao.dart';
+import 'package:tinder_para_caes/documents/tornarPadrinho.dart';
+import 'package:tinder_para_caes/documents/tornarVoluntario.dart';
 
 class VizualizarAssociacaoScreen extends StatefulWidget {
   @override
@@ -187,7 +190,12 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
                               children: [
                                 ElevatedButton(
                                   onPressed: () {
-                                    Navigator.pushNamed(context, '/becomeMember');
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => TornarSocioScreen(),
+                                      ),
+                                    );
                                   },
                                   child: Text("Tornar-se sócio"),
                                 ),
@@ -210,7 +218,12 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
                                 ),
                                 ElevatedButton(
                                   onPressed: () {
-                                    Navigator.pushNamed(context, '/volunteer');
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => TornarVoluntarioApp(),
+                                      ),
+                                    );
                                   },
                                   child: Text("Tornar-se voluntário"),
                                 ),

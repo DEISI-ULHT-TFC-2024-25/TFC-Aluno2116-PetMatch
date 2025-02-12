@@ -2,7 +2,7 @@
 
 TODO: 
 Ecras
-- pagina de perfil do cao (prespectva do utilizador e da associação)
+
 - adicionar o seu proprio cao (para mais tare poder ir passear com outros )
 - pagina de pedido para passear o cao 
 - preencher dados de responsabilidade 
@@ -17,6 +17,7 @@ DONE:
 - adicionnar cao na associaçáo
 - ver lista completa dos caes
 - pagina de perfil da associação (prespectiva do utilizador)
+- pagina de perfil do cao (prespectva do utilizador e da associação)
 
 
 TO DO LATER:
