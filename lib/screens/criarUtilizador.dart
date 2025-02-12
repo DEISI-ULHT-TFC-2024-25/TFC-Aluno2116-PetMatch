@@ -80,7 +80,7 @@ class UtilizadorFormScreenState extends State<Criarutilizador> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Utilizadorhomescreen()),
+                    MaterialPageRoute(builder: (context) => UtilizadorHomeScreen()),
                   );
                 },
                 child: Text('Submeter'),
