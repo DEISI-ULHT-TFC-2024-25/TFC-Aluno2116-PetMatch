@@ -4,9 +4,9 @@ import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/documents/tornarPadrinho.dart';
 
 class AnimalDetailsScreen extends StatelessWidget {
-  final bool isUser;
+  final bool isAssoci;
 
-  AnimalDetailsScreen({required this.isUser});
+  AnimalDetailsScreen({required this.isAssoci});
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +76,7 @@ class AnimalDetailsScreen extends StatelessWidget {
               _buildInfoRow(Icons.directions_walk, 'Passeios dados:', '$numeroDePasseiosDados'),
               _buildInfoRow(Icons.family_restroom, 'Pode apadrinhar:', asGoFather ? 'Não' : 'Sim'),
 
-              if (isUser && !asGoFather)
+              if (!isAssoci && !asGoFather)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: ElevatedButton(
