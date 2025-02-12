@@ -42,7 +42,7 @@ class AllAnimalsAssociacaoScreen extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AnimalDetailsScreen(),
+                          builder: (context) => AnimalDetailsScreen(isUser: isAssociacao),
                         ),
                       );
                     },

@@ -9,6 +9,7 @@ import 'package:tinder_para_caes/documents/passearCao.dart';
 import 'package:tinder_para_caes/documents/tornarPadrinho.dart';
 import 'package:tinder_para_caes/documents/tornarVoluntario.dart';
 
+
 class VizualizarAssociacaoScreen extends StatefulWidget {
   @override
   _VizualizarAssociacaoScreenState createState() => _VizualizarAssociacaoScreenState();
@@ -212,7 +213,12 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
                                 ),
                                 ElevatedButton(
                                   onPressed: () {
-                                    Navigator.pushNamed(context, '/sponsorAnimal');
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => TornarPadrinhoScreen(),
+                                      ),
+                                    );
                                   },
                                   child: Text("Apadrinar um animal"),
                                 ),

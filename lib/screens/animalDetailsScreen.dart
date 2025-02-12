@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:tinder_para_caes/screens/vizualizarAssociacaoScreen.dart';
 import 'package:tinder_para_caes/models/animal.dart';
+import 'package:tinder_para_caes/documents/tornarPadrinho.dart';
 
 class AnimalDetailsScreen extends StatelessWidget {
+  final bool isUser;
+
+  AnimalDetailsScreen({required this.isUser});
 
   @override
   Widget build(BuildContext context) {
-
     Animal animalExemplo = Animal.todosAnimais[2];
 
     final String fullName = animalExemplo.fullName;
@@ -20,8 +24,6 @@ class AnimalDetailsScreen extends StatelessWidget {
     final int numeroDePasseiosDados = animalExemplo.numeroDePasseiosDados;
     final bool asGoFather = animalExemplo.asGodFather;
 
-
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Perfil do Animal'),
@@ -33,7 +35,6 @@ class AnimalDetailsScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Espaço para foto do animal
               Container(
                 height: 200,
                 decoration: BoxDecoration(
@@ -50,7 +51,6 @@ class AnimalDetailsScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 16),
-              // Nome do Animal
               Text(
                 fullName,
                 style: TextStyle(
@@ -61,7 +61,6 @@ class AnimalDetailsScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 8),
-              // Informações do animal
               _buildInfoRow(Icons.pets, 'Espécie:', species),
               _buildInfoRow(Icons.badge, 'Raça:', breed),
               _buildInfoRow(Icons.cake, 'Idade:', '$age anos'),
@@ -76,7 +75,24 @@ class AnimalDetailsScreen extends StatelessWidget {
               _buildInfoRow(Icons.emoji_emotions, 'Comportamento:', behavior),
               _buildInfoRow(Icons.directions_walk, 'Passeios dados:', '$numeroDePasseiosDados'),
               _buildInfoRow(Icons.family_restroom, 'Pode apadrinhar:', asGoFather ? 'Não' : 'Sim'),
-              // Ícones de patinhas decorativas
+
+              if (isUser && !asGoFather)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.redAccent,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => TornarPadrinhoScreen()),
+                      );
+                    },
+                    child: Text("Apadrinhar este animal 🐾"),
+                  ),
+                ),
+
               SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
