@@ -15,7 +15,7 @@ class Authenticationservice {
 
       User? user = userCredential.user;
       if (user != null) {
-        await _firestore.collection("users").doc(user.uid).set(userData);
+        await _firestore.collection("utilizador").doc(user.uid).set(userData);
       }
 
       return user;
@@ -35,7 +35,7 @@ class Authenticationservice {
 
       User? user = userCredential.user;
       if (user != null) {
-        await _firestore.collection("associacoes").doc(user.uid).set(associacaoData);
+        await _firestore.collection("associacao").doc(user.uid).set(associacaoData);
       }
 
       return user;

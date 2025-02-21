@@ -22,7 +22,7 @@ class AnimalDetailsScreen extends StatelessWidget {
     final String breed = animalExemplo.breed;
     final String species = animalExemplo.species;
     final int numeroDePasseiosDados = animalExemplo.numeroDePasseiosDados;
-    final bool asGoFather = animalExemplo.asGodFather;
+    final bool asGoFather = animalExemplo.hasGodFather;
 
     return Scaffold(
       appBar: AppBar(
