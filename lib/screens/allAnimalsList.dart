@@ -3,11 +3,11 @@ import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/screens/animalDetailsScreen.dart';
 import 'package:tinder_para_caes/screens/adicionarAnimalScreen.dart'; // Tela para adicionar animais
 
-class AllAnimalsAssociacaoScreen extends StatelessWidget {
+class AllAnimalsList extends StatelessWidget {
   final List<Animal?> animais;
   final bool isAssociacao; // Verificação para mostrar o botão de adicionar
 
-  AllAnimalsAssociacaoScreen({required this.animais, required this.isAssociacao});
+  AllAnimalsList({required this.animais, required this.isAssociacao});
 
   @override
   Widget build(BuildContext context) {

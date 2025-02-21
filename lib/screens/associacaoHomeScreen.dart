@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/models/associacao.dart';
 import 'package:tinder_para_caes/models/utilizador.dart';
-import 'package:tinder_para_caes/screens/allAnimalsAssociacaoScreen.dart';
+import 'package:tinder_para_caes/screens/allAnimalsList.dart';
 import 'package:tinder_para_caes/screens/adicionarAnimalScreen.dart';
 import 'package:tinder_para_caes/models/funcionalidades.dart';
 
@@ -123,7 +123,7 @@ class Associacaohomescreen extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AllAnimalsAssociacaoScreen(animais: animais, isAssociacao: assoE.associacao,),
+                          builder: (context) => AllAnimalsList(animais: animais, isAssociacao: assoE.associacao,),
                         ),
                       );
                     },

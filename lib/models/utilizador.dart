@@ -1,3 +1,5 @@
+import 'package:tinder_para_caes/models/animal.dart';
+
 import 'associacao.dart';
 
 class Utilizador {
@@ -13,6 +15,7 @@ class Utilizador {
     String password;
 
     List<Associacao> associacoesEmQueEstaEnvolvido = [];
+    List<Animal> osSeusAnimais = [];
     bool associacao = false;
 
     

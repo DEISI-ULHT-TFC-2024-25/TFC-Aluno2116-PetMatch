@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/models/associacao.dart';
 import 'package:tinder_para_caes/models/utilizador.dart';
 import 'package:tinder_para_caes/screens/vizualizarAssociacaoScreen.dart';
+import 'package:tinder_para_caes/models/animal.dart';
+import 'package:tinder_para_caes/screens/adicionarAnimalScreen.dart';
+import 'package:tinder_para_caes/screens/allAnimalsList.dart';
 
 class UtilizadorHomeScreen extends StatelessWidget {
   @override
@@ -9,6 +12,7 @@ class UtilizadorHomeScreen extends StatelessWidget {
     // Obtenção das sugestões com base na localidade
     List<Associacao> sugestoesAssociacoes = Associacao.getSugestoesAssociacoes(Utilizador.user.local);
     List<Associacao> associacoesEnvolvido = Utilizador.user.associacoesEmQueEstaEnvolvido;
+    List<Animal> animais = Utilizador.user.osSeusAnimais;
 
     return Scaffold(
       appBar: AppBar(
@@ -20,6 +24,52 @@ class UtilizadorHomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Seção de animais
+              Text(
+                "Os seus animais",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 8.0),
+              animais.isEmpty
+                  ? Text("Introduza o seu patudo")
+                  : Row(
+                children: [
+                  ...animais.take(3).map((animal) => Expanded(
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Icon(Icons.pets, size: 50),
+                            Text(animal.fullName),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )),
+                ],
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => AllAnimalsList(animais: animais, isAssociacao: false))
+                  );
+                  // Ação para ver todos os animais
+                },
+                child: Text("Ver todos"),
+              ),
+
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => AdicionarAnimalScreen())
+                  );
+                  // Ação para ver todos os animais
+                },
+                child: Text("Adicionar patudo"),
+              ),
+
+              SizedBox(height: 16.0),
               Text(
                 "Associações Associadas",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

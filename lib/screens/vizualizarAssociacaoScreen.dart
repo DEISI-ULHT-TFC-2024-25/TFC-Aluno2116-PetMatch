@@ -4,7 +4,7 @@ import 'package:tinder_para_caes/documents/tornarSocio.dart';
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/models/associacao.dart';
 import 'package:tinder_para_caes/models/eventos.dart';
-import 'package:tinder_para_caes/screens/allAnimalsAssociacaoScreen.dart';
+import 'package:tinder_para_caes/screens/allAnimalsList.dart';
 import 'package:tinder_para_caes/documents/passearCao.dart';
 import 'package:tinder_para_caes/documents/tornarPadrinho.dart';
 import 'package:tinder_para_caes/documents/tornarVoluntario.dart';
@@ -126,7 +126,7 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => AllAnimalsAssociacaoScreen(animais: animals, isAssociacao: false),
+                                      builder: (context) => AllAnimalsList(animais: animals, isAssociacao: false),
                                     ),
                                   );
                                 },
