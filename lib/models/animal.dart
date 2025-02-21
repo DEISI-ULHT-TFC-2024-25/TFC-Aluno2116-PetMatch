@@ -5,7 +5,7 @@ import 'package:flutter/services.dart' show rootBundle;
 class Animal {
   int chip; //id dos utilizadores
   String fullName;
-  int age;
+  int age; //por a data e mostrar a idade atraves da data
   bool sterilized;
   int gender; //0 - Femnino, 1 - Masculino,
   String legalOwner;
