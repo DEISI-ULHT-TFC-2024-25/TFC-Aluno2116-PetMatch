@@ -5,6 +5,7 @@ import 'package:tinder_para_caes/screens/vizualizarAssociacaoScreen.dart';
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/screens/adicionarAnimalScreen.dart';
 import 'package:tinder_para_caes/screens/allAnimalsList.dart';
+import 'package:tinder_para_caes/screens/allAssociacoesList.dart';
 
 class UtilizadorHomeScreen extends StatelessWidget {
   @override
@@ -31,7 +32,7 @@ class UtilizadorHomeScreen extends StatelessWidget {
               ),
               SizedBox(height: 8.0),
               animais.isEmpty
-                  ? Text("Introduza o seu patudo")
+                  ? Text("Ainda não introduzio o seu patuto")
                   : Row(
                 children: [
                   ...animais.take(3).map((animal) => Expanded(
@@ -82,7 +83,7 @@ class UtilizadorHomeScreen extends StatelessWidget {
                     Expanded(
                       child: ListView.builder(
                         shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
+                        //physics: NeverScrollableScrollPhysics(),
                         itemCount: associacoesEnvolvido.length > 4 ? 4 : associacoesEnvolvido.length,
                         itemBuilder: (context, index) {
                           final associacao = associacoesEnvolvido[index];
@@ -104,13 +105,15 @@ class UtilizadorHomeScreen extends StatelessWidget {
                         },
                       ),
                     ),
-                    if (associacoesEnvolvido.length > 4)
-                      TextButton(
-                        onPressed: () {
-                          // Ação para ver todas as associações
-                        },
-                        child: Text("Ver todas"),
-                      ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context, MaterialPageRoute(builder: (context) => AllAssociacoesList(associacoes: associacoesEnvolvido))
+                        );
+                        // Ação para ver todas as associações
+                      },
+                      child: Text("Ver todas"),
+                    ),
                   ],
                 ),
               ),
@@ -127,7 +130,6 @@ class UtilizadorHomeScreen extends StatelessWidget {
                     Expanded(
                       child: ListView.builder(
                         shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
                         itemCount: sugestoesAssociacoes.length > 4 ? 4 : sugestoesAssociacoes.length,
                         itemBuilder: (context, index) {
                           final associacao = sugestoesAssociacoes[index];
@@ -136,7 +138,6 @@ class UtilizadorHomeScreen extends StatelessWidget {
                             child: ListTile(
                               title: Text(associacao.name),
                               subtitle: Text("Localidade: ${associacao.local}"),
-                              trailing: Icon(Icons.add),
                               onTap: () {
                                 Navigator.push(
                                   context,
@@ -150,13 +151,15 @@ class UtilizadorHomeScreen extends StatelessWidget {
                         },
                       ),
                     ),
-                    if (sugestoesAssociacoes.length > 4)
-                      TextButton(
-                        onPressed: () {
-                          // Ação para ver todas as sugestões
-                        },
-                        child: Text("Ver todas"),
-                      ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context, MaterialPageRoute(builder: (context) => AllAssociacoesList(associacoes: associacoesEnvolvido))
+                        );
+                        // Ação para ver todas as sugestões
+                      },
+                      child: Text("Ver todas"),
+                    ),
                   ],
                 ),
               ),

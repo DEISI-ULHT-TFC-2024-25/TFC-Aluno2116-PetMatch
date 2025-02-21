@@ -81,7 +81,7 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Animais Disponíveis:",
+                              "Animais da associação:",
                               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                             SizedBox(height: 10),

@@ -102,7 +102,7 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
             TextField(controller: portePesoController, decoration: InputDecoration(labelText: "Porte/Peso")),
 
             CheckboxListTile(
-              title: Text("Castrado/Estrelizada"),
+              title: Text("Castrado/Esterelizada"),
               value: estaEsterilizado,
               onChanged: (bool? value) {
                 setState(() {
