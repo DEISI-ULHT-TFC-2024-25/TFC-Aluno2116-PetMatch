@@ -16,7 +16,6 @@ Eventos/noticias - Eventos que a Associação vai realizar numa determinada data
 
 TODO: 
 Ecras
-- adicionar o seu proprio cao (para mais tarde poder ir passear com outros )
 - pagina para abrir os pedidos efectuados pelos uutilizadores
 
 - mostrar erros de registo, e de sucesso (popup)
@@ -41,6 +40,7 @@ DONE:
 - pagina de perfil do cao (prespectva do utilizador e da associação)
 - pagina de pedido para passear o cao
 - preencher dados de responsabilidade
+- - adicionar o seu proprio cao (para mais tarde poder ir passear com outros )
 
 
 TO DO LATER:

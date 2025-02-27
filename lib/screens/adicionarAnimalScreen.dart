@@ -3,6 +3,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:tinder_para_caes/models/animal.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class AdicionarAnimalScreen extends StatefulWidget {
   @override
@@ -186,15 +188,7 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
                 ),
               SizedBox(height: 16.0),
               ElevatedButton(
-                onPressed: () {
-                  final newAnimal = _nomeController.text.trim();
-                  if (newAnimal.isNotEmpty) {
-                    Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Animal '$newAnimal' adicionado!")),
-                    );
-                  }
-                },
+                onPressed: _salvarAnimal,
                 child: Text("Registar animal"),
               ),
             ],
@@ -203,4 +197,39 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
       ),
     );
   }
+  void _salvarAnimal() async {
+    if (_nomeController.text.isEmpty || _genero == null || _porte == null || _especie == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Preencha todos os campos obrigatórios!")),
+      );
+      return;
+    }
+
+    try {
+      await FirebaseFirestore.instance.collection('animal').add({
+        'nome': _nomeController.text.trim(),
+        'genero': _genero,
+        'castrado': _castrado,
+        'porte': _porte,
+        'especie': _especie,
+        'raca': _racaController.text.trim(),
+        'comportamento': _comportamentoController.text.trim(),
+        'criado_em': Timestamp.now(),
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Animal adicionado com sucesso!")),
+      );
+
+      Navigator.pop(context);
+    } catch (e) {
+      print("Erro ao guardar no Firestore: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Erro ao adicionar animal!")),
+      );
+    }
+  }
 }
+
+
+
