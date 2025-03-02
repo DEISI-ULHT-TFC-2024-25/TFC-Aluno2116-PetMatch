@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tinder_para_caes/firebaseLogic/authenticationService.dart'; // Serviço de autenticação
-import 'escolherUtiliAssoci.dart'; // Tela de registro
+import 'escolherUtiliAssoci.dart';
 import 'package:tinder_para_caes/screens/utilizadorHomeScreen.dart'; // Tela principal para utilizador
 import 'package:tinder_para_caes/screens/associacaoHomeScreen.dart'; // Tela principal para associação
 
@@ -16,7 +15,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final Authenticationservice authService = Authenticationservice(); // Instância do serviço de autenticação
+  final Authenticationservice authService = Authenticationservice();
 
   void login() async {
     User? user = await authService.loginUser(
@@ -27,19 +26,27 @@ class _LoginScreenState extends State<LoginScreen> {
     if (user != null) {
       print("✅ Login bem-sucedido!");
 
-      // 🔹 Pega o tipo do usuário no Firestore
+      // Obtém os dados do utilizador no Firestore
       Map<String, dynamic>? userData = await authService.getUserData(user.uid);
-      String userType = userData?['tipo'] ?? 'utilizador'; // Se não existir, assume "utilizador"
-
-      // 🔹 Redireciona conforme o tipo de usuário
+      String userType = userData?['tipo'] ?? 'utilizador'; // Assume "utilizador" se não existir
+      print(userType);
+      // Redireciona com base no tipo de usuário
       if (userType == "associacao") {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Associacaohomescreen()));
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Associacaohomescreen()),
+        );
       } else {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UtilizadorHomeScreen()));
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => UtilizadorHomeScreen()),
+        );
       }
     } else {
       print("❌ Erro no login");
-      // Aqui podes exibir um SnackBar ou um alerta para o usuário
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Erro ao fazer login. Verifique seus dados e tente novamente.')),
+      );
     }
   }
 
@@ -54,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
             const Text("Bem-vindo", style: TextStyle(fontSize: 16)),
             const SizedBox(height: 10),
             TextField(
-              controller: emailController, // Agora captura o email
+              controller: emailController,
               decoration: const InputDecoration(
                 labelText: 'Email',
                 border: OutlineInputBorder(),
@@ -62,21 +69,16 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 10),
             TextField(
-              controller: passwordController, // Agora captura a senha
+              controller: passwordController,
               decoration: const InputDecoration(
                 labelText: 'Palavra-passe',
                 border: OutlineInputBorder(),
               ),
-              obscureText: true, // Oculta a senha
+              obscureText: true,
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => UtilizadorHomeScreen()),
-                );
-              },
+              onPressed: login, // Agora chama a função de login corretamente
               child: const Text('Login'),
             ),
             const Spacer(),

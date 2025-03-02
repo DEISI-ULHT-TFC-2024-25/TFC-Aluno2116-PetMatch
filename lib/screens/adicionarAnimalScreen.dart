@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:io';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,8 +22,6 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
   List<String> racas = [];
   List<String> _racasFiltradas = [];
 
-
-
   @override
   void initState() {
     super.initState();
@@ -40,7 +38,6 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
       print('Erro ao carregar as raças: $e');
     }
   }
-
 
 
   @override
@@ -150,10 +147,13 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
                 onChanged: (String? value) {
                   setState(() {
                     _especie = value;
+                    _racaController.clear();
+                    _racasFiltradas.clear();
                   });
                 },
               ),
               SizedBox(height: 10),
+            if (_especie == "Cão") ...[
               TextField(
                 controller: _racaController,
                 decoration: InputDecoration(
@@ -192,21 +192,32 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
                 child: Text("Registar animal"),
               ),
             ],
-          ),
+          ]),
+
         ),
       ),
     );
   }
+
+
+
+
+
   void _salvarAnimal() async {
-    if (_nomeController.text.isEmpty || _genero == null || _porte == null || _especie == null) {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Preencha todos os campos obrigatórios!")),
+        SnackBar(content: Text("Você precisa estar autenticado para registrar um animal!")),
       );
       return;
     }
 
+    String userID = user.uid;
+    CollectionReference animaisRef = FirebaseFirestore.instance.collection('animal');
+    CollectionReference usersRef = FirebaseFirestore.instance.collection('users'); // 🔹 Definição correta
+
     try {
-      await FirebaseFirestore.instance.collection('animal').add({
+      DocumentReference novoAnimalRef = await animaisRef.add({
         'nome': _nomeController.text.trim(),
         'genero': _genero,
         'castrado': _castrado,
@@ -214,8 +225,14 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
         'especie': _especie,
         'raca': _racaController.text.trim(),
         'comportamento': _comportamentoController.text.trim(),
+        'donoID': userID,
         'criado_em': Timestamp.now(),
       });
+
+      // 🔹 Agora adicionamos o ID do animal à lista de animais do usuário
+      await usersRef.doc(userID).set({
+        'animais': FieldValue.arrayUnion([novoAnimalRef.id])
+      }, SetOptions(merge: true));
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Animal adicionado com sucesso!")),
@@ -229,6 +246,7 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
       );
     }
   }
+
 }
 
 
