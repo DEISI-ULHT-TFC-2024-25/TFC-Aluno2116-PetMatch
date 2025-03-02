@@ -9,6 +9,7 @@ class Pedido {
   Animal animalRequesitado;
   Associacao associacao;
   bool confirmouTodosOsRequisitos;
+  String mensagemAdicional ;
 
   // Construtor da classe
   Pedido({
@@ -17,13 +18,14 @@ class Pedido {
     required this.animalRequesitado,
     required this.associacao,
     required this.confirmouTodosOsRequisitos,
+    required this.mensagemAdicional,
 
   });
 
 
   static List<Pedido> getTodosPedidos(){
     List<Pedido> todosOsPedidos = [
-      Pedido(utilizadorQueRealizaOpedido: Utilizador.user, oQuePretendeFazer: Funcionalidades.passeiosDosCandeos, animalRequesitado: Animal.todosAnimais.first, associacao: Associacao.procurarAssociacao(0), confirmouTodosOsRequisitos: true),
+      Pedido(utilizadorQueRealizaOpedido: Utilizador.user, oQuePretendeFazer: Funcionalidades.passeiosDosCandeos, animalRequesitado: Animal.todosAnimais.first, associacao: Associacao.procurarAssociacao(0), confirmouTodosOsRequisitos: true, mensagemAdicional: ""),
     ];
 
     return todosOsPedidos;
@@ -32,5 +34,5 @@ class Pedido {
 }
 
 List<Pedido> todosOsPedidos = [
-  Pedido(utilizadorQueRealizaOpedido: Utilizador.user, oQuePretendeFazer: Funcionalidades.passeiosDosCandeos, animalRequesitado: Animal.todosAnimais.first, associacao: Associacao.procurarAssociacao(0), confirmouTodosOsRequisitos: true),
+  Pedido(utilizadorQueRealizaOpedido: Utilizador.user, oQuePretendeFazer: Funcionalidades.passeiosDosCandeos, animalRequesitado: Animal.todosAnimais.first, associacao: Associacao.procurarAssociacao(0), confirmouTodosOsRequisitos: true, mensagemAdicional: ""),
 ];
