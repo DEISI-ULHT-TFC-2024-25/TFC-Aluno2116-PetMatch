@@ -5,7 +5,7 @@
 - O documento pode ter uma subcoleção
 
 
-GLOSSARIO:
+GLOSSARIO:--------------------------------------------------
 Utilizador - pessoa que se regista e usa a aplicação para contactar associações e/ou registar os seus p..e. animais.
 Associação - Associação de protecção dos animais. Procuram voluntários para ajudar em tarefas diversas: passear os animais, levar comida, dar banho, etc.
 Animal - representa um animal que pode estar ao cuidado de uma instituição ou de um utilizador.
@@ -14,34 +14,31 @@ Funcionalidades - São as "tarefas/acções" que a Associação aceita que um Ut
 Eventos/noticias - Eventos que a Associação vai realizar numa determinada data. Por exemplo: "Venha conhecer os nossos animais novos".
 
 
-TODO: 
+TODO:--------------------------------------------------------- 
 Ecras
-- pagina para abrir os pedidos efectuados pelos uutilizadores
-
 - mostrar erros de registo, e de sucesso (popup)
 - limpar o isAssocicacao do firebaase e do codigo das classes (fazer a verificação do tipo de utilizador para as restrições de tipo de utilizador)
 - testar o login 
 
 Firebase:
-- replicar as coleções Utilizador(DONE) e Associação(DONE) e pedidos/notificacoes e animal 
+- 
+
+
+DONE:-----------------------------------------------------------
+- replicar as coleções Utilizador(DONE) e Associação(DONE) e pedidos/notificacoes e animal
 - animal (ids) nos objetos do utilizador e da associação
 - subcoleções das associações funcionalidades e eventos(DONE)
+- pagina para abrir os pedidos efectuados pelos uutilizadores
 
 
-DONE:
-- login
-- criar associação
-- criar utilizador
-- home page associaçao
-- home page utilizador
-- adicionnar cao na associaçáo
-- ver lista completa dos caes
-- pagina de perfil da associação (prespectiva do utilizador)
-- pagina de perfil do cao (prespectva do utilizador e da associação)
-- pagina de pedido para passear o cao
-- preencher dados de responsabilidade
-- - adicionar o seu proprio cao (para mais tarde poder ir passear com outros )
 
-
-TO DO LATER:
+TO DO LATER:----------------------------------------------------
 1  botão para historico de caes (home screen do utilizador)
+
+
+ERROS/PROBLEMAS:------------------------------------------------
+- login a entrar para o tipo de utilizador correto
+- API do mapa
+- aspeto (criar o tema)
+- politicas de privacidade e etc dos chats de mensagens ????
+- como fazer historico

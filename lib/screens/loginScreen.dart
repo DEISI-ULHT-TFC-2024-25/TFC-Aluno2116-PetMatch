@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:tinder_para_caes/firebaseLogic/authenticationService.dart'; // Serviço de autenticação
+import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
+import 'package:tinder_para_caes/firebaseLogic/authenticationService.dart';
 import 'escolherUtiliAssoci.dart';
-import 'package:tinder_para_caes/screens/utilizadorHomeScreen.dart'; // Tela principal para utilizador
-import 'package:tinder_para_caes/screens/associacaoHomeScreen.dart'; // Tela principal para associação
+import 'package:tinder_para_caes/screens/utilizadorHomeScreen.dart';
+import 'package:tinder_para_caes/screens/associacaoHomeScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,21 +17,49 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final Authenticationservice authService = Authenticationservice();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance; // Firestore instance
 
   void login() async {
-    User? user = await authService.loginUser(
-      emailController.text.trim(),
-      passwordController.text.trim(),
-    );
+    try {
+      // 1️⃣ Log in user with email & password
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
 
-    if (user != null) {
-      print("✅ Login bem-sucedido!");
+      User? user = userCredential.user;
+      if (user == null) {
+        throw Exception("❌ Error: User not found.");
+      }
 
-      // Obtém os dados do utilizador no Firestore
-      Map<String, dynamic>? userData = await authService.getUserData(user.uid);
-      String userType = userData?['tipo'] ?? 'utilizador'; // Assume "utilizador" se não existir
-      print(userType);
-      // Redireciona com base no tipo de usuário
+      print("✅ Login successful! UID: ${user.uid}");
+
+      // 2️⃣ First, check if the user exists in the "utilizador" collection
+      DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+      await _firestore.collection('utilizador').doc(user.uid).get();
+
+      String? userType;
+
+      if (userSnapshot.exists) {
+        userType = "utilizador"; // User is a normal user
+      } else {
+        // 3️⃣ If not found, check the "associacao" collection
+        DocumentSnapshot<Map<String, dynamic>> assocSnapshot =
+        await _firestore.collection('associacao').doc(user.uid).get();
+
+        if (assocSnapshot.exists) {
+          userType = "associacao"; // User is an association
+        }
+      }
+
+      if (userType == null) {
+        throw Exception("⚠️ User type not found in Firestore!");
+      }
+
+      print("🎭 User type: $userType");
+
+      // 4️⃣ Redirect to the correct screen
       if (userType == "associacao") {
         Navigator.pushReplacement(
           context,
@@ -42,13 +71,14 @@ class _LoginScreenState extends State<LoginScreen> {
           MaterialPageRoute(builder: (context) => UtilizadorHomeScreen()),
         );
       }
-    } else {
-      print("❌ Erro no login");
+    } catch (e) {
+      print("❌ Login error: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Erro ao fazer login. Verifique seus dados e tente novamente.')),
+        SnackBar(content: Text('Login failed: ${e.toString()}')),
       );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: login, // Agora chama a função de login corretamente
+              onPressed: login,
               child: const Text('Login'),
             ),
             const Spacer(),
