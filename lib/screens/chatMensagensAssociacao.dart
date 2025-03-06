@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ChatScreen extends StatefulWidget {
+class ChatMensagensAssociacao extends StatefulWidget {
   final String utilizador;
   final String genero;
   final String mensagemInicial;
@@ -8,7 +8,7 @@ class ChatScreen extends StatefulWidget {
   final String associacao;
   final bool confirmouTodosOsRequisitos;
 
-  ChatScreen({
+  ChatMensagensAssociacao({
     required this.utilizador,
     required this.genero,
     required this.mensagemInicial,
@@ -18,10 +18,10 @@ class ChatScreen extends StatefulWidget {
   });
 
   @override
-  _ChatScreenState createState() => _ChatScreenState();
+  _ChatMensagensAssociacaoState createState() => _ChatMensagensAssociacaoState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatMensagensAssociacaoState extends State<ChatMensagensAssociacao> {
   List<Map<String, String>> messages = []; // ONDE É PARA GUARDAR AS MENSAGENS POSTERIORMENTE NO FIRESTORE
   TextEditingController messageController = TextEditingController();
 

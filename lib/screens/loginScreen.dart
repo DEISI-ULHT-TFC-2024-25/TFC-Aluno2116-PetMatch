@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
+import 'package:go_router/go_router.dart';
 import 'package:tinder_para_caes/firebaseLogic/authenticationService.dart';
 import 'escolherUtiliAssoci.dart';
 import 'package:tinder_para_caes/screens/utilizadorHomeScreen.dart';
@@ -81,49 +82,58 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const Text("Bem-vindo", style: TextStyle(fontSize: 16)),
-            const SizedBox(height: 10),
-            TextField(
-              controller: emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // Mantém apenas o tamanho necessário
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              const Text(
+                "Bem-vindo",
+                style: TextStyle(fontSize: 16),
+                textAlign: TextAlign.center, // Centraliza o texto
               ),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: passwordController,
-              decoration: const InputDecoration(
-                labelText: 'Palavra-passe',
-                border: OutlineInputBorder(),
+              const SizedBox(height: 20),
+              TextField(
+                controller: emailController,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                ),
               ),
-              obscureText: true,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: login,
-              child: const Text('Login'),
-            ),
-            const Spacer(),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Escolherutiliassoci()),
-                );
-              },
-              child: const Text('Efectuar Registo'),
-            ),
-          ],
+              const SizedBox(height: 10),
+              TextField(
+                controller: passwordController,
+                decoration: const InputDecoration(
+                  labelText: 'Palavra-passe',
+                  border: OutlineInputBorder(),
+                ),
+                obscureText: true,
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: login,
+                child: const Text('Login'),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Escolherutiliassoci()),
+                  );
+                },
+                child: const Text('Efectuar Registo'),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+
 }
