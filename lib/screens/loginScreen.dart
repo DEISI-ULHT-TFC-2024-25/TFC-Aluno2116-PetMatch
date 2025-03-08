@@ -6,6 +6,8 @@ import 'package:tinder_para_caes/firebaseLogic/authenticationService.dart';
 import 'escolherUtiliAssoci.dart';
 import 'package:tinder_para_caes/screens/utilizadorHomeScreen.dart';
 import 'package:tinder_para_caes/screens/associacaoHomeScreen.dart';
+import 'package:tinder_para_caes/models/utilizador.dart';
+import 'package:tinder_para_caes/models/associacao.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -36,21 +38,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
       print("✅ Login successful! UID: ${user.uid}");
 
-      // 2️⃣ First, check if the user exists in the "utilizador" collection
+      // 2️⃣ Primeiro, verifica se o usuário existe na coleção "utilizador"
       DocumentSnapshot<Map<String, dynamic>> userSnapshot =
       await _firestore.collection('utilizador').doc(user.uid).get();
 
       String? userType;
 
       if (userSnapshot.exists) {
-        userType = "utilizador"; // User is a normal user
+        userType = "utilizador"; // Usuário normal
       } else {
-        // 3️⃣ If not found, check the "associacao" collection
+        // 3️⃣ Se não for encontrado, verifica na coleção "associacao"
         DocumentSnapshot<Map<String, dynamic>> assocSnapshot =
         await _firestore.collection('associacao').doc(user.uid).get();
 
         if (assocSnapshot.exists) {
-          userType = "associacao"; // User is an association
+          userType = "associacao"; // Usuário do tipo associação
         }
       }
 
@@ -60,16 +62,34 @@ class _LoginScreenState extends State<LoginScreen> {
 
       print("🎭 User type: $userType");
 
-      // 4️⃣ Redirect to the correct screen
+      // 4️⃣ Redireciona para a tela correta
       if (userType == "associacao") {
+        // Ler o documento da coleção 'associacao'
+        DocumentSnapshot<Map<String, dynamic>> assocSnapshot =
+        await _firestore.collection('associacao').doc(user.uid).get();
+
+        if (!assocSnapshot.exists) {
+          throw Exception("❌ Documento da associação não encontrado.");
+        }
+
+        Map<String, dynamic> data = assocSnapshot.data()!;
+        final minhaAssociacao = Associacao.fromMap(data);
+
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => Associacaohomescreen()),
+          MaterialPageRoute(builder: (context) => AssociacaoHomeScreen(associacao: minhaAssociacao)),
         );
       } else {
+        // Aqui, criamos a instância de Utilizador com os dados do Firestore.
+        // Certifique-se de que sua classe Utilizador possua o método fromMap.
+        Map<String, dynamic> userData = userSnapshot.data()!;
+        Utilizador utilizadorALogar = Utilizador.fromMap(userData);
+
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => UtilizadorHomeScreen()),
+          MaterialPageRoute(
+            builder: (context) => UtilizadorHomeScreen(utilizador: utilizadorALogar),
+          ),
         );
       }
     } catch (e) {
@@ -80,8 +100,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-
-  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -135,5 +153,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
 }

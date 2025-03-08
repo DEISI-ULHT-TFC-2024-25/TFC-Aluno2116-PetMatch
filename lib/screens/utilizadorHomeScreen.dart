@@ -8,16 +8,19 @@ import 'package:tinder_para_caes/screens/allAnimalsList.dart';
 import 'package:tinder_para_caes/screens/allAssociacoesList.dart';
 
 class UtilizadorHomeScreen extends StatelessWidget {
+  final Utilizador utilizador;
+  const UtilizadorHomeScreen({Key? key, required this.utilizador}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    // Obtenção das sugestões com base na localidade
-    List<Associacao> sugestoesAssociacoes = Associacao.getSugestoesAssociacoes(Utilizador.user.local);
-    List<Associacao> associacoesEnvolvido = Utilizador.user.associacoesEmQueEstaEnvolvido;
-    List<Animal> animais = Utilizador.user.osSeusAnimais;
+    // Obtenção das sugestões com base na localidade do utilizador recebido
+    List<Associacao> sugestoesAssociacoes = Associacao.getSugestoesAssociacoes(utilizador.local);
+    List<Associacao> associacoesEnvolvido = utilizador.associacoesEmQueEstaEnvolvido;
+    List<Animal> animais = utilizador.osSeusAnimais;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home Page - ${Utilizador.user.fullName}"),
+        title: Text("Home Page - ${utilizador.fullName}"),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -32,7 +35,7 @@ class UtilizadorHomeScreen extends StatelessWidget {
               ),
               SizedBox(height: 8.0),
               animais.isEmpty
-                  ? Text("Ainda não introduzio o seu patuto")
+                  ? Text("Ainda não introduziu o seu patudo")
                   : Row(
                 children: [
                   ...animais.take(3).map((animal) => Expanded(
@@ -53,23 +56,24 @@ class UtilizadorHomeScreen extends StatelessWidget {
               TextButton(
                 onPressed: () {
                   Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => AllAnimalsList(animais: animais, isAssociacao: false))
-                  );
-                  // Ação para ver todos os animais
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AllAnimalsList(
+                            animais: animais,
+                            isAssociacao: false,
+                          )));
                 },
                 child: Text("Ver todos"),
               ),
-
               TextButton(
                 onPressed: () {
                   Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => AdicionarAnimalScreen())
-                  );
-                  // Ação para ver todos os animais
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AdicionarAnimalScreen()));
                 },
                 child: Text("Adicionar patudo"),
               ),
-
               SizedBox(height: 16.0),
               Text(
                 "Associações Associadas",
@@ -77,13 +81,14 @@ class UtilizadorHomeScreen extends StatelessWidget {
               ),
               SizedBox(height: 8.0),
               Container(
-                height: (associacoesEnvolvido.length > 4) ? 300 : associacoesEnvolvido.length * 75.0,
+                height: (associacoesEnvolvido.length > 4)
+                    ? 300
+                    : associacoesEnvolvido.length * 75.0,
                 child: Column(
                   children: [
                     Expanded(
                       child: ListView.builder(
                         shrinkWrap: true,
-                        //physics: NeverScrollableScrollPhysics(),
                         itemCount: associacoesEnvolvido.length > 4 ? 4 : associacoesEnvolvido.length,
                         itemBuilder: (context, index) {
                           final associacao = associacoesEnvolvido[index];
@@ -108,9 +113,9 @@ class UtilizadorHomeScreen extends StatelessWidget {
                     TextButton(
                       onPressed: () {
                         Navigator.push(
-                            context, MaterialPageRoute(builder: (context) => AllAssociacoesList(associacoes: associacoesEnvolvido))
+                            context,
+                            MaterialPageRoute(builder: (context) => AllAssociacoesList(associacoes: associacoesEnvolvido))
                         );
-                        // Ação para ver todas as associações
                       },
                       child: Text("Ver todas"),
                     ),
@@ -124,7 +129,9 @@ class UtilizadorHomeScreen extends StatelessWidget {
               ),
               SizedBox(height: 8.0),
               Container(
-                height: (sugestoesAssociacoes.length > 4) ? 300 : sugestoesAssociacoes.length * 75.0,
+                height: (sugestoesAssociacoes.length > 4)
+                    ? 300
+                    : sugestoesAssociacoes.length * 75.0,
                 child: Column(
                   children: [
                     Expanded(
@@ -154,9 +161,9 @@ class UtilizadorHomeScreen extends StatelessWidget {
                     TextButton(
                       onPressed: () {
                         Navigator.push(
-                            context, MaterialPageRoute(builder: (context) => AllAssociacoesList(associacoes: associacoesEnvolvido))
+                            context,
+                            MaterialPageRoute(builder: (context) => AllAssociacoesList(associacoes: associacoesEnvolvido))
                         );
-                        // Ação para ver todas as sugestões
                       },
                       child: Text("Ver todas"),
                     ),

@@ -1,110 +1,111 @@
 import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/models/associacao.dart';
-import 'package:tinder_para_caes/models/utilizador.dart';
 import 'package:tinder_para_caes/screens/allAnimalsList.dart';
 import 'package:tinder_para_caes/screens/adicionarAnimalScreen.dart';
-import 'package:tinder_para_caes/models/funcionalidades.dart';
 
+class AssociacaoHomeScreen extends StatelessWidget {
 
-// Função para retornar uma associação pelo nome
+  final Associacao associacao;
 
-class Associacaohomescreen extends StatelessWidget {
-
-  //ecra exemplo para a associaçao h
-
-  /*Associacao associacaoImaginaria = Associacao.procurarAssociacaoPorNome("Associação H");
-*/
-
+  const AssociacaoHomeScreen({Key? key, required this.associacao}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    Associacao assoE = Associacao.procurarAssociacao(0);
-    List<Animal> animaisExibidos = assoE.animais;
-    List<Animal> animais= assoE.animais;
-/*
-    if(associacaoImaginaria != null){
-      List<Animal> animaisExibidos = associacaoImaginaria.animais.take(9).toList();
-      List<Animal> animais= associacaoImaginaria.animais;
-    }
- */
-
     return Scaffold(
-      appBar: AppBar( //ecra feito para associação h
-        title: Text("Home Page - ${assoE.name}"),
+      appBar: AppBar(
+        title: Text("Página da Associação"),
+        //backgroundColor: Colors.brown, // Ajuste conforme necessário
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Lista de Associações Associadas
-            Text(
-              "Notificações",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8.0),
-            Expanded(
-              child: ListView.builder(
-                itemCount: assoE.pedidosRealizados.length,
-                itemBuilder: (context, index) {
-                  final pedido = assoE.pedidosRealizados[index];
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Título
+              Text(
+                "Home Page - ${associacao.name}",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  decoration: TextDecoration.none,
+                ),
+              ),
+              SizedBox(height: 16.0),
 
-                  String utilizadorName = "";
-                  Funcionalidades? oQuePretendeFazer = null;
-                  Animal? animal = null;
-                  if(pedido != null) {
-                    utilizadorName = pedido.utilizadorQueRealizaOpedido.fullName;
-                    animal = pedido.animalRequesitado;
-                    oQuePretendeFazer = pedido.oQuePretendeFazer;
-                  }
+              // Notificações
+              Text(
+                "Notificações",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  decoration: TextDecoration.none,
+                ),
+              ),
+              SizedBox(height: 8.0),
+
+              // Lista de notificações
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: associacao.pedidosRealizados.length,
+                itemBuilder: (context, index) {
+                  final pedido = associacao.pedidosRealizados[index];
+                  String utilizadorName = pedido.utilizadorQueRealizaOpedido.fullName;
+                  Animal animal = pedido.animalRequesitado;
                   return Card(
-                    margin: EdgeInsets.symmetric(vertical: 4.0),
+                    margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
                     child: ListTile(
                       title: Text(utilizadorName),
                       subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Animal para qual o houve interesse: ${animal}",
-                            maxLines: 3, // Número máximo de linhas que o texto pode ocupar
-                            overflow: TextOverflow.ellipsis, // Adiciona "..." caso o texto ultrapasse o limite),
-                            ),
-
-                          Text("Notificação nova para: ${oQuePretendeFazer}"),
+                          Text(
+                            "Animal interessado: ${animal.fullName}",
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text("Pedido: ${pedido.oQuePretendeFazer}"),
                         ],
                       ),
-
-                    )
-
+                    ),
                   );
                 },
               ),
-            ),
-            SizedBox(height: 16.0),
-//--------------------------------------------------------------------------------------------------
+              SizedBox(height: 16.0),
 
+              // Animais visíveis ao público
+              Text(
+                "Os seus patudos visíveis ao público",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  decoration: TextDecoration.none,
+                ),
+              ),
+              SizedBox(height: 8.0),
 
-      // Lista de Sugestões de Associações
-            Text(
-              "Os seus patudos visiveis ao publico",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-
-            SizedBox(height: 8.0),
-            Expanded(
-              child: GridView.builder(
+              // Grid de animais com scroll total
+              GridView.builder(
+                shrinkWrap: true, // Permite que o Grid se ajuste dentro do SingleChildScrollView
+                physics: NeverScrollableScrollPhysics(), // Evita conflitos de rolagem
                 padding: const EdgeInsets.all(8.0),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3, // 3 itens por linha
+                  crossAxisCount: 3, // Define 3 colunas
                   crossAxisSpacing: 8.0,
                   mainAxisSpacing: 8.0,
+                  childAspectRatio: 1, // Mantém os cards mais quadrados
                 ),
-                itemCount: animaisExibidos.length,
+                itemCount: associacao.animais.length,
                 itemBuilder: (context, index) {
-
                   return Card(
-                    color: Colors.redAccent,
+                    color: Colors.brown,
                     child: Center(
                       child: Text(
-                        animaisExibidos[index]!.fullName,
+                        associacao.animais[index].fullName,
                         style: TextStyle(color: Colors.white, fontSize: 16),
                         textAlign: TextAlign.center,
                       ),
@@ -112,37 +113,42 @@ class Associacaohomescreen extends StatelessWidget {
                   );
                 },
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AllAnimalsList(animais: animais, isAssociacao: assoE.associacao,),
-                        ),
-                      );
-                    },
-                    child: Text("Ver Todos"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => AdicionarAnimalScreen()),
-                      );
-                    },
-                    child: Text("Adicionar Animal"),
-                  ),
-                ],
-              ),
+              SizedBox(height: 16.0),
 
-            ),
-          ],
+              // Botões de ações
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AllAnimalsList(
+                              animais: associacao.animais,
+                              isAssociacao: true,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Text("Ver Todos"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AdicionarAnimalScreen()),
+                        );
+                      },
+                      child: Text("Adicionar Animal"),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

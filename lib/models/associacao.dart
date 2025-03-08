@@ -1,7 +1,6 @@
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/models/pedido.dart';
 import 'package:tinder_para_caes/models/eventos.dart';
-
 import 'funcionalidades.dart';
 
 class Associacao {
@@ -15,22 +14,15 @@ class Associacao {
   bool showAddress;
   String address;
   String site;
-  int nif; //id
-  //preferencias
+  int nif; // ID
   List<Funcionalidades> funcionalidades = [];
-  //animais da associação
   List<Animal> animais = [];
-
-  //notificação de pedidos feitos a utilizadores
   List<Pedido> pedidosRealizados = [];
-
-  //Eventos
-  List<Eventos> eventos =[];
+  List<Eventos> eventos = [];
   List<String> necessidades = [];
   bool associacao = true;
 
-
-  // Construtor da classe
+  // Construtor principal
   Associacao({
     required this.name,
     required this.sigla,
@@ -46,77 +38,34 @@ class Associacao {
     required this.funcionalidades,
     required this.animais,
     required this.pedidosRealizados,
+    // eventos e necessidades podem ser inicializados externamente, se quiser
   });
 
-  //Associacao.simple()
-  //  : name = "0",
-  //    local = "0";
-
-
-
-  static Associacao procurarAssociacao(int id) {
-    if (id < 0 || id >= todasAssociacoes.length) {
-      throw Exception("Índice $id fora dos limites.");
-    }
-    return todasAssociacoes[id];
-  }
-
-  static Associacao procurarAssociacao_old(int id) {
-    List<Associacao> Associacoes = [
-      Associacao(name: "Associação E", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: Animal.todosAnimais, pedidosRealizados:Pedido.getTodosPedidos()),
-      Associacao(name: "Associação F", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
-      Associacao(name: "Associação G", local: "Portimão", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
-      Associacao(name: "Associação H", local: "Lisboa", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [],animais: [],pedidosRealizados:[]),
-      Associacao(name: "Associação I", local: "Lisboa", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
-      Associacao(name: "Associação J", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
-      Associacao(name: "Associação K", local: "Lisboa", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
-      Associacao(name: "Associação L", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
-    ];
-
-    return Associacoes[id];
-  }
-
-  // Função para filtrar associações sugeridas com base na localidade do usuário
-  static List<Associacao> getSugestoesAssociacoes(String local) {
-    return todasAssociacoes.where((associacao) =>
-    associacao.local == local
-    ).toList();
-  }
-
-
-  /*static Associacao procurarAssociacaoPorNome(String nome) {
-    return todasAssociacoes.firstWhere(
-          (associacao) => associacao.name == nome,
-          orElse: () => throw Exception("Associação com o nome '$nome' não encontrada."),
-    );
-  }*/
-
-
-
+  /// Construtor para criar uma Associacao a partir de um Map (ex.: dados do Firestore)
   factory Associacao.fromMap(Map<String, dynamic> map) {
     return Associacao(
-      name: map['nome'],
-      sigla: map['sigla'],
-      generalEmail: map['emailGeral'],
-      secundaryEmail: map['emailParaAlgumaCoisa'],
-      mainCellphone: map['telemovelPrincipal'],
-      secundaryCellphone: map['telemovelSecundario'],
-      local: map['localidade'],
-      showAddress: map['mostrarMorada'],
-      address: map['morada'],
-      site: map['site'],
-      nif: map['nif'],
-      funcionalidades: [],
-      animais: [],
-      pedidosRealizados: []
-
+      name: map['nome'] ?? '',
+      sigla: map['sigla'] ?? '',
+      generalEmail: map['emailGeral'] ?? '',
+      secundaryEmail: map['emailParaAlgumaCoisa'] ?? '',
+      mainCellphone: map['telemovelPrincipal'] ?? 0,
+      secundaryCellphone: map['telemovelSecundario'] ?? 0,
+      local: map['localidade'] ?? '',
+      showAddress: map['mostrarMorada'] ?? false,
+      address: map['morada'] ?? '',
+      site: map['site'] ?? '',
+      nif: map['nif'] ?? 0,
+      funcionalidades: [],        // Ajustar se quiser carregar do Firestore
+      animais: [],                // Ajustar se quiser carregar do Firestore
+      pedidosRealizados: [],      // Ajustar se quiser carregar do Firestore
     );
   }
 
-  // Método para converter o objeto User em um mapa (útil para converter o objeto em JSON)
+  /// Converte o objeto Associacao em Map (para salvar em Firestore ou gerar JSON)
   Map<String, dynamic> toMap() {
     return {
       'nome': name,
+      'sigla': sigla,
       'emailGeral': generalEmail,
       'emailParaAlgumaCoisa': secundaryEmail,
       'telemovelPrincipal': mainCellphone,
@@ -126,25 +75,67 @@ class Associacao {
       'morada': address,
       'site': site,
       'nif': nif,
-      'funcionalidades': funcionalidades
+      // Se quiser salvar listas de objetos:
+      // 'animais': animais.map((animal) => animal.toMap()).toList(),
+      // 'funcionalidades': funcionalidades.map((f) => f.toMap()).toList(),
+      // 'pedidosRealizados': pedidosRealizados.map((p) => p.toMap()).toList(),
+      // 'eventos': eventos.map((e) => e.toMap()).toList(),
+      // 'necessidades': necessidades,
     };
   }
 
-  // Função para adicionar animais
-  void adicionarAnimais(Associacao assoc, Animal anim) {
-    return assoc.animais.add(anim);
+  // Função para adicionar um animal à lista de animais
+  void adicionarAnimais(Animal anim) {
+    animais.add(anim);
   }
 
+  // Exemplo de método para filtrar associações por local
+  static List<Associacao> getSugestoesAssociacoes(String local) {
+    return todasAssociacoes.where((associacao) => associacao.local == local).toList();
+  }
+
+  // Exemplo de método para procurar associação por índice
+  static Associacao procurarAssociacao(int id) {
+    if (id < 0 || id >= todasAssociacoes.length) {
+      throw Exception("Índice $id fora dos limites.");
+    }
+    return todasAssociacoes[id];
+  }
 }
 
-// Lista completa de associações para sugestões (em uma aplicação real, isso viria da base de dados)
+// Lista estática de associações para exemplo (em uma aplicação real, viria da base de dados)
 List<Associacao> todasAssociacoes = [
-  Associacao(name: "Associação E", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: Animal.todosAnimais, pedidosRealizados: []),
-  Associacao(name: "Associação F", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
-  Associacao(name: "Associação G", local: "Portimão", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
-  Associacao(name: "Associação H", local: "Lisboa", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [],animais: [Animal.todosAnimais.first],pedidosRealizados:[]),
-  Associacao(name: "Associação I", local: "Lisboa", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
-  Associacao(name: "Associação J", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
-  Associacao(name: "Associação K", local: "Lisboa", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
-  Associacao(name: "Associação L", local: "Porto", nif:0, sigla: '', generalEmail: '', secundaryEmail: '', mainCellphone: 0, address: '', secundaryCellphone: 0, showAddress: false, site: '', funcionalidades: [], animais: [], pedidosRealizados:[]),
+  Associacao(
+    name: "Associação E",
+    local: "Porto",
+    nif: 0,
+    sigla: '',
+    generalEmail: '',
+    secundaryEmail: '',
+    mainCellphone: 0,
+    address: '',
+    secundaryCellphone: 0,
+    showAddress: false,
+    site: '',
+    funcionalidades: [],
+    animais: Animal.todosAnimais, // Exemplo usando a lista estática de Animal
+    pedidosRealizados: [],
+  ),
+  Associacao(
+    name: "Associação F",
+    local: "Porto",
+    nif: 0,
+    sigla: '',
+    generalEmail: '',
+    secundaryEmail: '',
+    mainCellphone: 0,
+    address: '',
+    secundaryCellphone: 0,
+    showAddress: false,
+    site: '',
+    funcionalidades: [],
+    animais: [],
+    pedidosRealizados: [],
+  ),
+  // ... Adicione quantas associações quiser
 ];
