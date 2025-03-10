@@ -17,7 +17,7 @@ class Associacao {
   int nif; // ID
   List<Funcionalidades> funcionalidades = [];
   List<Animal> animais = [];
-  List<Pedido> pedidosRealizados = [];
+  List<Pedido> pedidosRealizados =[];
   List<Eventos> eventos = [];
   List<String> necessidades = [];
   bool associacao = true;
@@ -55,9 +55,15 @@ class Associacao {
       address: map['morada'] ?? '',
       site: map['site'] ?? '',
       nif: map['nif'] ?? 0,
-      funcionalidades: [],        // Ajustar se quiser carregar do Firestore
-      animais: [],                // Ajustar se quiser carregar do Firestore
-      pedidosRealizados: [],      // Ajustar se quiser carregar do Firestore
+      funcionalidades: map['funcionalidades'] ?? [],
+      animais: map['animais'] ?? [],
+      pedidosRealizados: map['pedidosRealizados'] != null
+          ? List<Pedido>.from(
+        (map['pedidosRealizados'] as List<dynamic>).map(
+              (pedido) => Pedido.fromMap(pedido as Map<String, dynamic>),
+        ),
+      )
+          : [],      // Ajustar se quiser carregar do Firestore
     );
   }
 
@@ -75,12 +81,11 @@ class Associacao {
       'morada': address,
       'site': site,
       'nif': nif,
-      // Se quiser salvar listas de objetos:
-      // 'animais': animais.map((animal) => animal.toMap()).toList(),
-      // 'funcionalidades': funcionalidades.map((f) => f.toMap()).toList(),
-      // 'pedidosRealizados': pedidosRealizados.map((p) => p.toMap()).toList(),
-      // 'eventos': eventos.map((e) => e.toMap()).toList(),
-      // 'necessidades': necessidades,
+      'animais': animais.map((animal) => animal.toMap()).toList(),
+      'funcionalidades': funcionalidades.map((f) => f.toMap()).toList(),
+      'pedidosRealizados': pedidosRealizados.map((pedidos) => pedidos.toMap()).toList(),
+      'eventos': eventos.map((e) => e.toMap()).toList(),
+      //'necessidades': necessidades,
     };
   }
 

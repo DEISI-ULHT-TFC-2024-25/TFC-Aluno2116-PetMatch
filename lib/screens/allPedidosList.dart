@@ -1,40 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/models/utilizador.dart';
 import 'package:tinder_para_caes/models/associacao.dart';
-
-class Allpedidoslist {
-  final Utilizador utilizadorQueRealizaOpedido;
-  final String oQuePretendeFazer;
-  final Associacao associacao;
-  final bool confirmouTodosOsRequisitos;
-  final String mensagemAdicional;
-
-  Allpedidoslist({
-    required this.utilizadorQueRealizaOpedido,
-    required this.oQuePretendeFazer,
-    required this.associacao,
-    required this.confirmouTodosOsRequisitos,
-    required this.mensagemAdicional,
-  });
-}
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tinder_para_caes/firebaseLogic/associacaoProvider.dart';
+import 'package:tinder_para_caes/models/pedido.dart';
 
 class AllPedidosList extends StatelessWidget {
-  final List<Allpedidoslist> notificacoes;
+  const AllPedidosList({Key? key}) : super(key: key);
 
-  AllPedidosList({required this.notificacoes});
-
-  @override
   @override
   Widget build(BuildContext context) {
+    // Obtemos a associação do Provider
+    final associacao = Provider.of<AssociacaoProvider>(context).association;
+
+    if (associacao == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text("Notificações"),
+        ),
+        body: const Center(
+          child: Text("Nenhuma associação carregada."),
+        ),
+      );
+    }
+
+    // A lista de pedidos da associação
+    final pedidos = associacao.pedidosRealizados; // List<Pedido>
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Notificações"),
+        title: const Text("Notificações"),
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(8.0),
-        itemCount: notificacoes.length,
+        itemCount: pedidos.length,
         itemBuilder: (context, index) {
-          final notificacao = notificacoes[index];
+          final notificacao = pedidos[index]; // notificacao é do tipo Pedido
+
           return Card(
             margin: const EdgeInsets.symmetric(vertical: 8.0),
             child: Padding(
@@ -42,18 +45,24 @@ class AllPedidosList extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Exemplo: acessando o nome do utilizador
                   Text(
-                    "Utilizador: ${notificacao.utilizadorQueRealizaOpedido}",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    "Utilizador: ${notificacao.utilizadorQueRealizaOpedido.fullName}",
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
+                  // Se 'gender' for um int (0,1,2) ou algo similar, adapte aqui
                   Text("Gênero: ${notificacao.utilizadorQueRealizaOpedido.gender}"),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
+                  // Caso 'oQuePretendeFazer' seja um enum, você pode exibir .name ou algo similar
                   Text("O que pretende fazer: ${notificacao.oQuePretendeFazer}"),
                   Text("Associação: ${notificacao.associacao.name}"),
-                  Text("Confirmou requisitos: ${notificacao.confirmouTodosOsRequisitos ? "Sim" : "Não"}"),
-                  SizedBox(height: 8),
+                  Text(
+                    "Confirmou requisitos: "
+                        "${notificacao.confirmouTodosOsRequisitos ? "Sim" : "Não"}",
+                  ),
+                  const SizedBox(height: 8),
                   Text("Mensagem Adicional: ${notificacao.mensagemAdicional}"),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -61,22 +70,28 @@ class AllPedidosList extends StatelessWidget {
                         onPressed: () {
                           // Implementar lógica de aceitar
                         },
-                        child: Text("Aceitar"),
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.green[300]),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green[300],
+                        ),
+                        child: const Text("Aceitar"),
                       ),
                       ElevatedButton(
                         onPressed: () {
                           // Implementar lógica de enviar mensagem
                         },
-                        child: Text("Enviar Mensagem"),
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.blue[300]),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue[300],
+                        ),
+                        child: const Text("Enviar Mensagem"),
                       ),
                       ElevatedButton(
                         onPressed: () {
                           // Implementar lógica de recusar
                         },
-                        child: Text("Recusar"),
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.red[300]),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red[300],
+                        ),
+                        child: const Text("Recusar"),
                       ),
                     ],
                   ),

@@ -5,6 +5,7 @@ import 'package:tinder_para_caes/screens/allAnimalsList.dart';
 import 'package:tinder_para_caes/screens/adicionarAnimalScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:tinder_para_caes/firebaseLogic/associacaoProvider.dart';
+import 'package:tinder_para_caes/screens/allPedidosList.dart';
 
 class AssociacaoHomeScreen extends StatelessWidget {
 
@@ -151,6 +152,15 @@ class AssociacaoHomeScreen extends StatelessWidget {
                         );
                       },
                       child: Text("Adicionar Animal"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AllPedidosList()),
+                        );
+                      },
+                      child: Text("Ver notificações"),
                     ),
                   ],
                 ),

@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tinder_para_caes/screens/associacaoHomeScreen.dart';
 import 'package:tinder_para_caes/models/associacao.dart';
 import 'package:tinder_para_caes/firebaseLogic/authenticationService.dart';
+import 'package:provider/provider.dart';
+import 'package:tinder_para_caes/firebaseLogic/associacaoProvider.dart';
 
 class CriarAssociacao extends StatefulWidget {
   const CriarAssociacao({Key? key}) : super(key: key);
@@ -26,11 +28,11 @@ class _CriarAssociacaoFormScreenState extends State<CriarAssociacao> {
   final TextEditingController distritoController = TextEditingController();
 
   void register() async {
+    // Validações básicas
     if (passwordController.text != confirmPasswordController.text) {
       print("❌ As palavras-passe não coincidem!");
       return;
     }
-
     if (passwordController.text.isEmpty || email1Controller.text.isEmpty) {
       print("❌ Email e senha são obrigatórios");
       return;
@@ -47,10 +49,9 @@ class _CriarAssociacaoFormScreenState extends State<CriarAssociacao> {
       "morada": shareLocation ? moradaController.text : null,
       "distrito": !shareLocation ? distritoController.text : null,
       "tipo": "associacao",
-
     };
 
-    // Registra a associação no Firebase (Auth e Firestore).
+    // Registra a associação no Firebase (Auth) e salva os dados no Firestore.
     var firebaseUser = await authService.registerAssociacao(
       email1Controller.text,
       passwordController.text,
@@ -60,7 +61,7 @@ class _CriarAssociacaoFormScreenState extends State<CriarAssociacao> {
     if (firebaseUser != null) {
       print("✅ Associação registada com sucesso!");
 
-      // Leitura do documento salvo na coleção 'associacao' para garantir que os dados estão corretos.
+      // Leitura do documento salvo na coleção 'associacao'
       final uid = firebaseUser.uid;
       final docRef = FirebaseFirestore.instance.collection('associacao').doc(uid);
       final docSnap = await docRef.get();
@@ -73,11 +74,15 @@ class _CriarAssociacaoFormScreenState extends State<CriarAssociacao> {
       final data = docSnap.data() as Map<String, dynamic>;
       final minhaAssociacao = Associacao.fromMap(data);
 
-      // Navega para a home screen da associação, passando o objeto Associacao.
+      // Atualiza o provider da Associação com os dados lidos
+      Provider.of<AssociacaoProvider>(context, listen: false)
+          .setAssociation(minhaAssociacao);
+
+      // Navega para a home screen da associação.
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => AssociacaoHomeScreen(),
+          builder: (context) => const AssociacaoHomeScreen(),
         ),
       );
     } else {

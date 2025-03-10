@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tinder_para_caes/firebaseLogic/authenticationService.dart';
 import 'package:tinder_para_caes/models/utilizador.dart';
 import 'package:tinder_para_caes/screens/utilizadorHomeScreen.dart';
+import 'package:tinder_para_caes/firebaseLogic/utilizadorProvider.dart';
+import 'package:provider/provider.dart';
 
 class CriarUtilizador extends StatefulWidget {
   const CriarUtilizador({Key? key}) : super(key: key);
@@ -39,9 +41,9 @@ class UtilizadorFormScreenState extends State<CriarUtilizador> {
     }
   }
 
-  /// Método para registrar e, em seguida, ler do Firestore antes de navegar
+  /// Método para registrar e, em seguida, ler os dados do Firestore antes de navegar
   Future<void> register() async {
-    // Verificações básicas de senha
+    // Verificações básicas de senha e email
     if (passwordController.text != confirmPasswordController.text) {
       print("❌ As palavras-passe não coincidem!");
       return;
@@ -67,7 +69,7 @@ class UtilizadorFormScreenState extends State<CriarUtilizador> {
       "osSeusAnimais": [],
     };
 
-    // 1) Registra o usuário no Firebase (Auth) e salva no Firestore
+    // 1) Registra o usuário no Firebase (Auth) e salva os dados no Firestore
     var firebaseUser = await authService.registerUtilizador(
       emailController.text,
       passwordController.text,
@@ -84,16 +86,14 @@ class UtilizadorFormScreenState extends State<CriarUtilizador> {
       final docSnap = await docRef.get();
 
       if (!docSnap.exists) {
-        // Se, por algum motivo, o doc não existir, trate o erro
         print("❌ Documento do utilizador não encontrado no Firestore!");
         return;
       }
 
-      // 2.2) Convertemos o docSnap em Map<String, dynamic>
+      // 2.2) Converte o documento em Map<String, dynamic>
       final data = docSnap.data() as Map<String, dynamic>;
 
-      // 2.3) Montamos o Map que o 'Utilizador.fromMap' espera
-      //     (ajuste conforme sua classe Utilizador)
+      // 2.3) Monta o Map que o 'Utilizador.fromMap' espera
       final fromDoc = {
         'nif': int.tryParse(data['nif'].toString()) ?? 0,
         'fullName': data['nome'] ?? '',
@@ -104,20 +104,23 @@ class UtilizadorFormScreenState extends State<CriarUtilizador> {
         'address': data['morada'] ?? '',
         'local': data['distrito'] ?? '',
         'zipCode': data['zipcode'] ?? '',
-        'password': '', // Geralmente não se guarda a senha no Firestore
+        'password': '', // Normalmente não se guarda a senha no Firestore
         'associacoesEmQueEstaEnvolvido': [],
         'osSeusAnimais': [],
-        'associacao': false, // Se for um utilizador normal
+        'associacao': false,
       };
 
       // 2.4) Cria o objeto Utilizador usando o método fromMap da sua classe
       final meuUtilizador = Utilizador.fromMap(fromDoc);
 
-      // 3) Navega para a tela Home, passando o objeto Utilizador
+      // 2.5) Atualiza o Provider com os dados do utilizador
+      Provider.of<UtilizadorProvider>(context, listen: false).setUser(meuUtilizador);
+
+      // 3) Navega para a tela Home sem precisar passar o objeto como parâmetro
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => UtilizadorHomeScreen(),
+          builder: (context) => const UtilizadorHomeScreen(),
         ),
       );
     } else {
