@@ -77,7 +77,7 @@ class _CriarAssociacaoFormScreenState extends State<CriarAssociacao> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => AssociacaoHomeScreen(associacao: minhaAssociacao),
+          builder: (context) => AssociacaoHomeScreen(),
         ),
       );
     } else {

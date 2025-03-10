@@ -2,7 +2,8 @@ enum Funcionalidades {
   passeiosDosCandeos,
   apradinhamento,
   socios,
-  eventos,
-  voluntariado
+  partilhaEventos,
+  voluntariado,
+  familiaAcolhimentoTemporario
 }
 

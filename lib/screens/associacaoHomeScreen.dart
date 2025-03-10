@@ -3,14 +3,22 @@ import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/models/associacao.dart';
 import 'package:tinder_para_caes/screens/allAnimalsList.dart';
 import 'package:tinder_para_caes/screens/adicionarAnimalScreen.dart';
+import 'package:provider/provider.dart';
+import 'package:tinder_para_caes/firebaseLogic/associacaoProvider.dart';
 
 class AssociacaoHomeScreen extends StatelessWidget {
 
-  final Associacao associacao;
+  const AssociacaoHomeScreen({Key? key}) : super(key: key);
 
-  const AssociacaoHomeScreen({Key? key, required this.associacao}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final associacao = Provider.of<AssociacaoProvider>(context).association;
+
+    if (associacao == null) {
+      return const Scaffold(
+      body: Center(child: CircularProgressIndicator()),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text("Página da Associação"),

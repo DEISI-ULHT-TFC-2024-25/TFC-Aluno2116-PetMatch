@@ -6,21 +6,29 @@ import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/screens/adicionarAnimalScreen.dart';
 import 'package:tinder_para_caes/screens/allAnimalsList.dart';
 import 'package:tinder_para_caes/screens/allAssociacoesList.dart';
+import 'package:provider/provider.dart';
+import 'package:tinder_para_caes/firebaseLogic/utilizadorProvider.dart';
 
 class UtilizadorHomeScreen extends StatelessWidget {
-  final Utilizador utilizador;
-  const UtilizadorHomeScreen({Key? key, required this.utilizador}) : super(key: key);
+  const UtilizadorHomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Obtenção das sugestões com base na localidade do utilizador recebido
+    final utilizador = Provider.of<UtilizadorProvider>(context).user;
+
+    if (utilizador == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     List<Associacao> sugestoesAssociacoes = Associacao.getSugestoesAssociacoes(utilizador.local);
     List<Associacao> associacoesEnvolvido = utilizador.associacoesEmQueEstaEnvolvido;
     List<Animal> animais = utilizador.osSeusAnimais;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home Page - ${utilizador.fullName}"),
+        //title: Text("Home Page - $utilizador.fullName"),
       ),
       body: SingleChildScrollView(
         child: Padding(

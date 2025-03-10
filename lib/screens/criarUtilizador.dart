@@ -117,7 +117,7 @@ class UtilizadorFormScreenState extends State<CriarUtilizador> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => UtilizadorHomeScreen(utilizador: meuUtilizador),
+          builder: (context) => UtilizadorHomeScreen(),
         ),
       );
     } else {
