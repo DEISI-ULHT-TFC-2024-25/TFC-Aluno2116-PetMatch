@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/screens/vizualizarAssociacaoScreen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class TornarPadrinhoScreen extends StatefulWidget {
   @override
@@ -9,6 +11,19 @@ class TornarPadrinhoScreen extends StatefulWidget {
 class _TornarPadrinhoScreenState extends State<TornarPadrinhoScreen> {
   final _formKey = GlobalKey<FormState>();
   bool aceitaRegras = false;
+
+  // Controladores dos campos
+  final TextEditingController nomeController = TextEditingController();
+  final TextEditingController moradaController = TextEditingController();
+  final TextEditingController codigoPostalController = TextEditingController();
+  final TextEditingController localidadeController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController telemovelController = TextEditingController();
+  final TextEditingController nomeAnimalController = TextEditingController();
+
+  // Dropdown de apadrinhamento
+  List<String> opcoesApadrinhamento = ["Ajuda financeira", "Apoio com alimentação", "Custos veterinários", "Outro"];
+  String selectedOpcao = "Ajuda financeira";
 
   @override
   Widget build(BuildContext context) {
@@ -31,17 +46,19 @@ class _TornarPadrinhoScreenState extends State<TornarPadrinhoScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("📌 Dados Pessoais", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              _buildTextField("Nome Completo"),
-              _buildTextField("Morada"),
-              _buildTextField("Código Postal"),
-              _buildTextField("Localidade"),
-              _buildTextField("E-mail"),
-              _buildTextField("Telemóvel"),
+              _buildTextField("Nome Completo", nomeController),
+              _buildTextField("Morada", moradaController),
+              _buildTextField("Código Postal", codigoPostalController),
+              _buildTextField("Localidade", localidadeController),
+              _buildTextField("E-mail", emailController),
+              _buildTextField("Telemóvel", telemovelController),
               SizedBox(height: 20),
+
               Text("🐕 Escolha do Animal", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              _buildTextField("Nome do Animal que deseja apadrinhar"),
+              _buildTextField("Nome do Animal que deseja apadrinhar", nomeAnimalController),
               _buildDropdownApadrinhamento(),
               SizedBox(height: 20),
+
               CheckboxListTile(
                 title: Text("Aceito os termos e condições"),
                 value: aceitaRegras,
@@ -51,12 +68,14 @@ class _TornarPadrinhoScreenState extends State<TornarPadrinhoScreen> {
                   });
                 },
               ),
+
               SizedBox(height: 20),
               Center(
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate() && aceitaRegras) {
-                      _mostrarPopupConfirmacao();
+                      await _submeterFormulario(); // Salva no Firestore
+                      _mostrarPopupConfirmacao(); // Mostra o popup após salvar
                     }
                   },
                   child: Text("Submeter Pedido ✅"),
@@ -69,10 +88,12 @@ class _TornarPadrinhoScreenState extends State<TornarPadrinhoScreen> {
     );
   }
 
-  Widget _buildTextField(String label) {
+  /// Função para capturar dados dos campos de texto
+  Widget _buildTextField(String label, TextEditingController controller) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextFormField(
+        controller: controller,
         decoration: InputDecoration(
           labelText: label,
           border: OutlineInputBorder(),
@@ -87,16 +108,14 @@ class _TornarPadrinhoScreenState extends State<TornarPadrinhoScreen> {
     );
   }
 
+  /// Dropdown de tipo de apadrinhamento
   Widget _buildDropdownApadrinhamento() {
-    List<String> opcoes = ["Ajuda financeira", "Apoio com alimentação", "Custos veterinários", "Outro"];
-    String selectedOpcao = opcoes[0];
-
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: DropdownButtonFormField<String>(
         decoration: InputDecoration(border: OutlineInputBorder()),
         value: selectedOpcao,
-        items: opcoes.map((String value) {
+        items: opcoesApadrinhamento.map((String value) {
           return DropdownMenuItem<String>(
             value: value,
             child: Text(value),
@@ -111,6 +130,47 @@ class _TornarPadrinhoScreenState extends State<TornarPadrinhoScreen> {
     );
   }
 
+  /// Função para salvar no Firebase Firestore
+  Future<void> _submeterFormulario() async {
+    try {
+      // Obtém o ID do utilizador autenticado
+      String uidAssociacao = FirebaseAuth.instance.currentUser?.uid ?? "desconhecido";
+
+      // Referência ao Firestore
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+      // Criar um novo pedido na subcoleção "apadrinhar"
+      await firestore
+          .collection("pedidoENotificacoes") // 📂 Coleção principal
+          .doc(uidAssociacao) // 📄 Documento do utilizador
+          .collection("apadrinhar") // 📂 Subcoleção específica
+          .add({
+        "nomeCompleto": nomeController.text,
+        "morada": moradaController.text,
+        "codigoPostal": codigoPostalController.text,
+        "localidade": localidadeController.text,
+        "email": emailController.text,
+        "telemovel": telemovelController.text,
+        "nomeAnimal": nomeAnimalController.text,
+        "tipoApadrinhamento": selectedOpcao,
+        "status": "pendente", // Pedido começa como "pendente"
+        "dataCriacao": FieldValue.serverTimestamp(), // Timestamp automático
+      });
+
+      // Mensagem de sucesso
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Pedido submetido com sucesso! ✅")),
+      );
+
+    } catch (e) {
+      print("Erro ao submeter pedido: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Erro ao submeter pedido! ❌")),
+      );
+    }
+  }
+
+  /// Popup de confirmação após submissão
   void _mostrarPopupConfirmacao() {
     showDialog(
       context: context,

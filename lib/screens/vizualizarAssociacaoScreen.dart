@@ -227,7 +227,7 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => TornarVoluntarioApp(),
+                                        builder: (context) => TornarVoluntarioScreen(),
                                       ),
                                     );
                                   },

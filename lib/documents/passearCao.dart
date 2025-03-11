@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/screens/vizualizarAssociacaoScreen.dart';
 
@@ -31,6 +33,66 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
   bool temAlergias = false;
   bool estaEsterilizado = false;
   bool aceitaRegras = false; // Para o popup de confirmação
+
+
+  Future <void> _submeterFormulario() async {
+    try {
+      // Obtém o UID do utilizador autenticado (caso uses Firebase Authentication)
+      String uidAssociacao = FirebaseAuth.instance.currentUser?.uid ?? "desconhecido";
+
+      // Referência ao Firestore
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+      // Criar um novo pedido na subcoleção "passearCao"
+      await firestore
+          .collection("pedidoENotificacoes") // 📂 Coleção principal
+          .doc(uidAssociacao) // 📄 Documento do utilizador
+          .collection("passearCao") // 📂 Subcoleção específica
+          .add({
+        "nomePasseador": nomePasseadorController.text,
+        "moradaFiscal": moradaFiscalController.text,
+        "moradaContacto": moradaContactoController.text,
+        "ccBi": ccBiController.text,
+        "validadeCC": validadeCCController.text,
+        "tlm": tlmController.text,
+        "idade": int.tryParse(idadeController.text) ?? 0,
+
+        "nomeCao": nomeCaoController.text,
+        "chip": chipController.text,
+
+        "temProblemaComportamento": temProblemaComportamento,
+        "comportamentoDescricao": comportamentoController.text,
+        "temAlergias": temAlergias,
+        "alergiasDescricao": alergiasController.text,
+        "portePeso": portePesoController.text,
+        "estaEsterilizado": estaEsterilizado,
+
+        "matriculaVeiculo": matriculaVeiculoController.text,
+        "localPasseio": local.text,
+
+        "status": "pendente", // Inicialmente, o pedido fica como "pendente"
+        "dataCriacao": FieldValue.serverTimestamp(), // Timestamp automático
+      });
+
+      // Mensagem de sucesso
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Pedido de passeio submetido com sucesso! ✅")),
+      );
+
+      // Redirecionar para outra página após submissão
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => VizualizarAssociacaoScreen()),
+      );
+
+    } catch (e) {
+      // Em caso de erro
+      print("Erro ao submeter formulário: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Erro ao submeter pedido! ❌")),
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -174,12 +236,14 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
             ElevatedButton(
               child: Text("Aceitar ✅"),
               onPressed: aceitaRegras
-                  ? () {
-                Navigator.of(context).pop();
-                _mostrarPopupFinal();
+                  ? () async {
+                await _submeterFormulario(); // 📝 Primeiro grava os dados no Firestore
+                Navigator.of(context).pop(); // 🔄 Fecha o popup depois de salvar
+                _mostrarPopupFinal(); // 🎉 Mostra o popup final
               }
                   : null,
             ),
+
           ],
         );
       },
