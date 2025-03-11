@@ -101,6 +101,8 @@ class Utilizador {
                 secundaryCellphone: 0,
                 showAddress: false,
                 site: '',
+                eventos: [],
+                necessidades: [],
                 funcionalidades: [],
                 animais: [],
                 pedidosRealizados: [],

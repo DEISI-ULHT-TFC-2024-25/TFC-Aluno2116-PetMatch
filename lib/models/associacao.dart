@@ -15,12 +15,12 @@ class Associacao {
   String address;
   String site;
   int nif; // ID
-  List<Funcionalidades> funcionalidades = [];
-  List<Animal> animais = [];
-  List<Pedido> pedidosRealizados =[];
-  List<Eventos> eventos = [];
-  List<String> necessidades = [];
-  bool associacao = true;
+  List<Funcionalidade> funcionalidades;
+  List<Animal> animais;
+  List<Pedido> pedidosRealizados;
+  List<Eventos> eventos;
+  List<String> necessidades;
+  bool associacao;
 
   // Construtor principal
   Associacao({
@@ -38,7 +38,9 @@ class Associacao {
     required this.funcionalidades,
     required this.animais,
     required this.pedidosRealizados,
-    // eventos e necessidades podem ser inicializados externamente, se quiser
+    required this.eventos,
+    required this.necessidades,
+    this.associacao = true,
   });
 
   /// Construtor para criar uma Associacao a partir de um Map (ex.: dados do Firestore)
@@ -55,15 +57,22 @@ class Associacao {
       address: map['morada'] ?? '',
       site: map['site'] ?? '',
       nif: map['nif'] ?? 0,
-      funcionalidades: map['funcionalidades'] ?? [],
-      animais: map['animais'] ?? [],
-      pedidosRealizados: map['pedidosRealizados'] != null
-          ? List<Pedido>.from(
-        (map['pedidosRealizados'] as List<dynamic>).map(
-              (pedido) => Pedido.fromMap(pedido as Map<String, dynamic>),
-        ),
-      )
-          : [],      // Ajustar se quiser carregar do Firestore
+      funcionalidades: (map['funcionalidades'] as List<dynamic>?)?.map((f) {
+        return Funcionalidade.fromMap(f as Map<String, dynamic>, f['id']);
+      }).toList() ?? [],
+      animais: (map['animais'] as List<dynamic>?)?.map((a) {
+        return Animal.fromMap(a as Map<String, dynamic>);
+      }).toList() ?? [],
+      pedidosRealizados: (map['pedidosRealizados'] as List<dynamic>?)?.map((p) {
+        return Pedido.fromMap(p as Map<String, dynamic>);
+      }).toList() ?? [],
+      eventos: (map['eventos'] as List<dynamic>?)?.map((e) {
+        // Verifica se há um campo 'id' no evento, se não, cria um ID genérico
+        String eventoId = e['id'] ?? 'id_desconhecido';
+
+        return Eventos.fromMap(e as Map<String, dynamic>, eventoId);
+      }).toList() ?? [],
+      necessidades: List<String>.from(map['necessidades'] ?? []),
     );
   }
 
@@ -81,11 +90,11 @@ class Associacao {
       'morada': address,
       'site': site,
       'nif': nif,
-      'animais': animais.map((animal) => animal.toMap()).toList(),
       'funcionalidades': funcionalidades.map((f) => f.toMap()).toList(),
-      'pedidosRealizados': pedidosRealizados.map((pedidos) => pedidos.toMap()).toList(),
+      'animais': animais.map((a) => a.toMap()).toList(),
+      'pedidosRealizados': pedidosRealizados.map((p) => p.toMap()).toList(),
       'eventos': eventos.map((e) => e.toMap()).toList(),
-      //'necessidades': necessidades,
+      'necessidades': necessidades,
     };
   }
 
@@ -125,6 +134,8 @@ List<Associacao> todasAssociacoes = [
     funcionalidades: [],
     animais: Animal.todosAnimais, // Exemplo usando a lista estática de Animal
     pedidosRealizados: [],
+    eventos: [],
+    necessidades: [],
   ),
   Associacao(
     name: "Associação F",
@@ -141,6 +152,7 @@ List<Associacao> todasAssociacoes = [
     funcionalidades: [],
     animais: [],
     pedidosRealizados: [],
+    eventos: [],
+    necessidades: [],
   ),
-  // ... Adicione quantas associações quiser
 ];
