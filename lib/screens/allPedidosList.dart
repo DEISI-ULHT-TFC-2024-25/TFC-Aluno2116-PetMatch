@@ -11,7 +11,7 @@ class AllPedidosList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Obtemos a associação do Provider
+
     final associacao = Provider.of<AssociacaoProvider>(context).association;
 
     if (associacao == null) {
@@ -25,7 +25,7 @@ class AllPedidosList extends StatelessWidget {
       );
     }
 
-    // A lista de pedidos da associação
+
     final pedidos = associacao.pedidosRealizados; // List<Pedido>
 
     return Scaffold(
@@ -45,15 +45,14 @@ class AllPedidosList extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Exemplo: acessando o nome do utilizador
+
                   Text(
                     "Utilizador: ${notificacao.utilizadorQueRealizaOpedido.fullName}",
                     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  // Se 'gender' for um int (0,1,2) ou algo similar, adapte aqui
+
                   Text("Gênero: ${notificacao.utilizadorQueRealizaOpedido.gender}"),
                   const SizedBox(height: 8),
-                  // Caso 'oQuePretendeFazer' seja um enum, você pode exibir .name ou algo similar
                   Text("O que pretende fazer: ${notificacao.oQuePretendeFazer}"),
                   Text("Associação: ${notificacao.associacao.name}"),
                   Text(

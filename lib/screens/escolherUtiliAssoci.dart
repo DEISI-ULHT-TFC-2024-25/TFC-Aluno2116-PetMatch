@@ -27,7 +27,6 @@ class _Escolherutiliassoci extends State<Escolherutiliassoci> {
               ],
             ),
           ),
-          // Conteúdo da tela baseado no separador selecionado
           Expanded(
             child: _selectedIndex == 0 ? CriarUtilizador() : CriarAssociacao(),
           ),

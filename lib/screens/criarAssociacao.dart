@@ -28,7 +28,6 @@ class _CriarAssociacaoFormScreenState extends State<CriarAssociacao> {
   final TextEditingController distritoController = TextEditingController();
 
   void register() async {
-    // Validações básicas
     if (passwordController.text != confirmPasswordController.text) {
       print("❌ As palavras-passe não coincidem!");
       return;
@@ -38,8 +37,6 @@ class _CriarAssociacaoFormScreenState extends State<CriarAssociacao> {
       return;
     }
 
-    // Cria o Map com os dados a serem salvos no Firestore.
-    // Atenção: as chaves devem ser as mesmas usadas em Associacao.fromMap.
     Map<String, dynamic> associacaoData = {
       "nome": nomeController.text,
       "emailGeral": email1Controller.text,
@@ -51,7 +48,6 @@ class _CriarAssociacaoFormScreenState extends State<CriarAssociacao> {
       "tipo": "associacao",
     };
 
-    // Registra a associação no Firebase (Auth) e salva os dados no Firestore.
     var firebaseUser = await authService.registerAssociacao(
       email1Controller.text,
       passwordController.text,
@@ -60,8 +56,6 @@ class _CriarAssociacaoFormScreenState extends State<CriarAssociacao> {
 
     if (firebaseUser != null) {
       print("✅ Associação registada com sucesso!");
-
-      // Leitura do documento salvo na coleção 'associacao'
       final uid = firebaseUser.uid;
       final docRef = FirebaseFirestore.instance.collection('associacao').doc(uid);
       final docSnap = await docRef.get();
@@ -72,13 +66,10 @@ class _CriarAssociacaoFormScreenState extends State<CriarAssociacao> {
       }
 
       final data = docSnap.data() as Map<String, dynamic>;
-      final minhaAssociacao = Associacao.fromMap(data);
-
-      // Atualiza o provider da Associação com os dados lidos
+      final minhaAssociacao = Associacao.fromMap(uid,data);
       Provider.of<AssociacaoProvider>(context, listen: false)
           .setAssociation(minhaAssociacao);
 
-      // Navega para a home screen da associação.
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

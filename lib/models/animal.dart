@@ -16,7 +16,7 @@ class Animal {
   int numeroDePasseiosDados;
   bool hasGodFather;
 
-  // Construtor principal
+
   Animal({
     required this.chip,
     required this.fullName,
@@ -33,7 +33,7 @@ class Animal {
     required this.hasGodFather,
   });
 
-  // Construtor para criar um Animal a partir de um Map (ex.: dados do Firestore)
+
   factory Animal.fromMap(Map<String, dynamic> map) {
     return Animal(
       chip: map['chip'] ?? 0,
@@ -52,7 +52,7 @@ class Animal {
     );
   }
 
-  // Converte o objeto Animal em Map (para salvar em Firestore ou gerar JSON)
+
   Map<String, dynamic> toMap() {
     return {
       'chip': chip,
@@ -71,13 +71,13 @@ class Animal {
     };
   }
 
-  /// Exemplo de carregamento de raças (no caso, para cachorros).
+
   static Future<List<String>> loadDogBreeds() async {
     final String response = await rootBundle.loadString('assets/dogBreeds.txt');
     return response.split('\n').map((line) => line.trim()).toList();
   }
 
-  // Lista estática de animais para exemplo (em uma aplicação real, viria de BD).
+
   static final List<Animal> todosAnimais = [
     Animal(
       chip: 1111,

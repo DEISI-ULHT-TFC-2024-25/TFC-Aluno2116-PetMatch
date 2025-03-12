@@ -18,7 +18,6 @@ class Funcionalidade {
     required this.tipo,
   });
 
-  // Converter um documento Firestore para um objeto Funcionalidade
   factory Funcionalidade.fromMap(Map<String, dynamic> data, String id) {
     return Funcionalidade(
       id: id,
@@ -29,14 +28,13 @@ class Funcionalidade {
     );
   }
 
-  // Converter um objeto Funcionalidade para um mapa para armazenar no Firestore
+
   Map<String, dynamic> toMap() {
     return {
       'tipo': tipo.toString(),
     };
   }
 
-  // Adicionar funcionalidade a uma associação (subcoleção)
   static Future<void> addFuncionalidade(String associacaoId, Funcionalidade funcionalidade) async {
     await FirebaseFirestore.instance
         .collection('associacoes')
@@ -45,7 +43,7 @@ class Funcionalidade {
         .add(funcionalidade.toMap());
   }
 
-  // Atualizar uma funcionalidade existente
+
   static Future<void> updateFuncionalidade(String associacaoId, Funcionalidade funcionalidade) async {
     await FirebaseFirestore.instance
         .collection('associacoes')
@@ -55,7 +53,7 @@ class Funcionalidade {
         .update(funcionalidade.toMap());
   }
 
-  // Remover uma funcionalidade de uma associação
+
   static Future<void> deleteFuncionalidade(String associacaoId, String funcionalidadeId) async {
     await FirebaseFirestore.instance
         .collection('associacoes')
@@ -65,7 +63,7 @@ class Funcionalidade {
         .delete();
   }
 
-  // Obter funcionalidades de uma associação
+
   static Stream<List<Funcionalidade>> getFuncionalidades(String associacaoId) {
     return FirebaseFirestore.instance
         .collection('associacoes')

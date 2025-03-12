@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
+import 'package:tinder_para_caes/firebaseLogic/associacaoProvider.dart';
+import 'package:tinder_para_caes/firebaseLogic/utilizadorProvider.dart';
 
 class AdicionarAnimalScreen extends StatefulWidget {
   @override
@@ -25,20 +26,19 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
   @override
   void initState() {
     super.initState();
-    _initializeDogBreeds(); // Inicializa a leitura
+    _initializeDogBreeds();
   }
 
   Future<void> _initializeDogBreeds() async {
     try {
-      final dogBreeds = await Animal.loadDogBreeds(); // Carrega a lista de raças
+      final dogBreeds = await Animal.loadDogBreeds();
       setState(() {
-        racas = dogBreeds; // Atualiza o estado com a lista carregada
+        racas = dogBreeds;
       });
     } catch (e) {
       print('Erro ao carregar as raças: $e');
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -153,68 +153,74 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
                 },
               ),
               SizedBox(height: 10),
-            if (_especie == "Cão") ...[
-              TextField(
-                controller: _racaController,
-                decoration: InputDecoration(
-                  labelText: "Raça",
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (String value) {
-                  setState(() {
-                    _racasFiltradas = racas
-                        .where((raca) => raca.toLowerCase().contains(value.toLowerCase()))
-                        .toList();
-                  });
-                },
-              ),
-              if (_racasFiltradas.isNotEmpty)
-                Container(
-                  constraints: BoxConstraints(maxHeight: 150),
-                  child: ListView.builder(
-                    itemCount: _racasFiltradas.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(_racasFiltradas[index]),
-                        onTap: () {
-                          setState(() {
-                            _racaController.text = _racasFiltradas[index];
-                            _racasFiltradas = [];
-                          });
-                        },
-                      );
-                    },
+              if (_especie == "Cão") ...[
+                TextField(
+                  controller: _racaController,
+                  decoration: InputDecoration(
+                    labelText: "Raça",
+                    border: OutlineInputBorder(),
                   ),
+                  onChanged: (String value) {
+                    setState(() {
+                      _racasFiltradas = racas
+                          .where((raca) => raca.toLowerCase().contains(value.toLowerCase()))
+                          .toList();
+                    });
+                  },
                 ),
-              SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: _salvarAnimal,
-                child: Text("Registar animal"),
-              ),
+                if (_racasFiltradas.isNotEmpty)
+                  Container(
+                    constraints: BoxConstraints(maxHeight: 150),
+                    child: ListView.builder(
+                      itemCount: _racasFiltradas.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(_racasFiltradas[index]),
+                          onTap: () {
+                            setState(() {
+                              _racaController.text = _racasFiltradas[index];
+                              _racasFiltradas = [];
+                            });
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                SizedBox(height: 16.0),
+                ElevatedButton(
+                  onPressed: _salvarAnimal,
+                  child: Text("Registar animal"),
+                ),
+              ],
             ],
-          ]),
-
+          ),
         ),
       ),
     );
   }
 
-
-
-
-
   void _salvarAnimal() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
+    final associacao = Provider.of<AssociacaoProvider>(context, listen: false).association;
+    final utilizador = Provider.of<UtilizadorProvider>(context, listen: false).user;
+
+    String donoID;
+    bool isAssociacao = false;
+
+    if (associacao != null) {
+      donoID = associacao.uid;
+      isAssociacao = true;
+    } else if (utilizador != null) {
+      donoID = utilizador.uid;
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Você precisa estar autenticado para registrar um animal!")),
+        SnackBar(content: Text("Erro: Nenhum dono identificado!")),
       );
       return;
     }
 
-    String userID = user.uid;
     CollectionReference animaisRef = FirebaseFirestore.instance.collection('animal');
-    CollectionReference usersRef = FirebaseFirestore.instance.collection('users'); // 🔹 Definição correta
+    CollectionReference usersRef = FirebaseFirestore.instance.collection('users');
+    CollectionReference associacoesRef = FirebaseFirestore.instance.collection('associacoes');
 
     try {
       DocumentReference novoAnimalRef = await animaisRef.add({
@@ -225,14 +231,19 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
         'especie': _especie,
         'raca': _racaController.text.trim(),
         'comportamento': _comportamentoController.text.trim(),
-        'donoID': userID,
+        'donoID': donoID,
         'criado_em': Timestamp.now(),
       });
 
-      // 🔹 Agora adicionamos o ID do animal à lista de animais do usuário
-      await usersRef.doc(userID).set({
-        'animais': FieldValue.arrayUnion([novoAnimalRef.id])
-      }, SetOptions(merge: true));
+      if (isAssociacao) {
+        await associacoesRef.doc(donoID).set({
+          'animais': FieldValue.arrayUnion([novoAnimalRef.id])
+        }, SetOptions(merge: true));
+      } else {
+        await usersRef.doc(donoID).set({
+          'animais': FieldValue.arrayUnion([novoAnimalRef.id])
+        }, SetOptions(merge: true));
+      }
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Animal adicionado com sucesso!")),
@@ -246,8 +257,4 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
       );
     }
   }
-
 }
-
-
-

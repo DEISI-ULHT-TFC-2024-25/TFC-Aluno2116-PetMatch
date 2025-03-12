@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/screens/animalDetailsScreen.dart';
-import 'package:tinder_para_caes/screens/adicionarAnimalScreen.dart'; // Tela para adicionar animais
+import 'package:tinder_para_caes/screens/adicionarAnimalScreen.dart';
 
 class AllAnimalsList extends StatelessWidget {
   final List<Animal?> animais;
-  final bool isAssociacao; // Verificação para mostrar o botão de adicionar
+  final bool isAssociacao;
 
   AllAnimalsList({required this.animais, required this.isAssociacao});
 
@@ -46,7 +46,7 @@ class AllAnimalsList extends StatelessWidget {
                         ),
                       );
                     },
-                    icon: Icon(Icons.visibility), // Ícone de olho para detalhes
+                    icon: Icon(Icons.visibility),
                     label: Text("Ver mais informações 👀"),
                   ),
                 ],
@@ -67,7 +67,7 @@ class AllAnimalsList extends StatelessWidget {
             ),
           );
         },
-        child: Text("➕", style: TextStyle(fontSize: 24)), // Botão com emoji de +
+        child: Text("➕", style: TextStyle(fontSize: 24)),
         tooltip: "Adicionar Animal",
       )
           : null,

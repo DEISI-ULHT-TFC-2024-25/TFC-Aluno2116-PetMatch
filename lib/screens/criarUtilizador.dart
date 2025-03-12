@@ -29,7 +29,6 @@ class UtilizadorFormScreenState extends State<CriarUtilizador> {
   final TextEditingController distritoController = TextEditingController();
   final TextEditingController zipcodeController = TextEditingController();
 
-  /// Converte a string de gênero em inteiro (caso sua classe Utilizador use int)
   int parseGender(String g) {
     switch (g.toLowerCase()) {
       case 'feminino':
@@ -41,9 +40,7 @@ class UtilizadorFormScreenState extends State<CriarUtilizador> {
     }
   }
 
-  /// Método para registrar e, em seguida, ler os dados do Firestore antes de navegar
   Future<void> register() async {
-    // Verificações básicas de senha e email
     if (passwordController.text != confirmPasswordController.text) {
       print("❌ As palavras-passe não coincidem!");
       return;
@@ -53,7 +50,6 @@ class UtilizadorFormScreenState extends State<CriarUtilizador> {
       return;
     }
 
-    // Monta o mapa com os dados que vão para o Firestore
     Map<String, dynamic> userData = {
       "nome": nomeController.text,
       "email": emailController.text,
@@ -69,18 +65,15 @@ class UtilizadorFormScreenState extends State<CriarUtilizador> {
       "osSeusAnimais": [],
     };
 
-    // 1) Registra o usuário no Firebase (Auth) e salva os dados no Firestore
     var firebaseUser = await authService.registerUtilizador(
       emailController.text,
       passwordController.text,
       userData,
     );
 
-    // 2) Se o registro deu certo, 'firebaseUser' não será nulo
     if (firebaseUser != null) {
       print("✅ Utilizador registado com sucesso!");
 
-      // 2.1) Ler do Firestore para garantir que temos os dados exatos
       final uid = firebaseUser.uid;
       final docRef = FirebaseFirestore.instance.collection('utilizador').doc(uid);
       final docSnap = await docRef.get();
@@ -90,10 +83,7 @@ class UtilizadorFormScreenState extends State<CriarUtilizador> {
         return;
       }
 
-      // 2.2) Converte o documento em Map<String, dynamic>
       final data = docSnap.data() as Map<String, dynamic>;
-
-      // 2.3) Monta o Map que o 'Utilizador.fromMap' espera
       final fromDoc = {
         'nif': int.tryParse(data['nif'].toString()) ?? 0,
         'fullName': data['nome'] ?? '',
@@ -110,13 +100,10 @@ class UtilizadorFormScreenState extends State<CriarUtilizador> {
         'associacao': false,
       };
 
-      // 2.4) Cria o objeto Utilizador usando o método fromMap da sua classe
-      final meuUtilizador = Utilizador.fromMap(fromDoc);
+      final meuUtilizador = Utilizador.fromMap(uid,fromDoc);
 
-      // 2.5) Atualiza o Provider com os dados do utilizador
       Provider.of<UtilizadorProvider>(context, listen: false).setUser(meuUtilizador);
 
-      // 3) Navega para a tela Home sem precisar passar o objeto como parâmetro
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

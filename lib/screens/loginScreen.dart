@@ -29,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void login() async {
     try {
-      // 1️⃣ Log in user with email & password
+
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
@@ -42,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       print("✅ Login successful! UID: ${user.uid}");
 
-      // 2️⃣ Primeiro, verifica se o usuário existe na coleção "utilizador"
+
       DocumentSnapshot<Map<String, dynamic>> userSnapshot =
       await _firestore.collection('utilizador').doc(user.uid).get();
 
@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (userSnapshot.exists) {
         userType = "utilizador"; // Usuário normal
       } else {
-        // 3️⃣ Se não for encontrado, verifica na coleção "associacao"
+
         DocumentSnapshot<Map<String, dynamic>> assocSnapshot =
         await _firestore.collection('associacao').doc(user.uid).get();
 
@@ -66,27 +66,24 @@ class _LoginScreenState extends State<LoginScreen> {
 
       print("🎭 User type: $userType");
 
-      // 4️⃣ Redireciona para a tela correta
-      // Se o usuário for "utilizador"
+
       if (userType == "utilizador") {
         // Ler os dados do documento na coleção 'utilizador'
         Map<String, dynamic>? data = userSnapshot.data(); // era docSnapshot
         if (data == null) {
           throw Exception("Dados do utilizador não encontrados.");
         }
-        final meuUtilizador = Utilizador.fromMap(data);
+        final meuUtilizador = Utilizador.fromMap(user.uid, data);
 
-        // Atualiza o provider do Utilizador:
+
         Provider.of<UtilizadorProvider>(context, listen: false).setUser(
             meuUtilizador);
 
-        // Navega para a tela principal do utilizador (sem passar parâmetro):
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const UtilizadorHomeScreen()),
         );
       } else if (userType == "associacao") {
-        // Ler os dados do documento na coleção 'associacao'
         DocumentSnapshot<Map<String, dynamic>> assocSnapshot =
         await _firestore.collection('associacao').doc(user.uid).get();
 
@@ -94,13 +91,11 @@ class _LoginScreenState extends State<LoginScreen> {
         if (data == null) {
           throw Exception("Dados da associação não encontrados.");
         }
-        final minhaAssociacao = Associacao.fromMap(data);
+        final minhaAssociacao = Associacao.fromMap(user.uid, data);
 
-        // Atualiza o provider da Associação:
         Provider.of<AssociacaoProvider>(context, listen: false).setAssociation(
             minhaAssociacao);
 
-        // Navega para a tela principal da associação (sem passar parâmetro):
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const AssociacaoHomeScreen()),
@@ -121,13 +116,13 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            mainAxisSize: MainAxisSize.min, // Mantém apenas o tamanho necessário
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               const Text(
                 "Bem-vindo",
                 style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.center, // Centraliza o texto
+                textAlign: TextAlign.center, 
               ),
               const SizedBox(height: 20),
               TextField(

@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tinder_para_caes/models/animal.dart';
 import 'associacao.dart';
 
 class Utilizador {
+    String uid;
     int nif;
     String fullName;
     int cellphone;
@@ -18,6 +20,7 @@ class Utilizador {
     bool associacao;
 
     Utilizador({
+        required this.uid,
         required this.nif,
         required this.fullName,
         required this.cellphone,
@@ -33,9 +36,10 @@ class Utilizador {
         required this.associacao,
     });
 
-    /// Construtor para criar um objeto Utilizador a partir de um Map (do Firestore)
-    factory Utilizador.fromMap(Map<String, dynamic> map) {
+
+    factory Utilizador.fromMap(String documentId, Map<String, dynamic> map) {
         return Utilizador(
+            uid: documentId,
             nif: map['nif'] is int ? map['nif'] : int.tryParse(map['nif'].toString()) ?? 0,
             fullName: map['fullName'] ?? '',
             cellphone: map['cellphone'] is int ? map['cellphone'] : int.tryParse(map['cellphone'].toString()) ?? 0,
@@ -47,8 +51,8 @@ class Utilizador {
             zipCode: map['zipCode'] ?? '',
             password: map['password'] ?? '',
             associacoesEmQueEstaEnvolvido: map['associacoesEmQueEstaEnvolvido'] != null
-                ? List<Associacao>.from(
-                map['associacoesEmQueEstaEnvolvido'].map((x) => Associacao.fromMap(x)))
+                ? List<Associacao>.from(map['associacoesEmQueEstaEnvolvido']
+                .map((x) => Associacao.fromMap(x['uid'] ?? '', x as Map<String, dynamic>)))
                 : [],
             osSeusAnimais: map['osSeusAnimais'] != null
                 ? List<Animal>.from(map['osSeusAnimais'].map((x) => Animal.fromMap(x)))
@@ -57,7 +61,7 @@ class Utilizador {
         );
     }
 
-    /// Converte o objeto Utilizador em um Map (útil para salvar no Firestore ou converter para JSON)
+
     Map<String, dynamic> toMap() {
         return {
             'nif': nif,
@@ -76,8 +80,12 @@ class Utilizador {
         };
     }
 
-    // Exemplo de instância estática (útil para testes)
+    factory Utilizador.fromFirestore(DocumentSnapshot doc) {
+        return Utilizador.fromMap(doc.id, doc.data() as Map<String, dynamic>);
+    }
+
     static final Utilizador user = Utilizador(
+        uid: "123456", //
         nif: 1234567,
         fullName: "Pedro Alves",
         cellphone: 999999999,
@@ -90,6 +98,7 @@ class Utilizador {
         password: "123abc",
         associacoesEmQueEstaEnvolvido: [
             Associacao(
+                uid:"jfkd",
                 name: "Associação A",
                 local: "Lisboa",
                 nif: 0,
@@ -107,7 +116,6 @@ class Utilizador {
                 animais: [],
                 pedidosRealizados: [],
             ),
-            // Adicione outras associações, se necessário
         ],
         osSeusAnimais: [],
         associacao: false,
