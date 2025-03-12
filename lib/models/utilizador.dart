@@ -91,7 +91,6 @@ class Utilizador {
             if (animalSnapshot.exists) {
                 Animal animalAdicionar = Animal.fromMap(animalSnapshot.data()!);
                 osSeusAnimais.add(animalAdicionar);
-
             }
         } catch (e) {
             print("❌ Erro ao adicionar animal: $e");

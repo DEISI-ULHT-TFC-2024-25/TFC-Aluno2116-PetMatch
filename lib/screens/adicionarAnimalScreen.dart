@@ -190,7 +190,7 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
                   ),
                 SizedBox(height: 16.0),
                 ElevatedButton(
-                  onPressed: _salvarAnimal,
+                  onPressed: guardarAnimal,
                   child: Text("Registar animal"),
                 ),
               ],
@@ -201,7 +201,7 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
     );
   }
 
-  void _salvarAnimal() async {
+  void guardarAnimal() async {
     final associacao = Provider.of<AssociacaoProvider>(context, listen: false).association;
     final utilizador = Provider.of<UtilizadorProvider>(context, listen: false).user;
 
@@ -239,11 +239,12 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
 
 
       if (isAssociacao) {
-        await associacoesRef.doc(donoID).set({
-          'animais': FieldValue.arrayUnion([novoAnimalRef.id])
-
-        }, SetOptions(merge: true));
-
+        DocumentSnapshot<Map<String, dynamic>> userSnapshot = await _firestore.collection('associacao').doc(donoID).get();
+        if (userSnapshot.exists) {
+          Utilizador utilizador = Utilizador.fromMap(
+              donoID, userSnapshot.data()!);
+          await utilizador.adicionarAnimais(novoAnimalRef.id);
+        }
 
       } else {
         DocumentSnapshot<Map<String, dynamic>> userSnapshot = await _firestore.collection('utilizador').doc(donoID).get();
@@ -256,7 +257,6 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
           });
         }
       }
-
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Animal adicionado com sucesso!")),
       );

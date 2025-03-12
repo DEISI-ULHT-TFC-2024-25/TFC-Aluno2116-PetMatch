@@ -109,9 +109,24 @@ class Associacao {
   }
 
 
-  void adicionarAnimais(Animal anim) {
-    animais.add(anim);
+  Future<void> adicionarAnimais(String animalUid) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> animalSnapshot =
+      await FirebaseFirestore.instance.collection('animal').doc(animalUid).get();
+
+      if (animalSnapshot.exists) {
+        Animal animalAdicionar = Animal.fromMap(animalSnapshot.data()!);
+        animais.add(animalAdicionar);
+        await FirebaseFirestore.instance.collection('associacao').doc(uid).update({
+          'animais': FieldValue.arrayUnion([animalUid]),
+        });
+        print("✅ Animal adicionado com sucesso à associação!");
+      }
+    } catch (e) {
+      print("❌ Erro ao adicionar animal à associação: $e");
+    }
   }
+
 
 
   static List<Associacao> getSugestoesAssociacoes(String local) {
