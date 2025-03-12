@@ -84,6 +84,22 @@ class Utilizador {
         return Utilizador.fromMap(doc.id, doc.data() as Map<String, dynamic>);
     }
 
+    Future<void> adicionarAnimais(String animalUid) async {
+        try {
+            DocumentSnapshot<Map<String, dynamic>> animalSnapshot =
+            await FirebaseFirestore.instance.collection('animal').doc(animalUid).get();
+            if (animalSnapshot.exists) {
+                Animal animalAdicionar = Animal.fromMap(animalSnapshot.data()!);
+                osSeusAnimais.add(animalAdicionar);
+
+            }
+        } catch (e) {
+            print("❌ Erro ao adicionar animal: $e");
+        }
+    }
+
+
+
     static final Utilizador user = Utilizador(
         uid: "123456", //
         nif: 1234567,

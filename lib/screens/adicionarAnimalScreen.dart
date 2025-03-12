@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:tinder_para_caes/firebaseLogic/associacaoProvider.dart';
 import 'package:tinder_para_caes/firebaseLogic/utilizadorProvider.dart';
+import 'package:tinder_para_caes/models/utilizador.dart';
 
 class AdicionarAnimalScreen extends StatefulWidget {
   @override
@@ -22,6 +23,7 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
   String? _especie;
   List<String> racas = [];
   List<String> _racasFiltradas = [];
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance; // Firestore instance
 
   @override
   void initState() {
@@ -219,8 +221,8 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
     }
 
     CollectionReference animaisRef = FirebaseFirestore.instance.collection('animal');
-    CollectionReference usersRef = FirebaseFirestore.instance.collection('users');
-    CollectionReference associacoesRef = FirebaseFirestore.instance.collection('associacoes');
+    CollectionReference usersRef = FirebaseFirestore.instance.collection('utilizador');
+    CollectionReference associacoesRef = FirebaseFirestore.instance.collection('associacao');
 
     try {
       DocumentReference novoAnimalRef = await animaisRef.add({
@@ -235,14 +237,24 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
         'criado_em': Timestamp.now(),
       });
 
+
       if (isAssociacao) {
         await associacoesRef.doc(donoID).set({
           'animais': FieldValue.arrayUnion([novoAnimalRef.id])
+
         }, SetOptions(merge: true));
+
+
       } else {
-        await usersRef.doc(donoID).set({
-          'animais': FieldValue.arrayUnion([novoAnimalRef.id])
-        }, SetOptions(merge: true));
+        DocumentSnapshot<Map<String, dynamic>> userSnapshot = await _firestore.collection('utilizador').doc(donoID).get();
+        if (userSnapshot.exists) {
+          Utilizador utilizador = Utilizador.fromMap(
+              donoID, userSnapshot.data()!);
+          await utilizador.adicionarAnimais(novoAnimalRef.id);
+          await usersRef.doc(donoID).update({
+            'osSeusAnimais': FieldValue.arrayUnion([novoAnimalRef.id])
+          });
+        }
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
