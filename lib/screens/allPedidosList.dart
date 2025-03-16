@@ -67,7 +67,7 @@ class AllPedidosList extends StatelessWidget {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          // Implementar lógica de aceitar
+                          pedidos[index].estado = "Aceite";
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green[300],
@@ -76,7 +76,7 @@ class AllPedidosList extends StatelessWidget {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          // Implementar lógica de enviar mensagem
+                          pedidos[index].estado = "Pendente";
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue[300],
@@ -85,7 +85,7 @@ class AllPedidosList extends StatelessWidget {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          // Implementar lógica de recusar
+                          pedidos[index].estado = "Recusado";
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red[300],

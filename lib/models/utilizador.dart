@@ -6,9 +6,9 @@ class Utilizador {
     String uid;
     int nif;
     String fullName;
-    int cellphone;
+    String cellphone;
     bool isAdult;
-    int gender; // 0 - Feminino, 1 - Masculino, 2 - Outros
+    String gender;
     String email;
     String address;
     String local;
@@ -42,9 +42,9 @@ class Utilizador {
             uid: documentId,
             nif: map['nif'] is int ? map['nif'] : int.tryParse(map['nif'].toString()) ?? 0,
             fullName: map['fullName'] ?? '',
-            cellphone: map['cellphone'] is int ? map['cellphone'] : int.tryParse(map['cellphone'].toString()) ?? 0,
+            cellphone: map['address']  ?? '',
             isAdult: map['isAdult'] ?? false,
-            gender: map['gender'] is int ? map['gender'] : int.tryParse(map['gender'].toString()) ?? 0,
+            gender: map['gender']  ?? ' ',
             email: map['email'] ?? '',
             address: map['address'] ?? '',
             local: map['local'] ?? '',
@@ -99,13 +99,14 @@ class Utilizador {
 
 
 
+
     static final Utilizador user = Utilizador(
         uid: "123456", //
         nif: 1234567,
         fullName: "Pedro Alves",
-        cellphone: 999999999,
+        cellphone: " ",
         isAdult: true,
-        gender: 1,
+        gender: "Masculino",
         email: "pedro.alves@ulusofona.pt",
         address: "Campo Grande 376",
         local: "Lisboa",
@@ -120,9 +121,9 @@ class Utilizador {
                 sigla: '',
                 generalEmail: '',
                 secundaryEmail: '',
-                mainCellphone: 0,
+                mainCellphone: " ",
                 address: '',
-                secundaryCellphone: 0,
+                secundaryCellphone: " ",
                 showAddress: false,
                 site: '',
                 eventos: [],

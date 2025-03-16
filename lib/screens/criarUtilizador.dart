@@ -29,16 +29,7 @@ class UtilizadorFormScreenState extends State<CriarUtilizador> {
   final TextEditingController distritoController = TextEditingController();
   final TextEditingController zipcodeController = TextEditingController();
 
-  int parseGender(String g) {
-    switch (g.toLowerCase()) {
-      case 'feminino':
-        return 0;
-      case 'masculino':
-        return 1;
-      default:
-        return 2; // 'Outro'
-    }
-  }
+
 
   Future<void> register() async {
     if (passwordController.text != confirmPasswordController.text) {
@@ -77,33 +68,9 @@ class UtilizadorFormScreenState extends State<CriarUtilizador> {
       final uid = firebaseUser.uid;
       final docRef = FirebaseFirestore.instance.collection('utilizador').doc(uid);
       final docSnap = await docRef.get();
-
-      if (!docSnap.exists) {
-        print("❌ Documento do utilizador não encontrado no Firestore!");
-        return;
-      }
-
       final data = docSnap.data() as Map<String, dynamic>;
-      final fromDoc = {
-        'nif': int.tryParse(data['nif'].toString()) ?? 0,
-        'fullName': data['nome'] ?? '',
-        'cellphone': int.tryParse(data['telefone'].toString()) ?? 0,
-        'isAdult': data['maior_de_idade'] ?? false,
-        'gender': parseGender(data['sexo'] ?? 'Outro'),
-        'email': data['email'] ?? '',
-        'address': data['morada'] ?? '',
-        'local': data['distrito'] ?? '',
-        'zipCode': data['zipcode'] ?? '',
-        'password': '', // Normalmente não se guarda a senha no Firestore
-        'associacoesEmQueEstaEnvolvido': [],
-        'osSeusAnimais': [],
-        'associacao': false,
-      };
-
-      final meuUtilizador = Utilizador.fromMap(uid,fromDoc);
-
+      final meuUtilizador = Utilizador.fromMap(uid,data);
       Provider.of<UtilizadorProvider>(context, listen: false).setUser(meuUtilizador);
-
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

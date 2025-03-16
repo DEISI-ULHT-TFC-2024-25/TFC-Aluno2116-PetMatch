@@ -11,6 +11,7 @@ class Pedido {
   Associacao associacao;
   bool confirmouTodosOsRequisitos;
   String mensagemAdicional;
+  String estado;
 
 
   Pedido({
@@ -20,6 +21,7 @@ class Pedido {
     required this.associacao,
     required this.confirmouTodosOsRequisitos,
     required this.mensagemAdicional,
+    required this.estado,
   });
 
 
@@ -42,6 +44,7 @@ class Pedido {
       ),
       confirmouTodosOsRequisitos: map['confirmouTodosOsRequisitos'] ?? false,
       mensagemAdicional: map['mensagemAdicional'] ?? '',
+      estado: map['mensagemAdicional'] ?? '',
     );
   }
 
@@ -54,6 +57,7 @@ class Pedido {
       'associacao': associacao.toMap(),
       'confirmouTodosOsRequisitos': confirmouTodosOsRequisitos,
       'mensagemAdicional': mensagemAdicional,
+      'estado': estado,
     };
   }
 }

@@ -49,6 +49,7 @@ class _CriarAssociacaoFormScreenState extends State<CriarAssociacao> {
     };
 
     var firebaseUser = await authService.registerAssociacao(
+
       email1Controller.text,
       passwordController.text,
       associacaoData,
@@ -59,17 +60,10 @@ class _CriarAssociacaoFormScreenState extends State<CriarAssociacao> {
       final uid = firebaseUser.uid;
       final docRef = FirebaseFirestore.instance.collection('associacao').doc(uid);
       final docSnap = await docRef.get();
-
-      if (!docSnap.exists) {
-        print("❌ Documento da associação não encontrado no Firestore!");
-        return;
-      }
-
       final data = docSnap.data() as Map<String, dynamic>;
       final minhaAssociacao = Associacao.fromMap(uid,data);
       Provider.of<AssociacaoProvider>(context, listen: false)
           .setAssociation(minhaAssociacao);
-
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

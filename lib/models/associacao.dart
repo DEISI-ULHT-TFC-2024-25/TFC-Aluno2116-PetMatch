@@ -10,8 +10,8 @@ class Associacao {
   String sigla;
   String generalEmail;
   String secundaryEmail;
-  int mainCellphone;
-  int secundaryCellphone;
+  String mainCellphone;
+  String secundaryCellphone;
   String local;
   bool showAddress;
   String address;
@@ -23,6 +23,7 @@ class Associacao {
   List<Eventos> eventos;
   List<String> necessidades;
   bool associacao;
+  //Número de Identificação de Pessoa Coletiva (NIPC)
 
 
   Associacao({
@@ -152,9 +153,9 @@ List<Associacao> todasAssociacoes = [
     sigla: '',
     generalEmail: '',
     secundaryEmail: '',
-    mainCellphone: 0,
+    mainCellphone:" ",
     address: '',
-    secundaryCellphone: 0,
+    secundaryCellphone: " ",
     showAddress: false,
     site: '',
     funcionalidades: [],
@@ -171,9 +172,9 @@ List<Associacao> todasAssociacoes = [
     sigla: '',
     generalEmail: '',
     secundaryEmail: '',
-    mainCellphone: 0,
+    mainCellphone: " ",
     address: '',
-    secundaryCellphone: 0,
+    secundaryCellphone: " ",
     showAddress: false,
     site: '',
     funcionalidades: [],
