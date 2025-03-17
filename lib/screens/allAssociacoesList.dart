@@ -5,7 +5,7 @@ import 'package:tinder_para_caes/screens/vizualizarAssociacaoScreen.dart';
 class AllAssociacoesList extends StatelessWidget {
   final List<Associacao> associacoes;
 
-  AllAssociacoesList({required this.associacoes});
+  const AllAssociacoesList({super.key, required this.associacoes});
 
   @override
   Widget build(BuildContext context) {

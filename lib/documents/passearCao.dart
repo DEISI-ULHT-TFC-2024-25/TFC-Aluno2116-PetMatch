@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/screens/vizualizarAssociacaoScreen.dart';
 
 class PassearCaoScreen extends StatefulWidget {
+  const PassearCaoScreen({super.key});
+
   @override
   _PassearCaoScreenState createState() => _PassearCaoScreenState();
 }
@@ -234,7 +236,6 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
               },
             ),
             ElevatedButton(
-              child: Text("Aceitar ✅"),
               onPressed: aceitaRegras
                   ? () async {
                 await _submeterFormulario(); // 📝 Primeiro grava os dados no Firestore
@@ -242,6 +243,7 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
                 _mostrarPopupFinal(); // 🎉 Mostra o popup final
               }
                   : null,
+              child: Text("Aceitar ✅"),
             ),
 
           ],

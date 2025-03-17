@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class CandidaturaFATScreen extends StatefulWidget {
+  const CandidaturaFATScreen({super.key});
+
   @override
   _CandidaturaFATScreenState createState() => _CandidaturaFATScreenState();
 }

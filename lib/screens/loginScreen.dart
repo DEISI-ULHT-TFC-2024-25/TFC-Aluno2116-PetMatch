@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
-import 'package:go_router/go_router.dart';
 import 'package:tinder_para_caes/firebaseLogic/authenticationService.dart';
 import 'escolherUtiliAssoci.dart';
 import 'package:tinder_para_caes/screens/utilizadorHomeScreen.dart';

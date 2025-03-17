@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class TornarVoluntarioScreen extends StatefulWidget {
+  const TornarVoluntarioScreen({super.key});
+
   @override
   _TornarVoluntarioScreenState createState() => _TornarVoluntarioScreenState();
 }

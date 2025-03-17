@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:tinder_para_caes/firebaseLogic/associacaoProvider.dart';
 
 class CriarAssociacao extends StatefulWidget {
-  const CriarAssociacao({Key? key}) : super(key: key);
+  const CriarAssociacao({super.key});
 
   @override
   _CriarAssociacaoFormScreenState createState() => _CriarAssociacaoFormScreenState();

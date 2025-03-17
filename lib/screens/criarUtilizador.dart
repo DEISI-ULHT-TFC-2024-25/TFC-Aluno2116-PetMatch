@@ -7,7 +7,7 @@ import 'package:tinder_para_caes/firebaseLogic/utilizadorProvider.dart';
 import 'package:provider/provider.dart';
 
 class CriarUtilizador extends StatefulWidget {
-  const CriarUtilizador({Key? key}) : super(key: key);
+  const CriarUtilizador({super.key});
 
   @override
   UtilizadorFormScreenState createState() => UtilizadorFormScreenState();

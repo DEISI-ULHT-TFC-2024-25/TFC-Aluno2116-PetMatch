@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tinder_para_caes/models/utilizador.dart';
-import 'package:tinder_para_caes/models/associacao.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tinder_para_caes/firebaseLogic/associacaoProvider.dart';
-import 'package:tinder_para_caes/models/pedido.dart';
 
 class AllPedidosList extends StatelessWidget {
-  const AllPedidosList({Key? key}) : super(key: key);
+  const AllPedidosList({super.key});
 
   @override
   Widget build(BuildContext context) {

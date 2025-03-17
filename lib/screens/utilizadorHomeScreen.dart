@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/models/associacao.dart';
-import 'package:tinder_para_caes/models/utilizador.dart';
 import 'package:tinder_para_caes/screens/vizualizarAssociacaoScreen.dart';
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/screens/adicionarAnimalScreen.dart';
@@ -10,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:tinder_para_caes/firebaseLogic/utilizadorProvider.dart';
 
 class UtilizadorHomeScreen extends StatelessWidget {
-  const UtilizadorHomeScreen({Key? key}) : super(key: key);
+  const UtilizadorHomeScreen({super.key});
 
 
   @override
@@ -92,7 +91,7 @@ class UtilizadorHomeScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 8.0),
-                Container(
+                SizedBox(
                   height: (associacoesEnvolvido.length > 4)
                       ? 300
                       : associacoesEnvolvido.length * 75.0,
@@ -140,7 +139,7 @@ class UtilizadorHomeScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 8.0),
-                Container(
+                SizedBox(
                   height: (sugestoesAssociacoes.length > 4)
                       ? 300
                       : sugestoesAssociacoes.length * 75.0,

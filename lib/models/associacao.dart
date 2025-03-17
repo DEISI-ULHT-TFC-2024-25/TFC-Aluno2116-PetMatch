@@ -23,7 +23,7 @@ class Associacao {
   List<Eventos> eventos;
   List<String> necessidades;
   bool associacao;
-  //Número de Identificação de Pessoa Coletiva (NIPC)
+
 
 
   Associacao({

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:tinder_para_caes/screens/vizualizarAssociacaoScreen.dart';
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/documents/tornarPadrinho.dart';
 
 class AnimalDetailsScreen extends StatelessWidget {
   final bool isAssoci;
 
-  AnimalDetailsScreen({required this.isAssoci});
+  const AnimalDetailsScreen({super.key, required this.isAssoci});
 
   @override
   Widget build(BuildContext context) {

@@ -7,7 +7,7 @@ class AllAnimalsList extends StatelessWidget {
   final List<Animal?> animais;
   final bool isAssociacao;
 
-  AllAnimalsList({required this.animais, required this.isAssociacao});
+  const AllAnimalsList({super.key, required this.animais, required this.isAssociacao});
 
   @override
   Widget build(BuildContext context) {
@@ -67,8 +67,8 @@ class AllAnimalsList extends StatelessWidget {
             ),
           );
         },
-        child: Text("➕", style: TextStyle(fontSize: 24)),
         tooltip: "Adicionar Animal",
+        child: Text("➕", style: TextStyle(fontSize: 24)),
       )
           : null,
     );

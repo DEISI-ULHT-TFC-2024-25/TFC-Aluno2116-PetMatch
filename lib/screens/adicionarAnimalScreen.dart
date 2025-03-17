@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:tinder_para_caes/firebaseLogic/associacaoProvider.dart';
 import 'package:tinder_para_caes/firebaseLogic/utilizadorProvider.dart';
-import 'package:tinder_para_caes/models/associacao.dart';
 import 'package:tinder_para_caes/models/utilizador.dart';
 
 class AdicionarAnimalScreen extends StatefulWidget {
+  const AdicionarAnimalScreen({super.key});
+
   @override
   _AdicionarAnimalScreenState createState() => _AdicionarAnimalScreenState();
 }
@@ -249,7 +249,7 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
         Map<String, dynamic> userData = (userSnapshot.data() ?? {}) as Map<String, dynamic>;
 
         if (userSnapshot.exists) {
-          Utilizador utilizador = Utilizador.fromMap(donoID, userData!);
+          Utilizador utilizador = Utilizador.fromMap(donoID, userData);
 
           // ✅ Updates Firestore with new animal ID
           await usersRef.doc(donoID).update({

@@ -3,6 +3,8 @@ import 'package:tinder_para_caes/screens/criarAssociacao.dart';
 import 'package:tinder_para_caes/screens/criarUtilizador.dart';
 
 class Escolherutiliassoci extends StatefulWidget {
+  const Escolherutiliassoci({super.key});
+
   @override
   _Escolherutiliassoci createState() => _Escolherutiliassoci();
 }

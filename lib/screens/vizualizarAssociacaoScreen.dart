@@ -6,6 +6,8 @@ import 'package:tinder_para_caes/models/eventos.dart';
 import 'package:tinder_para_caes/screens/allAnimalsList.dart';
 
 class VizualizarAssociacaoScreen extends StatefulWidget {
+  const VizualizarAssociacaoScreen({super.key});
+
   @override
   _VizualizarAssociacaoScreenState createState() => _VizualizarAssociacaoScreenState();
 }
@@ -154,7 +156,7 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
                   SizedBox(height: 20),
                   Stack(
                     children: [
-                      Container(
+                      SizedBox(
                         height: 150,
                         child: GoogleMap(
                           onMapCreated: _onMapCreated,

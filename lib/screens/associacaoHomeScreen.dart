@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/models/animal.dart';
-import 'package:tinder_para_caes/models/associacao.dart';
 import 'package:tinder_para_caes/screens/allAnimalsList.dart';
 import 'package:tinder_para_caes/screens/adicionarAnimalScreen.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +7,7 @@ import 'package:tinder_para_caes/firebaseLogic/associacaoProvider.dart';
 import 'package:tinder_para_caes/screens/allPedidosList.dart';
 
 class AssociacaoHomeScreen extends StatefulWidget {
-  const AssociacaoHomeScreen({Key? key}) : super(key: key);
+  const AssociacaoHomeScreen({super.key});
 
   @override
   _AssociacaoHomeScreenState createState() => _AssociacaoHomeScreenState();
