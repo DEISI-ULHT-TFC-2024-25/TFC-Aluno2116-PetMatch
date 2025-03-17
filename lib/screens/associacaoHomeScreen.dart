@@ -7,75 +7,80 @@ import 'package:provider/provider.dart';
 import 'package:tinder_para_caes/firebaseLogic/associacaoProvider.dart';
 import 'package:tinder_para_caes/screens/allPedidosList.dart';
 
-class AssociacaoHomeScreen extends StatelessWidget {
-
+class AssociacaoHomeScreen extends StatefulWidget {
   const AssociacaoHomeScreen({Key? key}) : super(key: key);
+
+  @override
+  _AssociacaoHomeScreenState createState() => _AssociacaoHomeScreenState();
+}
+
+class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
+  List<Animal> animais = []; // Store fetched animals
+  bool isLoading = true; // Track loading state
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchAnimals();
+  }
+
+  Future<void> _fetchAnimals() async {
+    final associacao = Provider.of<AssociacaoProvider>(context, listen: false).association;
+
+    if (associacao != null) {
+      List<Animal> fetchedAnimals = await associacao.fetchAnimals(associacao.animais);
+      setState(() {
+        animais = fetchedAnimals;
+        isLoading = false;
+      });
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final associacao = Provider.of<AssociacaoProvider>(context).association;
 
-    if (associacao == null) {
+    if (associacao == null || isLoading) {
       return const Scaffold(
-      body: Center(child: CircularProgressIndicator()),
+        body: Center(child: CircularProgressIndicator()),
       );
     }
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Página da Associação"),
-        //backgroundColor: Colors.brown, // Ajuste conforme necessário
-      ),
+      appBar: AppBar(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Título
               Text(
                 "Home Page - ${associacao.name}",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                  decoration: TextDecoration.none,
-                ),
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, decoration: TextDecoration.none),
               ),
               SizedBox(height: 16.0),
+              Text("Notificações", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, decoration: TextDecoration.none)),
+              SizedBox(height: 20.0),
 
-              // Notificações
-              Text(
-                "Notificações",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                  decoration: TextDecoration.none,
-                ),
-              ),
-              SizedBox(height: 8.0),
-
-              // Lista de notificações
+              // Notifications List
               ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: associacao.pedidosRealizados.length,
                 itemBuilder: (context, index) {
                   final pedido = associacao.pedidosRealizados[index];
-                  String utilizadorName = pedido.utilizadorQueRealizaOpedido.fullName;
-                  Animal animal = pedido.animalRequesitado;
                   return Card(
                     margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
                     child: ListTile(
-                      title: Text(utilizadorName),
+                      title: Text(pedido.utilizadorQueRealizaOpedido.fullName),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "Animal interessado: ${animal.fullName}",
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                          Text("Animal interessado: ${pedido.animalRequesitado.fullName}", maxLines: 2, overflow: TextOverflow.ellipsis),
                           Text("Pedido: ${pedido.oQuePretendeFazer}"),
                         ],
                       ),
@@ -83,38 +88,39 @@ class AssociacaoHomeScreen extends StatelessWidget {
                   );
                 },
               ),
-              SizedBox(height: 16.0),
+              SizedBox(height: 20.0),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AllPedidosList()));
+                },
+                child: Text("Ver todas"),
+              ),
 
-              // Animais visíveis ao público
+              // Animals Section
               Text(
                 "Os seus patudos visíveis ao público",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                  decoration: TextDecoration.none,
-                ),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, decoration: TextDecoration.none),
               ),
-              SizedBox(height: 8.0),
+              SizedBox(height: 20.0),
 
-              // Grid de animais com scroll total
+              // Animals Grid
               GridView.builder(
-                shrinkWrap: true, // Permite que o Grid se ajuste dentro do SingleChildScrollView
-                physics: NeverScrollableScrollPhysics(), // Evita conflitos de rolagem
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 padding: const EdgeInsets.all(8.0),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3, // Define 3 colunas
+                  crossAxisCount: 3,
                   crossAxisSpacing: 8.0,
                   mainAxisSpacing: 8.0,
-                  childAspectRatio: 1, // Mantém os cards mais quadrados
+                  childAspectRatio: 1,
                 ),
-                itemCount: associacao.animais.length,
+                itemCount: animais.length,
                 itemBuilder: (context, index) {
                   return Card(
-                    color: Colors.brown,
+                    color: Colors.brown[300],
                     child: Center(
                       child: Text(
-                        associacao.animais[index].fullName,
+                        animais[index].fullName,
                         style: TextStyle(color: Colors.white, fontSize: 16),
                         textAlign: TextAlign.center,
                       ),
@@ -123,8 +129,18 @@ class AssociacaoHomeScreen extends StatelessWidget {
                 },
               ),
               SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AllAnimalsList(animais: animais, isAssociacao: true),
+                    ),
+                  );
+                },
+                child: Text("Ver Animais"),
+              ),
 
-              // Botões de ações
               Padding(
                 padding: const EdgeInsets.all(4.0),
                 child: Row(
@@ -132,35 +148,15 @@ class AssociacaoHomeScreen extends StatelessWidget {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AllAnimalsList(
-                              animais: associacao.animais,
-                              isAssociacao: true,
-                            ),
-                          ),
-                        );
-                      },
-                      child: Text("Ver Todos"),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => AdicionarAnimalScreen()),
-                        );
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => AdicionarAnimalScreen()));
                       },
                       child: Text("Adicionar Animal"),
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => AllPedidosList()),
-                        );
+                        // Implementar ação para "Editar necessidades"
                       },
-                      child: Text("Ver notificações"),
+                      child: Text("Editar necessidades"),
                     ),
                   ],
                 ),

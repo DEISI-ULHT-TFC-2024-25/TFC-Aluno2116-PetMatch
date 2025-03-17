@@ -27,6 +27,7 @@ class _CriarAssociacaoFormScreenState extends State<CriarAssociacao> {
   final TextEditingController moradaController = TextEditingController();
   final TextEditingController distritoController = TextEditingController();
 
+
   void register() async {
     if (passwordController.text != confirmPasswordController.text) {
       print("❌ As palavras-passe não coincidem!");
@@ -46,6 +47,10 @@ class _CriarAssociacaoFormScreenState extends State<CriarAssociacao> {
       "morada": shareLocation ? moradaController.text : null,
       "distrito": !shareLocation ? distritoController.text : null,
       "tipo": "associacao",
+      "animais": [],
+      "pedidos": [],
+      "eventos": [],
+      "necessidades": [],
     };
 
     var firebaseUser = await authService.registerAssociacao(

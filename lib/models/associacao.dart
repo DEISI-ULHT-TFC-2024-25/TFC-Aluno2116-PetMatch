@@ -18,7 +18,7 @@ class Associacao {
   String site;
   int nif;
   List<Funcionalidade> funcionalidades;
-  List<Animal> animais;
+  List<String> animais;
   List<Pedido> pedidosRealizados;
   List<Eventos> eventos;
   List<String> necessidades;
@@ -65,9 +65,7 @@ class Associacao {
       funcionalidades: (map['funcionalidades'] as List<dynamic>?)?.map((f) {
         return Funcionalidade.fromMap(f as Map<String, dynamic>, f['id']);
       }).toList() ?? [],
-      animais: (map['animais'] as List<dynamic>?)?.map((a) {
-        return Animal.fromMap(a as Map<String, dynamic>);
-      }).toList() ?? [],
+      animais: (map['animais'] as List<dynamic>?)?.map((a) => a.toString()).toList() ?? [],
       pedidosRealizados: (map['pedidosRealizados'] as List<dynamic>?)?.map((p) {
         return Pedido.fromMap(
           p['id'] ?? '',
@@ -97,7 +95,7 @@ class Associacao {
       'site': site,
       'nif': nif,
       'funcionalidades': funcionalidades.map((f) => f.toMap()).toList(),
-      'animais': animais.map((a) => a.toMap()).toList(),
+      'animais': animais,
       'pedidosRealizados': pedidosRealizados.map((p) => p.toMap()).toList(),
       'eventos': eventos.map((e) => e.toMap()).toList(),
       'necessidades': necessidades,
@@ -110,7 +108,7 @@ class Associacao {
   }
 
 
-  Future<void> adicionarAnimais(String animalUid) async {
+  /*Future<void> adicionarAnimais(String animalUid) async {
     try {
       DocumentSnapshot<Map<String, dynamic>> animalSnapshot =
       await FirebaseFirestore.instance.collection('animal').doc(animalUid).get();
@@ -126,8 +124,20 @@ class Associacao {
     } catch (e) {
       print("❌ Erro ao adicionar animal à associação: $e");
     }
-  }
+  }*/
 
+  Future<List<Animal>> fetchAnimals(List<String> animalUids) async {
+    List<Animal> animals = [];
+
+    for (String uid in animalUids) {
+      DocumentSnapshot doc = await FirebaseFirestore.instance.collection('animals').doc(uid).get();
+      if (doc.exists) {
+        animals.add(Animal.fromMap(doc.data() as Map<String, dynamic>));
+      }
+    }
+
+    return animals;
+  }
 
 
   static List<Associacao> getSugestoesAssociacoes(String local) {
@@ -145,25 +155,7 @@ class Associacao {
 
 
 List<Associacao> todasAssociacoes = [
-  Associacao(
-    uid: "associacaoE123",
-    name: "Associação E",
-    local: "Porto",
-    nif: 0,
-    sigla: '',
-    generalEmail: '',
-    secundaryEmail: '',
-    mainCellphone:" ",
-    address: '',
-    secundaryCellphone: " ",
-    showAddress: false,
-    site: '',
-    funcionalidades: [],
-    animais: Animal.todosAnimais,
-    pedidosRealizados: [],
-    eventos: [],
-    necessidades: [],
-  ),
+
   Associacao(
     uid: "associacaoF456",
     name: "Associação F",

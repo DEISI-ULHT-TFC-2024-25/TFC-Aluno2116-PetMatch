@@ -12,6 +12,7 @@ import 'package:tinder_para_caes/firebaseLogic/utilizadorProvider.dart';
 class UtilizadorHomeScreen extends StatelessWidget {
   const UtilizadorHomeScreen({Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     final utilizador = Provider.of<UtilizadorProvider>(context).user;
