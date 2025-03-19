@@ -103,11 +103,11 @@ class Utilizador {
     static final Utilizador user = Utilizador(
         uid: "123456", //
         nif: 1234567,
-        fullName: "Pedro Alves",
+        fullName: "Batata",
         cellphone: " ",
         isAdult: true,
         gender: "Masculino",
-        email: "pedro.alves@ulusofona.pt",
+        email: "batata@ulusofona.pt",
         address: "Campo Grande 376",
         local: "Lisboa",
         zipCode: "123456-123",

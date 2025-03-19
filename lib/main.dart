@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:tinder_para_caes/screens/loginScreen.dart';
 import 'package:tinder_para_caes/firebaseLogic/utilizadorProvider.dart';
 import 'package:tinder_para_caes/firebaseLogic/associacaoProvider.dart';
+import 'package:tinder_para_caes/theme/theme.dart'; // Import the theme
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +31,9 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Minha App',
-        theme: ThemeData(primarySwatch: Colors.blue),
+        theme: lightTheme, // Light theme
+        darkTheme: darkTheme, // Dark theme
+        themeMode: ThemeMode.system, // Automatically follow system theme
         home: LoginScreen(),
       ),
     );

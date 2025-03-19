@@ -5,6 +5,7 @@ import 'package:tinder_para_caes/models/associacao.dart';
 import 'package:tinder_para_caes/firebaseLogic/authenticationService.dart';
 import 'package:provider/provider.dart';
 import 'package:tinder_para_caes/firebaseLogic/associacaoProvider.dart';
+import '../models/funcionalidades.dart' show Funcionalidades;
 
 class CriarAssociacao extends StatefulWidget {
   const CriarAssociacao({super.key});
@@ -16,7 +17,6 @@ class CriarAssociacao extends StatefulWidget {
 class _CriarAssociacaoFormScreenState extends State<CriarAssociacao> {
   bool shareLocation = false;
   final Authenticationservice authService = Authenticationservice();
-
   final TextEditingController nomeController = TextEditingController();
   final TextEditingController email1Controller = TextEditingController();
   final TextEditingController email2Controller = TextEditingController();
@@ -27,6 +27,63 @@ class _CriarAssociacaoFormScreenState extends State<CriarAssociacao> {
   final TextEditingController moradaController = TextEditingController();
   final TextEditingController distritoController = TextEditingController();
 
+
+  List<Funcionalidades> funcionalidadesSelecionadas = [];
+
+  void _mostrarPopUpFuncionalidades() async {
+    List<Funcionalidades> selecionadasTemp = List.from(funcionalidadesSelecionadas);
+
+    bool? resultado = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Escolha as Funcionalidades que deseja que as pessoas possam realizar"),
+          content: Container(
+            width: MediaQuery.of(context).size.width * 0.9, // Ocupa quase a tela toda
+            height: MediaQuery.of(context).size.height * 0.7,
+            child: ListView(
+              children: Funcionalidades.values.map((func) {
+                return CheckboxListTile(
+                  title: Text(func.toString().split('.').last),
+                  value: selecionadasTemp.contains(func),
+                  onChanged: (bool? value) {
+                    setState(() {
+                      if (value == true) {
+                        selecionadasTemp.add(func);
+                      } else {
+                        selecionadasTemp.remove(func);
+                      }
+                    });
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+              child: const Text("Cancelar"),
+            ),
+            TextButton(
+              onPressed: () {
+                funcionalidadesSelecionadas = selecionadasTemp;
+                MaterialPageRoute(
+                    builder: (context) => const AssociacaoHomeScreen(),
+                );;
+              },
+              child: const Text("Confirmar"),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (resultado == true) {
+      setState(() {});
+    }
+  }
 
   void register() async {
     if (passwordController.text != confirmPasswordController.text) {
@@ -51,6 +108,9 @@ class _CriarAssociacaoFormScreenState extends State<CriarAssociacao> {
       "pedidos": [],
       "eventos": [],
       "necessidades": [],
+      "funcionalidades": funcionalidadesSelecionadas
+          .map((f) => f.toString().split('.').last)
+          .toList(),
     };
 
     var firebaseUser = await authService.registerAssociacao(
@@ -139,20 +199,22 @@ class _CriarAssociacaoFormScreenState extends State<CriarAssociacao> {
                 controller: moradaController,
                 decoration: const InputDecoration(labelText: 'Morada'),
               ),
-            ] else ...[
-              TextField(
+            TextField(
                 controller: distritoController,
                 decoration: const InputDecoration(labelText: 'Distrito'),
               ),
             ],
             const SizedBox(height: 20),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: ElevatedButton(
-                onPressed: register,
-                child: const Text("Submeter"),
-              ),
+            ElevatedButton(
+            onPressed: _mostrarPopUpFuncionalidades,
+            child: const Text("Escolher Funcionalidades"),
             ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+            onPressed: register,
+            child: const Text("Submeter"),
+            ),
+
           ],
         ),
       ),
