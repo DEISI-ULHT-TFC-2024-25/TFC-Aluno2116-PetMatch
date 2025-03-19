@@ -12,8 +12,8 @@ final ThemeData lightTheme = ThemeData(
   ),
   textTheme: TextTheme(
     bodyLarge: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.brown[900]),
-    bodyMedium: TextStyle(fontSize: 16, color: Colors.brown[600]),
-    bodySmall: TextStyle(fontSize: 14, color: Colors.brown[400]),
+    bodyMedium: TextStyle(fontSize: 16,fontWeight: FontWeight.bold, color: Colors.brown[600]),
+    bodySmall: TextStyle(fontSize: 16,fontWeight: FontWeight.bold, color: Colors.brown[400]),
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(

@@ -154,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 20),
 
               _isLoading
-                  ? PawLoading() // Show paw print animation when logging in
+                  ?                     PawLoading() // Show paw print animation when logging in
                   : ElevatedButton(
                 onPressed: login,
                 child: const Text('Login'),

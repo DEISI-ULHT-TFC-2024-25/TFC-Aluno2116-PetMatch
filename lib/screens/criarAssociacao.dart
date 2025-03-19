@@ -194,14 +194,15 @@ class _CriarAssociacaoFormScreenState extends State<CriarAssociacao> {
                 });
               },
             ),
+            TextField(
+              controller: distritoController,
+              decoration: const InputDecoration(labelText: 'Distrito'),
+            ),
+
             if (shareLocation) ...[
               TextField(
                 controller: moradaController,
                 decoration: const InputDecoration(labelText: 'Morada'),
-              ),
-            TextField(
-                controller: distritoController,
-                decoration: const InputDecoration(labelText: 'Distrito'),
               ),
             ],
             const SizedBox(height: 20),
