@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
 import 'package:tinder_para_caes/firebaseLogic/authenticationService.dart';
+import 'package:tinder_para_caes/widgets/paw_loading.dart' show PawLoading;
 import 'escolherUtiliAssoci.dart';
 import 'package:tinder_para_caes/screens/utilizadorHomeScreen.dart';
 import 'package:tinder_para_caes/screens/associacaoHomeScreen.dart';
@@ -26,7 +27,12 @@ class _LoginScreenState extends State<LoginScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance; // Firestore instance
 
+  bool _isLoading = false;
+
   void login() async {
+    setState(() {
+      _isLoading = true; // Show loading animation
+    });
     try {
 
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
@@ -63,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
         throw Exception("⚠️ User type not found in Firestore!");
       }
 
-      print("🎭 User type: $userType");
+      print(" User type: $userType");
 
 
       if (userType == "utilizador") {
@@ -106,6 +112,11 @@ class _LoginScreenState extends State<LoginScreen> {
         SnackBar(content: Text('Login failed: ${e.toString()}')),
       );
     }
+    finally {
+      setState(() {
+        _isLoading = false; // Hide loading animation
+      });
+    }
   }
 
   @override
@@ -141,10 +152,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 obscureText: true,
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
+
+              _isLoading
+                  ? PawLoading() // Show paw print animation when logging in
+                  : ElevatedButton(
                 onPressed: login,
                 child: const Text('Login'),
               ),
+
               const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
