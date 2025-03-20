@@ -50,6 +50,7 @@ dependencies:
 
   provider: any
   animate_do: ^4.2.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -63,7 +64,6 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   mockito: ^5.4.2
   build_runner: ^2.4.6
-
 
 
 

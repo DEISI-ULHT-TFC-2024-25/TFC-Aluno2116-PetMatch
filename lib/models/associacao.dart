@@ -1,8 +1,8 @@
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/models/pedido.dart';
 import 'package:tinder_para_caes/models/eventos.dart';
-import 'funcionalidades.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'funcionalidades.dart';
 
 class Associacao {
   String uid;
@@ -17,14 +17,12 @@ class Associacao {
   String address;
   String site;
   int nif;
-  List<Funcionalidade> funcionalidades;
+  List<Funcionalidades> funcionalidades; // Ajustado para corresponder ao enum
   List<String> animais;
   List<Pedido> pedidosRealizados;
   List<Eventos> eventos;
   List<String> necessidades;
   bool associacao;
-
-
 
   Associacao({
     required this.uid,
@@ -47,7 +45,6 @@ class Associacao {
     this.associacao = true,
   });
 
-
   factory Associacao.fromMap(String documentId, Map<String, dynamic> map) {
     return Associacao(
       uid: documentId,
@@ -55,31 +52,29 @@ class Associacao {
       sigla: map['sigla'] ?? '',
       generalEmail: map['emailGeral'] ?? '',
       secundaryEmail: map['emailParaAlgumaCoisa'] ?? '',
-      mainCellphone: map['telemovelPrincipal'] ?? 0,
-      secundaryCellphone: map['telemovelSecundario'] ?? 0,
+      mainCellphone: map['telemovelPrincipal'] ?? '',
+      secundaryCellphone: map['telemovelSecundario'] ?? '',
       local: map['localidade'] ?? '',
       showAddress: map['mostrarMorada'] ?? false,
       address: map['morada'] ?? '',
       site: map['site'] ?? '',
       nif: map['nif'] ?? 0,
-      funcionalidades: (map['funcionalidades'] as List<dynamic>?)?.map((f) {
-        return Funcionalidade.fromMap(f as Map<String, dynamic>, f['id']);
-      }).toList() ?? [],
-      animais: (map['animais'] as List<dynamic>?)?.map((a) => a.toString()).toList() ?? [],
-      pedidosRealizados: (map['pedidosRealizados'] as List<dynamic>?)?.map((p) {
-        return Pedido.fromMap(
-          p['id'] ?? '',
-          p as Map<String, dynamic>,
-        );
-      }).toList() ?? [],
-      eventos: (map['eventos'] as List<dynamic>?)?.map((e) {
-        String eventoId = e['id'] ?? 'id_desconhecido';
-        return Eventos.fromMap(e as Map<String, dynamic>, eventoId);
-      }).toList() ?? [],
+      funcionalidades: (map['funcionalidades'] as List<dynamic>?)
+          ?.map((f) => Funcionalidades.values.firstWhere(
+              (element) => element.toString().split('.').last == f)).toList() ??
+          [],
+      animais: List<String>.from(map['animais'] ?? []),
+      pedidosRealizados: (map['pedidosRealizados'] as List<dynamic>?)
+          ?.map((p) => Pedido.fromMap(p['id'] ?? '', p as Map<String, dynamic>))
+          .toList() ??
+          [],
+      eventos: (map['eventos'] as List<dynamic>?)
+          ?.map((e) => Eventos.fromMap(e as Map<String, dynamic>, e['id'] ?? 'id_desconhecido'))
+          .toList() ??
+          [],
       necessidades: List<String>.from(map['necessidades'] ?? []),
     );
   }
-
 
   Map<String, dynamic> toMap() {
     return {
@@ -94,7 +89,7 @@ class Associacao {
       'morada': address,
       'site': site,
       'nif': nif,
-      'funcionalidades': funcionalidades.map((f) => f.toMap()).toList(),
+      'funcionalidades': funcionalidades.map((f) => f.toString().split('.').last).toList(),
       'animais': animais,
       'pedidosRealizados': pedidosRealizados.map((p) => p.toMap()).toList(),
       'eventos': eventos.map((e) => e.toMap()).toList(),
@@ -102,35 +97,16 @@ class Associacao {
     };
   }
 
-
   factory Associacao.fromFirestore(DocumentSnapshot doc) {
     return Associacao.fromMap(doc.id, doc.data() as Map<String, dynamic>);
   }
-
-
-  /*Future<void> adicionarAnimais(String animalUid) async {
-    try {
-      DocumentSnapshot<Map<String, dynamic>> animalSnapshot =
-      await FirebaseFirestore.instance.collection('animal').doc(animalUid).get();
-
-      if (animalSnapshot.exists) {
-        Animal animalAdicionar = Animal.fromMap(animalSnapshot.data()!);
-        animais.add(animalAdicionar);
-        await FirebaseFirestore.instance.collection('associacao').doc(uid).update({
-          'animais': FieldValue.arrayUnion([animalUid]),
-        });
-        print("✅ Animal adicionado com sucesso à associação!");
-      }
-    } catch (e) {
-      print("❌ Erro ao adicionar animal à associação: $e");
-    }
-  }*/
 
   Future<List<Animal>> fetchAnimals(List<String> animalUids) async {
     List<Animal> animals = [];
 
     for (String uid in animalUids) {
-      DocumentSnapshot doc = await FirebaseFirestore.instance.collection('animals').doc(uid).get();
+      DocumentSnapshot doc =
+      await FirebaseFirestore.instance.collection('animals').doc(uid).get();
       if (doc.exists) {
         animals.add(Animal.fromMap(doc.data() as Map<String, dynamic>));
       }
@@ -139,11 +115,9 @@ class Associacao {
     return animals;
   }
 
-
   static List<Associacao> getSugestoesAssociacoes(String local) {
     return todasAssociacoes.where((associacao) => associacao.local == local).toList();
   }
-
 
   static Associacao procurarAssociacao(int id) {
     if (id < 0 || id >= todasAssociacoes.length) {
@@ -153,9 +127,7 @@ class Associacao {
   }
 }
 
-
 List<Associacao> todasAssociacoes = [
-
   Associacao(
     uid: "associacaoF456",
     name: "Associação F",

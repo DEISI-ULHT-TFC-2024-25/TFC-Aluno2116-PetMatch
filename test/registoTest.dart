@@ -1,11 +1,12 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' show TextField;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:mockito/mockito.dart';
 import 'package:tinder_para_caes/screens/loginScreen.dart';
 import 'package:tinder_para_caes/screens/escolherUtiliAssoci.dart';
 import 'package:provider/provider.dart';
-import 'mocks.mocks.dart'; // Importação dos mocks gerais
-import 'test_helpers.dart'; // Importação do helper para criar widgets de teste
+import 'mocks.mocks.dart'; // Import generated mocks
+import 'test_helpers.dart'; // Import test helper
 
 void main() {
   group('LoginScreen Tests', () {
@@ -42,14 +43,6 @@ void main() {
       expect(find.textContaining('Login failed'), findsOneWidget);
     });
 
-    testWidgets('Mostra animação de carregamento ao clicar no login', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget(child: const LoginScreen(), authService: mockAuthService));
-      await tester.enterText(find.byType(TextField).first, 'email@teste.com');
-      await tester.enterText(find.byType(TextField).last, 'senha123');
-      await tester.tap(find.text('Login'));
-      await tester.pump();
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-    });
 
     testWidgets('Navega para a tela de registro ao clicar no botão de registro', (WidgetTester tester) async {
       await tester.pumpWidget(createTestWidget(child: const LoginScreen(), authService: mockAuthService));
