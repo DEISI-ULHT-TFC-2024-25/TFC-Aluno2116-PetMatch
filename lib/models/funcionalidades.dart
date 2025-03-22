@@ -6,7 +6,8 @@ enum Funcionalidades {
   socios,
   partilhaEventos,
   voluntariado,
-  familiaAcolhimentoTemporario
+  familiaAcolhimentoTemporaria,
+  listaDeNecessidades
 }
 
 class Funcionalidade {

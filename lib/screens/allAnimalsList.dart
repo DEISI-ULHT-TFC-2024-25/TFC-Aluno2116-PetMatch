@@ -4,7 +4,7 @@ import 'package:tinder_para_caes/screens/animalDetailsScreen.dart';
 import 'package:tinder_para_caes/screens/adicionarAnimalScreen.dart';
 
 class AllAnimalsList extends StatelessWidget {
-  final List<Animal?> animais;
+  final List<Animal?> animais ;
   final bool isAssociacao;
 
   const AllAnimalsList({super.key, required this.animais, required this.isAssociacao});

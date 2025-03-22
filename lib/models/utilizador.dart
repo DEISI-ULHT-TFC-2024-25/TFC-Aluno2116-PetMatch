@@ -16,7 +16,7 @@ class Utilizador {
     String password;
 
     List<Associacao> associacoesEmQueEstaEnvolvido;
-    List<Animal> osSeusAnimais;
+    List<String> osSeusAnimais;
     bool associacao;
 
     Utilizador({
@@ -42,7 +42,7 @@ class Utilizador {
             uid: documentId,
             nif: map['nif'] is int ? map['nif'] : int.tryParse(map['nif'].toString()) ?? 0,
             fullName: map['fullName'] ?? '',
-            cellphone: map['address']  ?? '',
+            cellphone: map['cellphone']  ?? '',
             isAdult: map['isAdult'] ?? false,
             gender: map['gender']  ?? ' ',
             email: map['email'] ?? '',
@@ -54,9 +54,7 @@ class Utilizador {
                 ? List<Associacao>.from(map['associacoesEmQueEstaEnvolvido']
                 .map((x) => Associacao.fromMap(x['uid'] ?? '', x as Map<String, dynamic>)))
                 : [],
-            osSeusAnimais: map['osSeusAnimais'] != null
-                ? List<Animal>.from(map['osSeusAnimais'].map((x) => Animal.fromMap(x)))
-                : [],
+            osSeusAnimais: List<String>.from(map['animais'] ?? []),
             associacao: map['associacao'] ?? false,
         );
     }
@@ -75,7 +73,7 @@ class Utilizador {
             'zipCode': zipCode,
             'password': password,
             'associacoesEmQueEstaEnvolvido': associacoesEmQueEstaEnvolvido.map((a) => a.toMap()).toList(),
-            'osSeusAnimais': osSeusAnimais.map((a) => a.toMap()).toList(),
+            'osSeusAnimais': osSeusAnimais,
             'associacao': associacao,
         };
     }
@@ -84,20 +82,24 @@ class Utilizador {
         return Utilizador.fromMap(doc.id, doc.data() as Map<String, dynamic>);
     }
 
-    Future<void> adicionarAnimais(String animalUid) async {
-        try {
-            DocumentSnapshot<Map<String, dynamic>> animalSnapshot =
-            await FirebaseFirestore.instance.collection('animal').doc(animalUid).get();
-            if (animalSnapshot.exists) {
-                Animal animalAdicionar = Animal.fromMap(animalSnapshot.data()!);
-                osSeusAnimais.add(animalAdicionar);
+
+    Future<List<Animal>> fetchAnimals(List<String> animalUids) async {
+        List<Animal> animals = [];
+        for (String uid in animalUids) {
+            DocumentSnapshot doc =
+            await FirebaseFirestore.instance.collection('animal').doc(uid).get();
+            if (doc.exists) {
+                final data = doc.data();
+
+                if (data is Map<String, dynamic>) {
+                    animals.add(Animal.fromMap(data));
+                } else {
+                    print("⚠️ Erro: Documento $uid não contém um Map válido. Tipo: ${data.runtimeType}, Conteúdo: $data");
+                }
             }
-        } catch (e) {
-            print("❌ Erro ao adicionar animal: $e");
         }
+        return animals;
     }
-
-
 
 
     static final Utilizador user = Utilizador(

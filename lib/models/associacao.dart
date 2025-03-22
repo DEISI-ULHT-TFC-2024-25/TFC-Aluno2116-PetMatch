@@ -103,17 +103,22 @@ class Associacao {
 
   Future<List<Animal>> fetchAnimals(List<String> animalUids) async {
     List<Animal> animals = [];
-
     for (String uid in animalUids) {
       DocumentSnapshot doc =
-      await FirebaseFirestore.instance.collection('animals').doc(uid).get();
+      await FirebaseFirestore.instance.collection('animal').doc(uid).get(); // <- nome certo
       if (doc.exists) {
-        animals.add(Animal.fromMap(doc.data() as Map<String, dynamic>));
+        final data = doc.data();
+
+        if (data is Map<String, dynamic>) {
+          animals.add(Animal.fromMap(data));
+        } else {
+          print("⚠️ Erro: Documento $uid não contém um Map válido. Tipo: ${data.runtimeType}, Conteúdo: $data");
+        }
       }
     }
-
     return animals;
   }
+
 
   static List<Associacao> getSugestoesAssociacoes(String local) {
     return todasAssociacoes.where((associacao) => associacao.local == local).toList();

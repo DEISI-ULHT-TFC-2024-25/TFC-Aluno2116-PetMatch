@@ -15,16 +15,25 @@ class AdicionarAnimalScreen extends StatefulWidget {
 }
 
 class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
+  final _formKey = GlobalKey<FormState>();
+
   final TextEditingController _nomeController = TextEditingController();
+  final TextEditingController _chipController = TextEditingController();
+  final TextEditingController _idadeController = TextEditingController();
+  final TextEditingController _donoLegalController = TextEditingController();
+  final TextEditingController _alergiasController = TextEditingController();
   final TextEditingController _comportamentoController = TextEditingController();
   final TextEditingController _racaController = TextEditingController();
+
   String? _genero;
   bool _castrado = false;
   String? _porte;
   String? _especie;
+  bool _temPadrinho = false;
+  bool _temFat = false;
+
   List<String> racas = [];
   List<String> _racasFiltradas = [];
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance; // Firestore instance
 
   @override
   void initState() {
@@ -52,111 +61,146 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextField(
-                controller: _nomeController,
-                decoration: InputDecoration(
-                  labelText: "Nome do Animal",
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 10),
-              DropdownButtonFormField<String>(
-                decoration: InputDecoration(
-                  labelText: "Gênero",
-                  border: OutlineInputBorder(),
-                ),
-                value: _genero,
-                items: ["Feminino", "Masculino"].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (String? value) {
-                  setState(() {
-                    _genero = value;
-                  });
-                },
-              ),
-              SizedBox(height: 10),
-              Row(
-                children: [
-                  Checkbox(
-                    value: _castrado,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        _castrado = value ?? false;
-                      });
-                    },
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextField(
+                  controller: _nomeController,
+                  decoration: InputDecoration(
+                    labelText: "Nome do Animal",
+                    border: OutlineInputBorder(),
                   ),
-                  Text("Castrado/Esterilizado"),
-                ],
-              ),
-              SizedBox(height: 10),
-              DropdownButtonFormField<String>(
-                decoration: InputDecoration(
-                  labelText: "Porte",
-                  border: OutlineInputBorder(),
                 ),
-                value: _porte,
-                items: ["Pequeno", "Médio", "Grande", "Gigante"].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (String? value) {
-                  setState(() {
-                    _porte = value;
-                  });
-                },
-              ),
-              SizedBox(height: 10),
-              TextField(
-                controller: _comportamentoController,
-                decoration: InputDecoration(
-                  labelText: "Comportamento e Problemas Comportamentais",
-                  border: OutlineInputBorder(),
+                SizedBox(height: 10),
+                TextField(
+                  controller: _chipController,
+                  decoration: InputDecoration(
+                    labelText: "Micro-chip (opcional)",
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.number,
                 ),
-                maxLines: 3,
-              ),
-              SizedBox(height: 10),
-              DropdownButtonFormField<String>(
-                decoration: InputDecoration(
-                  labelText: "Espécie",
-                  border: OutlineInputBorder(),
+                SizedBox(height: 10),
+                TextField(
+                  controller: _idadeController,
+                  decoration: InputDecoration(
+                    labelText: "Idade",
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.number,
                 ),
-                value: _especie,
-                items: [
-                  "Cão",
-                  "Gato",
-                  "Aves",
-                  "Chinchilas",
-                  "Porquinhos da Índia",
-                  "Cavalos",
-                  "Cacatuas",
-                  "Ovelhas",
-                  "Peixes",
-                  "Hamsters"
-                ].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (String? value) {
-                  setState(() {
-                    _especie = value;
-                    _racaController.clear();
-                    _racasFiltradas.clear();
-                  });
-                },
-              ),
-              SizedBox(height: 10),
-              if (_especie == "Cão") ...[
+                SizedBox(height: 10),
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    labelText: "Gênero",
+                    border: OutlineInputBorder(),
+                  ),
+                  value: _genero,
+                  items: ["Feminino", "Masculino"].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? value) {
+                    setState(() {
+                      _genero = value;
+                    });
+                  },
+                ),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: _castrado,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _castrado = value ?? false;
+                        });
+                      },
+                    ),
+                    Text("Castrado/Esterilizado"),
+                  ],
+                ),
+                SizedBox(height: 10),
+                TextField(
+                  controller: _donoLegalController,
+                  decoration: InputDecoration(
+                    labelText: "Dono Legal (opcional)",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 10),
+                TextField(
+                  controller: _alergiasController,
+                  decoration: InputDecoration(
+                    labelText: "Alergias ou problemas de saúde (opcional)",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 10),
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    labelText: "Porte",
+                    border: OutlineInputBorder(),
+                  ),
+                  value: _porte,
+                  items: ["Pequeno", "Médio", "Grande", "Gigante"].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? value) {
+                    setState(() {
+                      _porte = value;
+                    });
+                  },
+                ),
+                SizedBox(height: 10),
+                TextField(
+                  controller: _comportamentoController,
+                  decoration: InputDecoration(
+                    labelText: "Comportamento",
+                    border: OutlineInputBorder(),
+                  ),
+                  maxLines: 3,
+                ),
+                SizedBox(height: 10),
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    labelText: "Espécie",
+                    border: OutlineInputBorder(),
+                  ),
+                  value: _especie,
+                  items: [
+                    "Cão",
+                    "Gato",
+                    "Aves",
+                    "Chinchilas",
+                    "Porquinhos da Índia",
+                    "Cavalos",
+                    "Cacatuas",
+                    "Ovelhas",
+                    "Peixes",
+                    "Hamsters"
+                  ].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? value) {
+                    setState(() {
+                      _especie = value;
+                      _racaController.clear();
+                      _racasFiltradas.clear();
+                    });
+                  },
+                ),
+                SizedBox(height: 10),
                 TextField(
                   controller: _racaController,
                   decoration: InputDecoration(
@@ -189,13 +233,32 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
                       },
                     ),
                   ),
+                SizedBox(height: 10),
+                CheckboxListTile(
+                  title: Text("Tem Padrinho"),
+                  value: _temPadrinho,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _temPadrinho = value ?? false;
+                    });
+                  },
+                ),
+                CheckboxListTile(
+                  title: Text("Tem FAT(Familia de Acolhimento Temporario"),
+                  value: _temFat,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _temFat = value ?? false;
+                    });
+                  },
+                ),
                 SizedBox(height: 16.0),
                 ElevatedButton(
-                  onPressed: guardarAnimal,
+                  onPressed: _especie != null && _nomeController.text.isNotEmpty ? guardarAnimal : null,
                   child: Text("Registar animal"),
                 ),
               ],
-            ],
+            ),
           ),
         ),
       ),
@@ -228,40 +291,37 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
     try {
       DocumentReference novoAnimalRef = await animaisRef.add({
         'nome': _nomeController.text.trim(),
+        'chip': _chipController.text.isNotEmpty ? int.tryParse(_chipController.text) : null,
+        'idade': int.tryParse(_idadeController.text) ?? 0,
         'genero': _genero,
         'castrado': _castrado,
+        'donoLegal': _donoLegalController.text.trim().isNotEmpty ? _donoLegalController.text.trim() : null,
+        'alergias': _alergiasController.text.trim().isNotEmpty ? _alergiasController.text.trim() : null,
         'porte': _porte,
+        'comportamento': _comportamentoController.text.trim(),
         'especie': _especie,
         'raca': _racaController.text.trim(),
-        'comportamento': _comportamentoController.text.trim(),
+        'temPadrinho': _temPadrinho,
+        'temFat': _temFat,
+        'numeroDePasseiosDados': 0,
+        'reviews': [],
         'donoID': donoID,
         'criado_em': Timestamp.now(),
       });
 
       if (isAssociacao) {
-        // ✅ Correctly updates the associacao in Firestore
         await associacoesRef.doc(donoID).update({
           'animais': FieldValue.arrayUnion([novoAnimalRef.id])
         });
-
       } else {
-        DocumentSnapshot userSnapshot = await _firestore.collection('associacao').doc(donoID).get();
-        Map<String, dynamic> userData = (userSnapshot.data() ?? {}) as Map<String, dynamic>;
-
-        if (userSnapshot.exists) {
-          Utilizador utilizador = Utilizador.fromMap(donoID, userData);
-
-          // ✅ Updates Firestore with new animal ID
-          await usersRef.doc(donoID).update({
-            'osSeusAnimais': FieldValue.arrayUnion([novoAnimalRef.id])
-          });
-        }
+        await usersRef.doc(donoID).update({
+          'osSeusAnimais': FieldValue.arrayUnion([novoAnimalRef.id])
+        });
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Animal adicionado com sucesso!")),
       );
-
       Navigator.pop(context);
     } catch (e) {
       print("Erro ao guardar no Firestore: $e");
@@ -270,5 +330,4 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
       );
     }
   }
-
 }

@@ -8,13 +8,45 @@ import 'package:tinder_para_caes/screens/allAssociacoesList.dart';
 import 'package:provider/provider.dart';
 import 'package:tinder_para_caes/firebaseLogic/utilizadorProvider.dart';
 
-class UtilizadorHomeScreen extends StatelessWidget {
+class UtilizadorHomeScreen extends StatefulWidget {
   const UtilizadorHomeScreen({super.key});
+
+  @override
+  _UtilizadorHomeScreenState createState() => _UtilizadorHomeScreenState();
+}
+
+class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
+  List<Animal> animais = [];
+  bool isLoading = true;// Track loading state
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchAnimals();
+  }
+
+  Future<void> _fetchAnimals() async {
+    final utilizador = Provider.of<UtilizadorProvider>(context, listen: false).user;
+
+    if (utilizador != null) {
+      List<Animal> fetchedAnimals = await utilizador.fetchAnimals(utilizador.osSeusAnimais);
+      setState(() {
+        animais = fetchedAnimals;
+        isLoading = false;
+      });
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
 
 
   @override
   Widget build(BuildContext context) {
     final utilizador = Provider.of<UtilizadorProvider>(context).user;
+
 
     if (utilizador == null) {
       return const Scaffold(
@@ -24,7 +56,6 @@ class UtilizadorHomeScreen extends StatelessWidget {
 
     List<Associacao> sugestoesAssociacoes = Associacao.getSugestoesAssociacoes(utilizador.local);
     List<Associacao> associacoesEnvolvido = utilizador.associacoesEmQueEstaEnvolvido;
-    List<Animal> animais = utilizador.osSeusAnimais;
 
 
 
@@ -188,4 +219,5 @@ class UtilizadorHomeScreen extends StatelessWidget {
       );
   }
 }
+
 
