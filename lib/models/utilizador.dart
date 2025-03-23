@@ -54,7 +54,7 @@ class Utilizador {
                 ? List<Associacao>.from(map['associacoesEmQueEstaEnvolvido']
                 .map((x) => Associacao.fromMap(x['uid'] ?? '', x as Map<String, dynamic>)))
                 : [],
-            osSeusAnimais: List<String>.from(map['animais'] ?? []),
+            osSeusAnimais: List<String>.from(map['osSeusAnimais'] ?? []),
             associacao: map['associacao'] ?? false,
         );
     }

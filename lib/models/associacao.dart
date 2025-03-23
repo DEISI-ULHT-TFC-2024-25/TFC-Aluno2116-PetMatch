@@ -120,9 +120,15 @@ class Associacao {
   }
 
 
-  static List<Associacao> getSugestoesAssociacoes(String local) {
-    return todasAssociacoes.where((associacao) => associacao.local == local).toList();
+  static Future<List<Associacao>> getSugestoesAssociacoesFirebase(String local) async {
+    final snapshot = await FirebaseFirestore.instance.collection('associacoes').get();
+
+    return snapshot.docs
+        .map((doc) => Associacao.fromFirestore(doc))
+        .where((associacao) => associacao.local == local)
+        .toList();
   }
+
 
   static Associacao procurarAssociacao(int id) {
     if (id < 0 || id >= todasAssociacoes.length) {

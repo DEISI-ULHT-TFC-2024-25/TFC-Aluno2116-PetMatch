@@ -17,12 +17,15 @@ class UtilizadorHomeScreen extends StatefulWidget {
 
 class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
   List<Animal> animais = [];
-  bool isLoading = true;// Track loading state
+  bool isLoading = true;//
+  List<Associacao> sugestoesAssociacoes = [];
+
 
   @override
   void initState() {
     super.initState();
     _fetchAnimals();
+    _fetchSugestoesAssociacoes();
   }
 
   Future<void> _fetchAnimals() async {
@@ -41,6 +44,20 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
     }
   }
 
+  Future<void> _fetchSugestoesAssociacoes() async {
+    final utilizador = Provider.of<UtilizadorProvider>(context, listen: false).user;
+
+    if (utilizador != null) {
+      List<Associacao> fetchedAssociacoes =
+      await Associacao.getSugestoesAssociacoesFirebase(utilizador.local);
+
+      setState(() {
+        sugestoesAssociacoes = fetchedAssociacoes;
+      });
+    }
+  }
+
+
 
 
   @override
@@ -54,10 +71,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
       );
     }
 
-    List<Associacao> sugestoesAssociacoes = Associacao.getSugestoesAssociacoes(utilizador.local);
     List<Associacao> associacoesEnvolvido = utilizador.associacoesEmQueEstaEnvolvido;
-
-
 
       return Scaffold(
         appBar: AppBar(
