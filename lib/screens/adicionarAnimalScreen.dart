@@ -6,6 +6,9 @@ import 'package:provider/provider.dart';
 import 'package:tinder_para_caes/firebaseLogic/associacaoProvider.dart';
 import 'package:tinder_para_caes/firebaseLogic/utilizadorProvider.dart';
 import 'package:tinder_para_caes/models/utilizador.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
 
 class AdicionarAnimalScreen extends StatefulWidget {
   const AdicionarAnimalScreen({super.key});
@@ -34,6 +37,7 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
 
   List<String> racas = [];
   List<String> _racasFiltradas = [];
+
 
   @override
   void initState() {
@@ -307,6 +311,7 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
         'reviews': [],
         'donoID': donoID,
         'criado_em': Timestamp.now(),
+        'imagens': [],
       });
 
       if (isAssociacao) {
@@ -318,6 +323,7 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
           'osSeusAnimais': FieldValue.arrayUnion([novoAnimalRef.id])
         });
       }
+      await mostrarPopupAdicionarFotos(novoAnimalRef.id);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Animal adicionado com sucesso!")),
@@ -330,4 +336,80 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
       );
     }
   }
+
+  Future<void> mostrarPopupAdicionarFotos(String animalId) async {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return Dialog(
+          insetPadding: EdgeInsets.all(20),
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.8,
+            padding: EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Deseja adicionar fotos ao animal agora?',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 30),
+                ElevatedButton.icon(
+                  onPressed: () async {
+                    Navigator.pop(context); // fecha o popup
+                    await selecionarEGuardarFotos(animalId);
+                  },
+                  icon: Icon(Icons.photo),
+                  label: Text('Adicionar fotos agora'),
+                ),
+                SizedBox(height: 10),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context); // fecha o popup
+                  },
+                  child: Text('Mais tarde'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> selecionarEGuardarFotos(String animalId) async {
+    final picker = ImagePicker();
+    final pickedFiles = await picker.pickMultiImage(); // permite selecionar várias imagens
+
+    if (pickedFiles != null && pickedFiles.isNotEmpty) {
+      List<String> downloadUrls = [];
+
+      for (var pickedFile in pickedFiles) {
+        File imageFile = File(pickedFile.path);
+        final fileName = DateTime.now().millisecondsSinceEpoch.toString();
+        final storageRef = FirebaseStorage.instance
+            .ref()
+            .child('animais/$animalId/$fileName.jpg');
+
+        await storageRef.putFile(imageFile);
+        String url = await storageRef.getDownloadURL();
+        downloadUrls.add(url);
+      }
+
+      // Atualizar Firestore com os URLs das imagens
+      await FirebaseFirestore.instance
+          .collection('animal')
+          .doc(animalId)
+          .update({
+        'imagens': FieldValue.arrayUnion(downloadUrls),
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Fotos adicionadas com sucesso!")),
+      );
+    }
+  }
+
 }

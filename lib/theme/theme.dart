@@ -22,6 +22,11 @@ final ThemeData lightTheme = ThemeData(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
   ),
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    backgroundColor: Colors.brown[500],
+    foregroundColor: Colors.white,
+  ),
+
 );
 
 // Dark Theme (Dark Browns & Black)
@@ -46,4 +51,9 @@ final ThemeData darkTheme = ThemeData(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
   ),
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    backgroundColor: Colors.brown[700],
+    foregroundColor: Colors.white,
+  ),
+
 );

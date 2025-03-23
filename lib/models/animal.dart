@@ -1,20 +1,21 @@
 import 'package:flutter/services.dart';
 
 class Animal {
-  int chip;                  // ID (chip)
+  int chip;
   String fullName;
-  int age;                   // Idade
+  int age;
   bool sterilized;
-  int gender;                // 0 - Feminino, 1 - Masculino
+  String gender;
   String legalOwner;
   String allergies;
   String size;
   String behavior;
-  String breed;             // Raça
-  String species;           // Espécie
+  String breed;
+  String species;
   int numeroDePasseiosDados;
   bool hasGodFather;
-
+  bool hasFat;
+  List<String> imagens; // NOVO CAMPO
 
   Animal({
     required this.chip,
@@ -30,27 +31,29 @@ class Animal {
     required this.species,
     required this.numeroDePasseiosDados,
     required this.hasGodFather,
+    required this.hasFat,
+    required this.imagens,
   });
-
 
   factory Animal.fromMap(Map<String, dynamic> map) {
     return Animal(
       chip: map['chip'] ?? 0,
-      fullName: map['fullName'] ?? '',
-      age: map['age'] ?? 0,
-      sterilized: map['sterilized'] ?? false,
-      gender: map['gender'] ?? 0,
-      legalOwner: map['legalOwner'] ?? '',
-      allergies: map['allergies'] ?? '',
-      size: map['size'] ?? '',
-      behavior: map['behavior'] ?? '',
-      breed: map['breed'] ?? '',
-      species: map['species'] ?? '',
+      fullName: map['nome'] ?? '',
+      age: map['idade'] ?? 0,
+      sterilized: map['castrado'] ?? false,
+      gender: map['genero'] ?? 0,
+      legalOwner: map['donoLegal'] ?? '',
+      allergies: map['alergias'] ?? '',
+      size: map['porte'] ?? '',
+      behavior: map['comportamento'] ?? '',
+      breed: map['raca'] ?? '',
+      species: map['especie'] ?? '',
       numeroDePasseiosDados: map['numeroDePasseiosDados'] ?? 0,
-      hasGodFather: map['hasGodFather'] ?? false,
+      hasGodFather: map['temPadrinho'] ?? false,
+      hasFat: map['temFat']?? false,
+      imagens: List<String>.from(map['imagens'] ?? []),
     );
   }
-
 
   Map<String, dynamic> toMap() {
     return {
@@ -67,15 +70,15 @@ class Animal {
       'species': species,
       'numeroDePasseiosDados': numeroDePasseiosDados,
       'hasGodFather': hasGodFather,
+      'hasFat': hasFat,
+      'imagens': imagens,
     };
   }
-
 
   static Future<List<String>> loadDogBreeds() async {
     final String response = await rootBundle.loadString('assets/dogBreeds.txt');
     return response.split('\n').map((line) => line.trim()).toList();
   }
-
 
   static final List<Animal> todosAnimais = [
     Animal(
@@ -83,7 +86,7 @@ class Animal {
       fullName: "Nikitta Coelho",
       age: 10,
       sterilized: true,
-      gender: 0,
+      gender: "Femenino",
       legalOwner: "Catia Coelho",
       allergies: "só ao juizo",
       size: "Medium",
@@ -92,66 +95,9 @@ class Animal {
       species: "dog",
       numeroDePasseiosDados: 0,
       hasGodFather: true,
+      hasFat: false,
+      imagens: [],
     ),
-    Animal(
-      chip: 1112,
-      fullName: "Ninja Coelho",
-      age: 14,
-      sterilized: true,
-      gender: 1,
-      legalOwner: "Diogo Coelho",
-      allergies: "ao polen",
-      size: "Medium",
-      behavior: "só dorme e ressona",
-      breed: "Chow-Chow",
-      species: "dog",
-      numeroDePasseiosDados: 0,
-      hasGodFather: true,
-    ),
-    Animal(
-      chip: 1113,
-      fullName: "Gouda Coelho",
-      age: 8,
-      sterilized: true,
-      gender: 0,
-      legalOwner: "Hugo Coelho",
-      allergies: "nenhumas",
-      size: "Giant",
-      behavior: "um bebé grande",
-      breed: "indefinido",
-      species: "dog",
-      numeroDePasseiosDados: 0,
-      hasGodFather: false,
-    ),
-    Animal(
-      chip: 1114,
-      fullName: "Miny Coelho",
-      age: 12,
-      sterilized: true,
-      gender: 0,
-      legalOwner: "Carmen Coelho",
-      allergies: "a outros cães",
-      size: "Medium",
-      behavior: "não se dá com outros cães",
-      breed: "pastor-alemão/pit",
-      species: "dog",
-      numeroDePasseiosDados: 0,
-      hasGodFather: true,
-    ),
-    Animal(
-      chip: 1115,
-      fullName: "Patas Coelho",
-      age: 11,
-      sterilized: true,
-      gender: 0,
-      legalOwner: "Carmen Coelho",
-      allergies: "a homens",
-      size: "Medium",
-      behavior: "questionável",
-      breed: "indefinido",
-      species: "dog",
-      numeroDePasseiosDados: 0,
-      hasGodFather: true,
-    ),
+
   ];
 }

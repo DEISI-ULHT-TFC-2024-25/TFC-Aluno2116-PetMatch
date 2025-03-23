@@ -42,11 +42,14 @@ class AllAnimalsList extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AnimalDetailsScreen(isAssoci: isAssociacao),
+                          builder: (context) => AnimalDetailsScreen(
+                            animal: animal,
+                            isAssoci: isAssociacao,
+                          ),
                         ),
                       );
                     },
-                    icon: Icon(Icons.visibility),
+
                     label: Text("Ver mais informações 👀"),
                   ),
                 ],
@@ -68,8 +71,8 @@ class AllAnimalsList extends StatelessWidget {
           );
         },
         tooltip: "Adicionar Animal",
-        child: Text("➕", style: TextStyle(fontSize: 24)),
-      )
+        child: const Icon(Icons.add, size: 30),
+        )
           : null,
     );
   }

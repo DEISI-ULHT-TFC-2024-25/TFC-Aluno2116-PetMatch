@@ -1,32 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/documents/tornarPadrinho.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AnimalDetailsScreen extends StatelessWidget {
+  final Animal animal;
   final bool isAssoci;
 
-  const AnimalDetailsScreen({super.key, required this.isAssoci});
+  const AnimalDetailsScreen({
+    super.key,
+    required this.animal,
+    required this.isAssoci,
+  });
 
   @override
   Widget build(BuildContext context) {
-    Animal animalExemplo = Animal.todosAnimais[2];
+    final theme = Theme.of(context);
+    final primaryColor = theme.colorScheme.primary;
 
-    final String fullName = animalExemplo.fullName;
-    final int age = animalExemplo.age;
-    final bool sterilized = animalExemplo.sterilized;
-    final int gender = animalExemplo.gender; // 0 - Feminino, 1 - Masculino
-    final String allergies = animalExemplo.allergies;
-    final String size = animalExemplo.size;
-    final String behavior = animalExemplo.behavior;
-    final String breed = animalExemplo.breed;
-    final String species = animalExemplo.species;
-    final int numeroDePasseiosDados = animalExemplo.numeroDePasseiosDados;
-    final bool asGoFather = animalExemplo.hasGodFather;
+    final String fullName = animal.fullName;
+    final int age = animal.age;
+    final bool sterilized = animal.sterilized;
+    final String gender = animal.gender;
+    final String allergies = animal.allergies;
+    final String size = animal.size;
+    final String behavior = animal.behavior;
+    final String breed = animal.breed;
+    final String species = animal.species;
+    final int numeroDePasseiosDados = animal.numeroDePasseiosDados;
+    final bool asGoFather = animal.hasGodFather;
+    final String? imagemPerfil = animal.imagens.isNotEmpty ? animal.imagens.first : null;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Perfil do Animal'),
-        backgroundColor: Colors.redAccent,
+        title: const Text('Perfil do Animal'),
+        backgroundColor: primaryColor,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -36,71 +47,89 @@ class AnimalDetailsScreen extends StatelessWidget {
             children: [
               Container(
                 height: 200,
+                width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Colors.grey[400],
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.redAccent, width: 2),
+                  border: Border.all(color: primaryColor, width: 2),
+                  image: imagemPerfil != null
+                      ? DecorationImage(
+                    image: NetworkImage(imagemPerfil),
+                    fit: BoxFit.cover,
+                  )
+                      : null,
+                  color: theme.colorScheme.surfaceVariant,
                 ),
-                child: Center(
+                child: imagemPerfil == null
+                    ? Center(
                   child: Icon(
-                    Icons.add_a_photo,
+                    Icons.pets,
                     size: 50,
-                    color: Colors.redAccent,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                )
+                    : null,
+              ),
+
+              if (isAssoci)
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    icon: Icon(Icons.add_a_photo, color: primaryColor),
+                    onPressed: () async {
+                      await mostrarPopupAdicionarFotos(context, animal);
+                    },
                   ),
                 ),
-              ),
-              SizedBox(height: 16),
+
+              const SizedBox(height: 16),
               Text(
                 fullName,
-                style: TextStyle(
-                  fontSize: 24,
+                style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: Colors.redAccent,
+                  color: primaryColor,
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 8),
-              _buildInfoRow(Icons.pets, 'Espécie:', species),
-              _buildInfoRow(Icons.badge, 'Raça:', breed),
-              _buildInfoRow(Icons.cake, 'Idade:', '$age anos'),
+              const SizedBox(height: 8),
+              _buildInfoRow(context, Icons.pets, 'Espécie:', species),
+              _buildInfoRow(context, Icons.badge, 'Raça:', breed),
+              _buildInfoRow(context, Icons.cake, 'Idade:', '$age anos'),
               _buildInfoRow(
-                gender == 0 ? Icons.female : Icons.male,
+                context,
+                gender == "0" ? Icons.female : Icons.male,
                 'Gênero:',
-                gender == 0 ? 'Feminino' : 'Masculino',
+                gender == "0" ? 'Feminino' : 'Masculino',
               ),
-              _buildInfoRow(Icons.healing, 'Esterilizado:', sterilized ? 'Sim' : 'Não'),
-              _buildInfoRow(Icons.warning, 'Alergias:', allergies.isEmpty ? 'Nenhuma' : allergies),
-              _buildInfoRow(Icons.rule, 'Tamanho:', size),
-              _buildInfoRow(Icons.emoji_emotions, 'Comportamento:', behavior),
-              _buildInfoRow(Icons.directions_walk, 'Passeios dados:', '$numeroDePasseiosDados'),
-              _buildInfoRow(Icons.family_restroom, 'Pode apadrinhar:', asGoFather ? 'Não' : 'Sim'),
+              _buildInfoRow(context, Icons.healing, 'Esterilizado:', sterilized ? 'Sim' : 'Não'),
+              _buildInfoRow(context, Icons.warning, 'Alergias:', allergies.isEmpty ? 'Nenhuma' : allergies),
+              _buildInfoRow(context, Icons.rule, 'Tamanho:', size),
+              _buildInfoRow(context, Icons.emoji_emotions, 'Comportamento:', behavior),
+              _buildInfoRow(context, Icons.directions_walk, 'Passeios dados:', '$numeroDePasseiosDados'),
+              _buildInfoRow(context, Icons.family_restroom, 'Pode apadrinhar:', asGoFather ? 'Não' : 'Sim'),
 
               if (!isAssoci && !asGoFather)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.redAccent,
-                    ),
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => TornarPadrinhoScreen()),
+                        MaterialPageRoute(builder: (context) => const TornarPadrinhoScreen()),
                       );
                     },
-                    child: Text("Apadrinhar este animal 🐾"),
+                    child: const Text("Apadrinhar este animal 🐾"),
                   ),
                 ),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.pets, size: 32, color: Colors.redAccent),
-                  SizedBox(width: 8),
-                  Icon(Icons.pets, size: 32, color: Colors.redAccent),
-                  SizedBox(width: 8),
-                  Icon(Icons.pets, size: 32, color: Colors.redAccent),
+                  Icon(Icons.pets, size: 32, color: primaryColor),
+                  const SizedBox(width: 8),
+                  Icon(Icons.pets, size: 32, color: primaryColor),
+                  const SizedBox(width: 8),
+                  Icon(Icons.pets, size: 32, color: primaryColor),
                 ],
               ),
             ],
@@ -110,30 +139,97 @@ class AnimalDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String label, String value) {
+  Widget _buildInfoRow(BuildContext context, IconData icon, String label, String value) {
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
-          Icon(icon, color: Colors.redAccent),
-          SizedBox(width: 8),
+          Icon(icon, color: theme.colorScheme.primary),
+          const SizedBox(width: 8),
           Text(
             label,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
+            style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           Expanded(
             child: Text(
               value,
-              style: TextStyle(fontSize: 16),
+              style: theme.textTheme.bodyLarge,
               overflow: TextOverflow.ellipsis,
             ),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> mostrarPopupAdicionarFotos(BuildContext context, Animal animal) async {
+    return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return Dialog(
+          insetPadding: const EdgeInsets.all(20),
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.8,
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                Text(
+                  'Deseja adicionar fotos ao perfil?',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                const SizedBox(height: 30),
+                ElevatedButton.icon(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    await selecionarEGuardarFotos(context, animal);
+                  },
+                  icon: const Icon(Icons.photo),
+                  label: const Text('Escolher e adicionar'),
+                ),
+                const SizedBox(height: 10),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancelar'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> selecionarEGuardarFotos(BuildContext context, Animal animal) async {
+    final picker = ImagePicker();
+    final pickedFiles = await picker.pickMultiImage();
+
+    if (pickedFiles != null && pickedFiles.isNotEmpty) {
+      List<String> urls = [];
+
+      for (var file in pickedFiles) {
+        File imageFile = File(file.path);
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child('animais/${animal.chip}/${DateTime.now().millisecondsSinceEpoch}.jpg');
+
+        await ref.putFile(imageFile);
+        String url = await ref.getDownloadURL();
+        urls.add(url);
+      }
+
+      await FirebaseFirestore.instance
+          .collection('animal')
+          .doc(animal.chip.toString())
+          .update({
+        'imagens': FieldValue.arrayUnion(urls),
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Fotos adicionadas com sucesso!')),
+      );
+    }
   }
 }
