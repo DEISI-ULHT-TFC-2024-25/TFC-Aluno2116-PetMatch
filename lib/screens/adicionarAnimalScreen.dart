@@ -52,7 +52,7 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
         racas = dogBreeds;
       });
     } catch (e) {
-      print('Erro ao carregar as raças: $e');
+      print('Erro ao carregar os distritos: $e');
     }
   }
 

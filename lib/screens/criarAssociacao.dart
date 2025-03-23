@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:tinder_para_caes/screens/associacaoHomeScreen.dart';
 import 'package:tinder_para_caes/models/associacao.dart';
 import 'package:tinder_para_caes/firebaseLogic/authenticationService.dart';
@@ -149,6 +150,30 @@ class _CriarAssociacaoState extends State<CriarAssociacao> {
     }
   }
 
+  List<String> distritos = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeDistritos();
+  }
+
+  static Future<List<String>> loadDistritos() async {
+    final String response = await rootBundle.loadString('assets/distritos.txt');
+    return response.split('\n').map((line) => line.trim()).toList();
+  }
+
+  Future<void> _initializeDistritos() async {
+    try {
+      final distritosLista = await loadDistritos();
+      setState(() {
+        distritos = distritosLista;
+      });
+    } catch (e) {
+      print('Erro ao carregar os distritos: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context); // Obtém o tema
@@ -205,10 +230,27 @@ class _CriarAssociacaoState extends State<CriarAssociacao> {
                 });
               },
             ),
-            TextField(
-              controller: distritoController,
-              decoration: const InputDecoration(labelText: 'Distrito'),
+            Autocomplete<String>(
+              optionsBuilder: (TextEditingValue textEditingValue) {
+                if (textEditingValue.text.isEmpty) {
+                  return const Iterable<String>.empty();
+                }
+                return distritos.where((String distrito) =>
+                    distrito.toLowerCase().contains(textEditingValue.text.toLowerCase()));
+              },
+              fieldViewBuilder: (BuildContext context, TextEditingController textEditingController, FocusNode focusNode, VoidCallback onFieldSubmitted) {
+                distritoController.text = textEditingController.text;
+                return TextField(
+                  controller: textEditingController,
+                  focusNode: focusNode,
+                  decoration: const InputDecoration(labelText: 'Distrito'),
+                );
+              },
+              onSelected: (String selection) {
+                distritoController.text = selection;
+              },
             ),
+
             if (shareLocation) ...[
               TextField(
                 controller: moradaController,

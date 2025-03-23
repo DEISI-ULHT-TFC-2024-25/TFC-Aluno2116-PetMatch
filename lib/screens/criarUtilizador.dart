@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:tinder_para_caes/firebaseLogic/authenticationService.dart';
 import 'package:tinder_para_caes/models/utilizador.dart';
 import 'package:tinder_para_caes/screens/utilizadorHomeScreen.dart';
@@ -18,6 +19,7 @@ class UtilizadorFormScreenState extends State<CriarUtilizador> {
   String gender = 'Feminino';
   final List<String> genders = ['Feminino', 'Masculino', 'Outro'];
   final Authenticationservice authService = Authenticationservice();
+  List<String> distritos = [];
 
   final TextEditingController nomeController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -79,6 +81,27 @@ class UtilizadorFormScreenState extends State<CriarUtilizador> {
       );
     } else {
       print("❌ Erro ao registrar utilizador");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeDistritos();
+  }
+
+  static Future<List<String>> loadDistritos() async {
+    final String response = await rootBundle.loadString('assets/distritos.txt');
+    return response.split('\n').map((line) => line.trim()).toList();
+  }
+  Future<void> _initializeDistritos() async {
+    try {
+      final distritosLista = await loadDistritos();
+      setState(() {
+        distritos = distritosLista;
+      });
+    } catch (e) {
+      print('Erro ao carregar os distritos: $e');
     }
   }
 
@@ -155,14 +178,31 @@ class UtilizadorFormScreenState extends State<CriarUtilizador> {
             ),
             const SizedBox(height: 20),
             TextField(
-              controller: distritoController,
-              decoration: const InputDecoration(labelText: 'Distrito'),
+              controller: zipcodeController,
+              decoration: const InputDecoration(labelText: 'Código Postal'),
             ),
             const SizedBox(height: 20),
-            TextField(
-              controller: zipcodeController,
-              decoration: const InputDecoration(labelText: 'Código-postal'),
+            Autocomplete<String>(
+              optionsBuilder: (TextEditingValue textEditingValue) {
+                if (textEditingValue.text.isEmpty) {
+                  return const Iterable<String>.empty();
+                }
+                return distritos.where((String distrito) =>
+                    distrito.toLowerCase().contains(textEditingValue.text.toLowerCase()));
+              },
+              fieldViewBuilder: (BuildContext context, TextEditingController textEditingController, FocusNode focusNode, VoidCallback onFieldSubmitted) {
+                distritoController.text = textEditingController.text;
+                return TextField(
+                  controller: textEditingController,
+                  focusNode: focusNode,
+                  decoration: const InputDecoration(labelText: 'Distrito'),
+                );
+              },
+              onSelected: (String selection) {
+                distritoController.text = selection;
+              },
             ),
+
             const SizedBox(height: 20),
             Align(
               alignment: Alignment.bottomRight,
