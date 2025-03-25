@@ -31,7 +31,7 @@ class AllAssociacoesList extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   Text("Sigla: ${associacao.sigla}"),
-                  Text("Local:${associacao.local}"),
+                  Text("Local:${associacao.distrito}"),
                   Text("Número de Animais: ${associacao.animais.length}"),
                   Text("Tarefas Necessárias: ${associacao.funcionalidades}"),
                   SizedBox(height: 12),

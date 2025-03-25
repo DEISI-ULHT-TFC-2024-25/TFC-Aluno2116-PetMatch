@@ -12,7 +12,7 @@ class Associacao {
   String secundaryEmail;
   String mainCellphone;
   String secundaryCellphone;
-  String local;
+  String distrito;
   bool showAddress;
   String address;
   String site;
@@ -32,7 +32,7 @@ class Associacao {
     required this.secundaryEmail,
     required this.mainCellphone,
     required this.secundaryCellphone,
-    required this.local,
+    required this.distrito,
     required this.showAddress,
     required this.address,
     required this.site,
@@ -54,7 +54,7 @@ class Associacao {
       secundaryEmail: map['emailParaAlgumaCoisa'] ?? '',
       mainCellphone: map['telemovelPrincipal'] ?? '',
       secundaryCellphone: map['telemovelSecundario'] ?? '',
-      local: map['localidade'] ?? '',
+      distrito: map['distrito'] ?? '',
       showAddress: map['mostrarMorada'] ?? false,
       address: map['morada'] ?? '',
       site: map['site'] ?? '',
@@ -84,7 +84,7 @@ class Associacao {
       'emailParaAlgumaCoisa': secundaryEmail,
       'telemovelPrincipal': mainCellphone,
       'telemovelSecundario': secundaryCellphone,
-      'localidade': local,
+      'distrito': distrito,
       'mostrarMorada': showAddress,
       'morada': address,
       'site': site,
@@ -120,12 +120,12 @@ class Associacao {
   }
 
 
-  static Future<List<Associacao>> getSugestoesAssociacoesFirebase(String local) async {
+  static Future<List<Associacao>> getSugestoesAssociacoesFirebase(String distrito) async {
     final snapshot = await FirebaseFirestore.instance.collection('associacoes').get();
 
     return snapshot.docs
         .map((doc) => Associacao.fromFirestore(doc))
-        .where((associacao) => associacao.local == local)
+        .where((associacao) => associacao.distrito == distrito)
         .toList();
   }
 
@@ -142,7 +142,7 @@ List<Associacao> todasAssociacoes = [
   Associacao(
     uid: "associacaoF456",
     name: "Associação F",
-    local: "Porto",
+    distrito: "Porto",
     nif: 0,
     sigla: '',
     generalEmail: '',

@@ -11,7 +11,7 @@ class Utilizador {
     String gender;
     String email;
     String address;
-    String local;
+    String distrito;
     String zipCode;
     String password;
 
@@ -28,7 +28,7 @@ class Utilizador {
         required this.gender,
         required this.email,
         required this.address,
-        required this.local,
+        required this.distrito,
         required this.zipCode,
         required this.password,
         required this.associacoesEmQueEstaEnvolvido,
@@ -47,7 +47,7 @@ class Utilizador {
             gender: map['gender']  ?? ' ',
             email: map['email'] ?? '',
             address: map['address'] ?? '',
-            local: map['local'] ?? '',
+            distrito: map['distrito'] ?? '',
             zipCode: map['zipCode'] ?? '',
             password: map['password'] ?? '',
             associacoesEmQueEstaEnvolvido: map['associacoesEmQueEstaEnvolvido'] != null
@@ -69,7 +69,7 @@ class Utilizador {
             'gender': gender,
             'email': email,
             'address': address,
-            'local': local,
+            'distrito': distrito,
             'zipCode': zipCode,
             'password': password,
             'associacoesEmQueEstaEnvolvido': associacoesEmQueEstaEnvolvido.map((a) => a.toMap()).toList(),
@@ -111,14 +111,14 @@ class Utilizador {
         gender: "Masculino",
         email: "batata@ulusofona.pt",
         address: "Campo Grande 376",
-        local: "Lisboa",
+        distrito: "Lisboa",
         zipCode: "123456-123",
         password: "123abc",
         associacoesEmQueEstaEnvolvido: [
             Associacao(
                 uid:"jfkd",
                 name: "Associação A",
-                local: "Lisboa",
+                distrito: "Lisboa",
                 nif: 0,
                 sigla: '',
                 generalEmail: '',

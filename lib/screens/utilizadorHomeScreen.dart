@@ -49,7 +49,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
 
     if (utilizador != null) {
       List<Associacao> fetchedAssociacoes =
-      await Associacao.getSugestoesAssociacoesFirebase(utilizador.local);
+      await Associacao.getSugestoesAssociacoesFirebase(utilizador.distrito);
 
       setState(() {
         sugestoesAssociacoes = fetchedAssociacoes;
@@ -152,7 +152,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                               margin: EdgeInsets.symmetric(vertical: 4.0),
                               child: ListTile(
                                 title: Text(associacao.name),
-                                subtitle: Text("Localidade: ${associacao.local}"),
+                                subtitle: Text("Localidade: ${associacao.distrito}"),
                                 onTap: () {
                                   Navigator.push(
                                     context,
@@ -200,7 +200,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                               margin: EdgeInsets.symmetric(vertical: 4.0),
                               child: ListTile(
                                 title: Text(associacao.name),
-                                subtitle: Text("Localidade: ${associacao.local}"),
+                                subtitle: Text("Localidade: ${associacao.distrito}"),
                                 onTap: () {
                                   Navigator.push(
                                     context,
