@@ -121,7 +121,7 @@ class Associacao {
 
 
   static Future<List<Associacao>> getSugestoesAssociacoesFirebase(String distrito) async {
-    final snapshot = await FirebaseFirestore.instance.collection('associacoes').get();
+    final snapshot = await FirebaseFirestore.instance.collection('associacao').get();
 
     return snapshot.docs
         .map((doc) => Associacao.fromFirestore(doc))

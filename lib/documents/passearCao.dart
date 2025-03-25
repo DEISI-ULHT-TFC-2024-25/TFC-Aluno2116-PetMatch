@@ -82,9 +82,9 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
       );
 
       // Redirecionar para outra página após submissão
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => VizualizarAssociacaoScreen()),
-      );
+      //Navigator.of(context).pushReplacement(
+        //MaterialPageRoute(builder: (context) => VizualizarAssociacaoScreen()),
+      //);
 
     } catch (e) {
       // Em caso de erro
@@ -277,9 +277,9 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
             TextButton(
               child: Text("Fechar"),
               onPressed: () {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => VizualizarAssociacaoScreen()),
-                );
+                //Navigator.of(context).pushReplacement(
+                  //MaterialPageRoute(builder: (context) => VizualizarAssociacaoScreen()),
+                //);
               },
             ),
           ],

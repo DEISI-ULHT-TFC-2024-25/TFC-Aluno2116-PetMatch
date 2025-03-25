@@ -40,7 +40,7 @@ class AllAssociacoesList extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => VizualizarAssociacaoScreen(),
+                          builder: (context) => VizualizarAssociacaoScreen(associacao: associacao,),
                         ),
                       );
                     },

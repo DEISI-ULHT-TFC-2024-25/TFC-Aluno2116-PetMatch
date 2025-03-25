@@ -46,12 +46,14 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
 
   Future<void> _fetchSugestoesAssociacoes() async {
     final utilizador = Provider.of<UtilizadorProvider>(context, listen: false).user;
+    String? distrito = utilizador?.distrito;
 
     if (utilizador != null) {
-      List<Associacao> fetchedAssociacoes =
-      await Associacao.getSugestoesAssociacoesFirebase(utilizador.distrito);
+      List<Associacao> fetchedAssociacoes = await Associacao.getSugestoesAssociacoesFirebase(distrito!);
+      print(distrito);
 
       setState(() {
+        print(sugestoesAssociacoes);
         sugestoesAssociacoes = fetchedAssociacoes;
       });
     }
@@ -157,7 +159,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => VizualizarAssociacaoScreen(),
+                                      builder: (context) => VizualizarAssociacaoScreen(associacao: associacao,),
                                     ),
                                   );
                                 },
@@ -205,7 +207,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => VizualizarAssociacaoScreen(),
+                                      builder: (context) => VizualizarAssociacaoScreen(associacao: associacao,),
                                     ),
                                   );
                                 },
@@ -218,7 +220,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                         onPressed: () {
                           Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => AllAssociacoesList(associacoes: associacoesEnvolvido))
+                              MaterialPageRoute(builder: (context) => AllAssociacoesList(associacoes: sugestoesAssociacoes))
                           );
                         },
                         child: Text("Ver todas"),

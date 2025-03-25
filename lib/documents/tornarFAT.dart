@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class CandidaturaFATScreen extends StatefulWidget {
-  const CandidaturaFATScreen({super.key});
+class TornarFAT extends StatefulWidget {
+  const TornarFAT({super.key});
 
   @override
-  _CandidaturaFATScreenState createState() => _CandidaturaFATScreenState();
+  _TornarFATState createState() => _TornarFATState();
 }
 
-class _CandidaturaFATScreenState extends State<CandidaturaFATScreen> {
+class _TornarFATState extends State<TornarFAT> {
   final _formKey = GlobalKey<FormState>();
 
   // Variáveis para capturar os valores do formulário

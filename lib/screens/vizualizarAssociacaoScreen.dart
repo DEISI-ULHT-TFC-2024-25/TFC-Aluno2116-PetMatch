@@ -4,9 +4,16 @@ import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/models/associacao.dart';
 import 'package:tinder_para_caes/models/eventos.dart';
 import 'package:tinder_para_caes/screens/allAnimalsList.dart';
+import 'package:tinder_para_caes/documents/passearCao.dart';
+import 'package:tinder_para_caes/documents/tornarPadrinho.dart';
+import 'package:tinder_para_caes/documents/tornarFAT.dart';
+import 'package:tinder_para_caes/documents/tornarSocio.dart';
+import 'package:tinder_para_caes/documents/tornarVoluntario.dart';
 
 class VizualizarAssociacaoScreen extends StatefulWidget {
-  const VizualizarAssociacaoScreen({super.key});
+  final Associacao associacao;
+
+  const VizualizarAssociacaoScreen({super.key, required this.associacao});
 
   @override
   _VizualizarAssociacaoScreenState createState() => _VizualizarAssociacaoScreenState();
@@ -15,14 +22,14 @@ class VizualizarAssociacaoScreen extends StatefulWidget {
 class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen> {
   late GoogleMapController mapController;
   bool isFullScreen = false;
-  bool isLoading = true; // Track if data is still loading
+  bool isLoading = true;
   List<Animal> animals = [];
   List<Eventos> events = [];
   List<String> needs = [];
   String name = "";
   int numberOfAnimals = 0;
 
-  final LatLng _center = const LatLng(38.7169, -9.1399); // Associação location
+  final LatLng _center = const LatLng(38.7169, -9.1399);
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -35,8 +42,7 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
   }
 
   Future<void> _fetchData() async {
-    Associacao assoE = Associacao.procurarAssociacao(0);
-
+    Associacao assoE = widget.associacao;
     List<Animal> fetchedAnimals = await assoE.fetchAnimals(assoE.animais);
 
     setState(() {
@@ -45,37 +51,43 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
       needs = assoE.necessidades;
       name = assoE.name;
       numberOfAnimals = assoE.animais.length;
-      isLoading = false; // Data is ready
+      isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
     if (isLoading) {
       return Scaffold(
-        body: Center(child: CircularProgressIndicator()), // Show loading indicator
+        body: Center(child: CircularProgressIndicator()),
       );
     }
 
     return Scaffold(
       appBar: isFullScreen ? null : AppBar(title: Text(name)),
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 🔹 COLUNA ESQUERDA
+            Expanded(
+              flex: 2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     "$numberOfAnimals animais na associação",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 20),
                   if (events.isNotEmpty) ...[
                     Text(
                       "Eventos:",
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 10),
                     ListView.builder(
@@ -84,6 +96,7 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
                       itemCount: events.length,
                       itemBuilder: (context, index) {
                         return ListTile(
+                          leading: Icon(Icons.event, color: theme.colorScheme.primary),
                           title: Text(events[index].titulo),
                           subtitle: Text(events[index].date),
                         );
@@ -93,7 +106,7 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
                   SizedBox(height: 20),
                   Text(
                     "Animais da associação:",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 10),
                   GridView.builder(
@@ -118,14 +131,17 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
                             Container(
                               height: 100,
                               width: double.infinity,
-                              color: Colors.grey[300],
-                              child: Icon(Icons.pets, size: 50, color: Colors.grey),
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.surfaceVariant,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Icon(Icons.pets, size: 50, color: theme.colorScheme.onSurfaceVariant),
                             ),
                             SizedBox(height: 5),
-                            Text(animal.fullName, style: TextStyle(fontWeight: FontWeight.bold)),
-                            Text("${animal.age} anos"),
-                            Text(animal.gender == 1 ? "Masculino" : "Feminino"),
-                            Text(animal.sterilized ? "Castrado" : "Não castrado"),
+                            Text(animal.fullName, style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
+                            Text("${animal.age} anos", style: textTheme.bodyMedium),
+                            Text(animal.gender == 1 ? "Masculino" : "Feminino", style: textTheme.bodyMedium),
+                            Text(animal.sterilized ? "Castrado" : "Não castrado", style: textTheme.bodyMedium),
                           ],
                         ),
                       );
@@ -143,45 +159,128 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
                     },
                     child: Text("Ver Todos"),
                   ),
-                  SizedBox(height: 20),
-                  Text(
-                    "Donativos e necessidades:",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 10),
-                  if (needs.isNotEmpty)
-                    ...needs.map((need) => Text("- $need"))
-                  else
-                    Text("De momento não existem informações"),
-                  SizedBox(height: 20),
-                  Stack(
-                    children: [
-                      SizedBox(
-                        height: 150,
-                        child: GoogleMap(
-                          onMapCreated: _onMapCreated,
-                          initialCameraPosition: CameraPosition(
-                            target: _center,
-                            zoom: 15.0,
-                          ),
-                          markers: {
-                            Marker(
-                              markerId: MarkerId("associacao"),
-                              position: _center,
-                              infoWindow: InfoWindow(title: name),
-                            ),
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
                 ],
               ),
             ),
-          ),
-        ],
+
+            SizedBox(width: 24), // Espaço entre colunas
+
+            // 🔸 COLUNA DIREITA
+            Expanded(
+              flex: 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Donativos e necessidades:",
+                    style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  if (needs.isNotEmpty)
+                    ...needs.map((need) => Text("- $need", style: textTheme.bodyMedium))
+                  else
+                    Text("De momento não existem informações", style: textTheme.bodyMedium),
+                  SizedBox(height: 20),
+
+                  // Mapa
+                  Container(
+                    height: 200,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: theme.dividerColor),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: GoogleMap(
+                      onMapCreated: _onMapCreated,
+                      initialCameraPosition: CameraPosition(
+                        target: _center,
+                        zoom: 15.0,
+                      ),
+                      markers: {
+                        Marker(
+                          markerId: MarkerId("associacao"),
+                          position: _center,
+                          infoWindow: InfoWindow(title: name),
+                        ),
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20),
+
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AllAnimalsList(animais: animals, isAssociacao: false),
+                        ),
+                      );
+                    },
+                    child: Text("Contactar Associação"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TornarPadrinhoScreen(),
+                        ),
+                      );
+                    },
+                    child: Text("Apadrinhar"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>PassearCaoScreen(),
+                        ),
+                      );
+                    },
+                    child: Text("Ir Passear Cão"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TornarVoluntarioScreen(),
+                        ),
+                      );
+                    },
+                    child: Text("Inscrever em Voluntariado"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TornarSocioScreen(),
+                        ),
+                      );
+                    },
+                    child: Text( "Tornar-se Sócio"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TornarFAT(),
+                        ),
+                      );
+                    },
+                    child: Text("Tornar-se Família de Acolhimento Temporário"),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
+
     );
   }
+
+
 }

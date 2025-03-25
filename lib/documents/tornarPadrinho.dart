@@ -31,13 +31,13 @@ class _TornarPadrinhoScreenState extends State<TornarPadrinhoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => VizualizarAssociacaoScreen()),
-          ),
-        ),
+        //leading: IconButton(
+         // icon: Icon(Icons.arrow_back),
+          //onPressed: () => Navigator.pushReplacement(
+            //context,
+            //MaterialPageRoute(builder: (context) => VizualizarAssociacaoScreen()),
+          //),
+        //),
         title: Text("Tornar-se Padrinho 🐶"),
       ),
       body: SingleChildScrollView(
@@ -184,10 +184,10 @@ class _TornarPadrinhoScreenState extends State<TornarPadrinhoScreen> {
             TextButton(
               child: Text("Fechar"),
               onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => VizualizarAssociacaoScreen()),
-                );
+                //Navigator.pushReplacement(
+                  //context,
+                  //MaterialPageRoute(builder: (context) => VizualizarAssociacaoScreen()),
+                //);
               },
             ),
           ],
