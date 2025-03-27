@@ -157,7 +157,7 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
 
           SizedBox(height: 30),
 
-          // 🔸 Secção de Donativos, Mapa e Ações
+
           Text(
             "Donativos e necessidades:",
             style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
@@ -169,25 +169,48 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
             Text("De momento não existem informações", style: textTheme.bodyMedium),
           SizedBox(height: 20),
 
-          Container(
-            height: 200,
+          AnimatedContainer(
+            duration: Duration(milliseconds: 300),
+            height: isFullScreen ? MediaQuery.of(context).size.height * 0.6 : 200,
             decoration: BoxDecoration(
               border: Border.all(color: theme.dividerColor),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: GoogleMap(
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: CameraPosition(
-                target: _center,
-                zoom: 15.0,
-              ),
-              markers: {
-                Marker(
-                  markerId: MarkerId("associacao"),
-                  position: _center,
-                  infoWindow: InfoWindow(title: name),
+            child: Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: GoogleMap(
+                    onMapCreated: _onMapCreated,
+                    initialCameraPosition: CameraPosition(
+                      target: _center,
+                      zoom: 15.0,
+                    ),
+                    markers: {
+                      Marker(
+                        markerId: MarkerId("associacao"),
+                        position: _center,
+                        infoWindow: InfoWindow(title: name),
+                      ),
+                    },
+                    zoomControlsEnabled: true, // Ícones de zoom visíveis
+                    zoomGesturesEnabled: true, // Gestos com dois dedos
+                  ),
                 ),
-              },
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: FloatingActionButton(
+                    mini: true,
+                    onPressed: () {
+                      setState(() {
+                        isFullScreen = !isFullScreen;
+                      });
+                    },
+                    child: Icon(isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen),
+                  ),
+                ),
+              ],
             ),
           ),
           SizedBox(height: 20),
