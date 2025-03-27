@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tinder_para_caes/firebaseLogic/associacaoProvider.dart';
+import 'package:tinder_para_caes/models/pedido.dart'; // <-- importa o modelo Pedido
 
 class AllPedidosList extends StatelessWidget {
-  const AllPedidosList({super.key});
+  final List<Pedido> pedidos;
+
+  const AllPedidosList({super.key, required this.pedidos});
 
   @override
   Widget build(BuildContext context) {
-
     final associacao = Provider.of<AssociacaoProvider>(context).association;
 
     if (associacao == null) {
@@ -21,9 +23,6 @@ class AllPedidosList extends StatelessWidget {
       );
     }
 
-
-    final pedidos = associacao.pedidosRealizados; // List<Pedido>
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Notificações"),
@@ -32,7 +31,7 @@ class AllPedidosList extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         itemCount: pedidos.length,
         itemBuilder: (context, index) {
-          final notificacao = pedidos[index]; // notificacao é do tipo Pedido
+          final notificacao = pedidos[index];
 
           return Card(
             margin: const EdgeInsets.symmetric(vertical: 8.0),
@@ -41,19 +40,16 @@ class AllPedidosList extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   Text(
                     "Utilizador: ${notificacao.utilizadorQueRealizaOpedido.fullName}",
                     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-
                   Text("Gênero: ${notificacao.utilizadorQueRealizaOpedido.gender}"),
                   const SizedBox(height: 8),
                   Text("O que pretende fazer: ${notificacao.oQuePretendeFazer}"),
                   Text("Associação: ${notificacao.associacao.name}"),
                   Text(
-                    "Confirmou requisitos: "
-                        "${notificacao.confirmouTodosOsRequisitos ? "Sim" : "Não"}",
+                    "Confirmou requisitos: ${notificacao.confirmouTodosOsRequisitos ? "Sim" : "Não"}",
                   ),
                   const SizedBox(height: 8),
                   Text("Mensagem Adicional: ${notificacao.mensagemAdicional}"),
@@ -63,7 +59,8 @@ class AllPedidosList extends StatelessWidget {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          pedidos[index].estado = "Aceite";
+                          // Idealmente, atualiza via Provider ou setState em StatefulWidget
+                          notificacao.estado = "Aceite";
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green[300],
@@ -72,7 +69,7 @@ class AllPedidosList extends StatelessWidget {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          pedidos[index].estado = "Pendente";
+                          notificacao.estado = "Pendente";
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue[300],
@@ -81,7 +78,7 @@ class AllPedidosList extends StatelessWidget {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          pedidos[index].estado = "Recusado";
+                          notificacao.estado = "Recusado";
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red[300],

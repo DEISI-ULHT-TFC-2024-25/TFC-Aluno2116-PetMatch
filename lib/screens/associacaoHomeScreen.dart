@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/models/animal.dart';
+import 'package:tinder_para_caes/models/pedido.dart';
 import 'package:tinder_para_caes/screens/allAnimalsList.dart';
 import 'package:tinder_para_caes/screens/adicionarAnimalScreen.dart';
 import 'package:provider/provider.dart';
@@ -15,12 +16,14 @@ class AssociacaoHomeScreen extends StatefulWidget {
 
 class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
   List<Animal> animais = []; // Store fetched animals
-  bool isLoading = true; // Track loading state
+  bool isLoading = true;// Track loading state
+  List<Pedido> pedidos = [];
 
   @override
   void initState() {
     super.initState();
     _fetchAnimals();
+    _fetchPedidos();
   }
 
   Future<void> _fetchAnimals() async {
@@ -38,6 +41,26 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
       });
     }
   }
+
+  Future<void> _fetchPedidos() async {
+    final associacao = Provider.of<AssociacaoProvider>(context, listen: false).association;
+
+    if (associacao != null) {
+      List<Pedido> fetchedPedidos = await associacao.fetchPedidos(associacao.pedidosRealizados, associacao.uid);
+      setState(() {
+        pedidos = fetchedPedidos;
+        isLoading = false;
+      });
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +94,7 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: associacao.pedidosRealizados.length,
                 itemBuilder: (context, index) {
-                  final pedido = associacao.pedidosRealizados[index];
+                  final pedido = pedidos[index];
                   return Card(
                     margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
                     child: ListTile(
@@ -90,7 +113,7 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
               SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AllPedidosList()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AllPedidosList(pedidos: pedidos)));
                 },
                 child: Text("Ver todas"),
               ),

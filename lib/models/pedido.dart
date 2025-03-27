@@ -1,10 +1,10 @@
-import 'package:tinder_para_caes/models/animal.dart';
+import 'package:tinder_para_caes/models/animal.dart' show Animal;
 import 'package:tinder_para_caes/models/associacao.dart';
 import 'package:tinder_para_caes/models/funcionalidades.dart';
-import 'package:tinder_para_caes/models/utilizador.dart';
-
+import 'package:tinder_para_caes/models/utilizador.dart' show Utilizador;
 
 class Pedido {
+  String id;
   Utilizador utilizadorQueRealizaOpedido;
   Funcionalidade oQuePretendeFazer;
   Animal animalRequesitado;
@@ -13,8 +13,8 @@ class Pedido {
   String mensagemAdicional;
   String estado;
 
-
   Pedido({
+    required this.id,
     required this.utilizadorQueRealizaOpedido,
     required this.oQuePretendeFazer,
     required this.animalRequesitado,
@@ -24,11 +24,11 @@ class Pedido {
     required this.estado,
   });
 
-
-  factory Pedido.fromMap(String documentId, Map<String, dynamic> map) {
+  factory Pedido.fromMap(Map<String, dynamic> map, String documentId) {
     return Pedido(
+      id: documentId,
       utilizadorQueRealizaOpedido: Utilizador.fromMap(
-        map['utilizadorQueRealizaOpedido']['uid'] ?? documentId,
+        map['utilizadorQueRealizaOpedido']['uid'] ?? '',
         map['utilizadorQueRealizaOpedido'] as Map<String, dynamic>,
       ),
       oQuePretendeFazer: Funcionalidade.fromMap(
@@ -39,15 +39,14 @@ class Pedido {
         map['animalRequesitado'] as Map<String, dynamic>,
       ),
       associacao: Associacao.fromMap(
-        map['associacao']['uid'] ?? documentId,
+        map['associacao']['uid'] ?? '',
         map['associacao'] as Map<String, dynamic>,
       ),
       confirmouTodosOsRequisitos: map['confirmouTodosOsRequisitos'] ?? false,
       mensagemAdicional: map['mensagemAdicional'] ?? '',
-      estado: map['mensagemAdicional'] ?? '',
+      estado: map['estado'] ?? '',
     );
   }
-
 
   Map<String, dynamic> toMap() {
     return {

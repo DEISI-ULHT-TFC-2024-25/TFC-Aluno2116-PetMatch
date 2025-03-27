@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/models/pedido.dart';
 import 'package:tinder_para_caes/models/eventos.dart';
@@ -19,7 +20,7 @@ class Associacao {
   int nif;
   List<Funcionalidades> funcionalidades; // Ajustado para corresponder ao enum
   List<String> animais;
-  List<Pedido> pedidosRealizados;
+  List<String> pedidosRealizados;
   List<Eventos> eventos;
   List<String> necessidades;
   bool associacao;
@@ -64,10 +65,7 @@ class Associacao {
               (element) => element.toString().split('.').last == f)).toList() ??
           [],
       animais: List<String>.from(map['animais'] ?? []),
-      pedidosRealizados: (map['pedidosRealizados'] as List<dynamic>?)
-          ?.map((p) => Pedido.fromMap(p['id'] ?? '', p as Map<String, dynamic>))
-          .toList() ??
-          [],
+      pedidosRealizados: (List<String>.from(map['pedidosRealizados'] ?? [])),
       eventos: (map['eventos'] as List<dynamic>?)
           ?.map((e) => Eventos.fromMap(e as Map<String, dynamic>, e['id'] ?? 'id_desconhecido'))
           .toList() ??
@@ -91,7 +89,7 @@ class Associacao {
       'nif': nif,
       'funcionalidades': funcionalidades.map((f) => f.toString().split('.').last).toList(),
       'animais': animais,
-      'pedidosRealizados': pedidosRealizados.map((p) => p.toMap()).toList(),
+      'pedidosRealizados': pedidosRealizados,
       'eventos': eventos.map((e) => e.toMap()).toList(),
       'necessidades': necessidades,
     };
@@ -118,6 +116,28 @@ class Associacao {
     }
     return animals;
   }
+
+
+  Future<List<Pedido>> fetchPedidos(List<String> tiposDePedidos, String assocId) async {
+    List<Pedido> pedidos = [];
+
+    for (String tipo in tiposDePedidos) {
+      // Vai buscar a subcoleção com nome tipo dentro do documento da associação
+      final snapshot = await FirebaseFirestore.instance
+          .collection('pedidosENotificacoes')
+          .doc(assocId)
+          .collection(tipo)
+          .get();
+
+      for (var doc in snapshot.docs) {
+        final data = doc.data();
+        pedidos.add(Pedido.fromMap(data, doc.id)); // Supondo que fromMap aceita o ID
+      }
+    }
+    return pedidos;
+  }
+
+
 
 
   static Future<List<Associacao>> getSugestoesAssociacoesFirebase(String distrito) async {
