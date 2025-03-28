@@ -175,7 +175,7 @@ class _TornarSocioScreenState extends State<TornarSocioScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("🎉 Inscrição Confirmada!"),
-          content: Text("Obrigado por se tornar sócio! Em breve, entraremos em contacto."),
+          content: Text("Obrigado pelo interesse em tornar-se sócio! Em breve, entraremos em contacto."),
           actions: [
             TextButton(
               child: Text("Fechar"),

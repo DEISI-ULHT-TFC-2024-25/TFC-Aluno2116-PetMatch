@@ -33,6 +33,7 @@ dependencies:
 
   go_router: ^14.6.2 # Verifique a versão mais recente no pub.dev
   google_maps_flutter: ^2.5.0
+  google_maps_flutter_web: 0.5.12
   cupertino_icons: ^1.0.8
   firebase_core: ^3.11.0
   firebase_auth: ^5.4.2
@@ -83,6 +84,8 @@ flutter:
     - assets/dogBreeds.txt
     - assets/paw.png
     - assets/distritos.txt
+    - assets/pawPin.png
+
 
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

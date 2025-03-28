@@ -29,6 +29,8 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
   String name = "";
   int numberOfAnimals = 0;
 
+
+//cordenadas a substituir pelas da associação
   final LatLng _center = const LatLng(38.7169, -9.1399);
 
   void _onMapCreated(GoogleMapController controller) {
@@ -71,7 +73,7 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
-          // 🔹 Parte Principal: Info e Animais
+          // Parte Principal: Info e Animais
           Text(
             "$numberOfAnimals animais na associação",
             style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
@@ -169,52 +171,6 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
             Text("De momento não existem informações", style: textTheme.bodyMedium),
           SizedBox(height: 20),
 
-          AnimatedContainer(
-            duration: Duration(milliseconds: 300),
-            height: isFullScreen ? MediaQuery.of(context).size.height * 0.6 : 200,
-            decoration: BoxDecoration(
-              border: Border.all(color: theme.dividerColor),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: GoogleMap(
-                    onMapCreated: _onMapCreated,
-                    initialCameraPosition: CameraPosition(
-                      target: _center,
-                      zoom: 15.0,
-                    ),
-                    markers: {
-                      Marker(
-                        markerId: MarkerId("associacao"),
-                        position: _center,
-                        infoWindow: InfoWindow(title: name),
-                      ),
-                    },
-                    zoomControlsEnabled: true, // Ícones de zoom visíveis
-                    zoomGesturesEnabled: true, // Gestos com dois dedos
-                  ),
-                ),
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: FloatingActionButton(
-                    mini: true,
-                    onPressed: () {
-                      setState(() {
-                        isFullScreen = !isFullScreen;
-                      });
-                    },
-                    child: Icon(isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 20),
-
           ElevatedButton(
             onPressed: () {
               Navigator.push(
@@ -281,6 +237,54 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
             },
             child: Text("Tornar-se Família de Acolhimento Temporário"),
           ),
+
+          AnimatedContainer(
+            duration: Duration(milliseconds: 300),
+            height: isFullScreen ? MediaQuery.of(context).size.height * 0.8 : 200,
+            decoration: BoxDecoration(
+              border: Border.all(color: theme.dividerColor),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: GoogleMap(
+                    onMapCreated: _onMapCreated,
+                    initialCameraPosition: CameraPosition(
+                      target: _center,
+                      zoom: 15.0,
+                    ),
+                    markers: {
+                      Marker(
+                        markerId: MarkerId("associacao"),
+                        position: _center,
+                        infoWindow: InfoWindow(title: name),
+                      ),
+                    },
+                    zoomControlsEnabled: true, // Ícones de zoom visíveis
+                    zoomGesturesEnabled: true, // Gestos com dois dedos
+                  ),
+                ),
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: FloatingActionButton(
+                    mini: true,
+                    onPressed: () {
+                      setState(() {
+                        isFullScreen = !isFullScreen;
+                      });
+                    },
+                    child: Icon(isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 80),
+
+
         ],
       ),
     );

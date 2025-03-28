@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tinder_para_caes/models/associacao.dart';
 import 'package:tinder_para_caes/screens/vizualizarAssociacaoScreen.dart';
 import 'package:tinder_para_caes/models/animal.dart';
@@ -19,6 +20,15 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
   List<Animal> animais = [];
   bool isLoading = true;//
   List<Associacao> sugestoesAssociacoes = [];
+  late GoogleMapController mapController;
+  bool isFullScreen = false;
+
+  //cordenadas a substituir pelas da associação
+  final LatLng _center = const LatLng(38.7169, -9.1399);
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
 
 
   @override
@@ -65,6 +75,8 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
   @override
   Widget build(BuildContext context) {
     final utilizador = Provider.of<UtilizadorProvider>(context).user;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
 
 
     if (utilizador == null) {
@@ -225,9 +237,57 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                         },
                         child: Text("Ver todas"),
                       ),
+
                     ],
                   ),
                 ),
+
+                AnimatedContainer(
+                  duration: Duration(milliseconds: 300),
+                  height: isFullScreen ? MediaQuery.of(context).size.height * 0.8 : 200,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: theme.dividerColor),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Stack(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(6),
+                        child: GoogleMap(
+                          onMapCreated: _onMapCreated,
+                          initialCameraPosition: CameraPosition(
+                            target: _center,
+                            zoom: 15.0,
+                          ),
+                          markers: {
+                            Marker(
+                              markerId: MarkerId("associacao"),
+                              position: _center,
+                              infoWindow: InfoWindow(title: sugestoesAssociacoes[0].name),
+                            ),
+                          },
+                          zoomControlsEnabled: true, // Ícones de zoom visíveis
+                          zoomGesturesEnabled: true, // Gestos com dois dedos
+                        ),
+                      ),
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: FloatingActionButton(
+                          mini: true,
+                          onPressed: () {
+                            setState(() {
+                              isFullScreen = !isFullScreen;
+                            });
+                          },
+                          child: Icon(isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+
               ],
             ),
           ),
