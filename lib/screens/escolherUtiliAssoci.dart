@@ -15,19 +15,15 @@ class _Escolherutiliassoci extends State<Escolherutiliassoci> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //appBar: AppBar(title: Text('Registo')),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Separador na parte superior
-          Container(
-            color: Colors.grey[200],
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildTabButton('Utilizador', 0),
-                _buildTabButton('Associação', 1),
-              ],
-            ),
+          SizedBox(height: 40),
+          Row(
+            children: [
+              _buildTabButton('Utilizador', 0),
+              _buildTabButton('Associação', 1),
+            ],
           ),
           Expanded(
             child: _selectedIndex == 0 ? CriarUtilizador() : CriarAssociacao(),
@@ -38,28 +34,31 @@ class _Escolherutiliassoci extends State<Escolherutiliassoci> {
   }
 
   Widget _buildTabButton(String title, int index) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedIndex = index;
-        });
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: _selectedIndex == index ? Colors.blue : Colors.transparent,
-              width: 3,
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        child: Container(
+          alignment: Alignment.center,
+          padding: EdgeInsets.symmetric(vertical: 10),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: _selectedIndex == index ? Colors.black : Colors.transparent,
+                width: 5,
+              ),
             ),
           ),
-        ),
-        child: Text(
-          title,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: _selectedIndex == index ? Colors.blue : Colors.black,
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: _selectedIndex == index ? Colors.black : Colors.brown,
+            ),
           ),
         ),
       ),

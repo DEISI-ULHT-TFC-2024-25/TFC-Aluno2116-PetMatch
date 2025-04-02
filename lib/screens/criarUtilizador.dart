@@ -157,7 +157,7 @@ class UtilizadorFormScreenState extends State<CriarUtilizador> {
               },
             ),
             DropdownButtonFormField<String>(
-              decoration: const InputDecoration(labelText: 'Sexo'),
+              decoration: const InputDecoration(labelText: 'Género'),
               value: gender,
               items: genders.map((String g) {
                 return DropdownMenuItem<String>(

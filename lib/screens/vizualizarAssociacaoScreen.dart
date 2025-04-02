@@ -137,7 +137,7 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
                     SizedBox(height: 5),
                     Text(animal.fullName, style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
                     Text("${animal.age} anos", style: textTheme.bodyMedium),
-                    Text(animal.gender == 1 ? "Masculino" : "Feminino", style: textTheme.bodyMedium),
+                    Text(animal.gender , style: textTheme.bodyMedium),
                     Text(animal.sterilized ? "Castrado" : "Não castrado", style: textTheme.bodyMedium),
                   ],
                 ),

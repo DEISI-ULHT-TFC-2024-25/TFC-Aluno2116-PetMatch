@@ -41,7 +41,7 @@ class Animal {
       fullName: map['nome'] ?? '',
       age: map['idade'] ?? 0,
       sterilized: map['castrado'] ?? false,
-      gender: map['genero'] ?? 0,
+      gender: map['genero'] ?? "",
       legalOwner: map['donoLegal'] ?? '',
       allergies: map['alergias'] ?? '',
       size: map['porte'] ?? '',

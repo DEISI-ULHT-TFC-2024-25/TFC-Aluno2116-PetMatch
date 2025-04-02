@@ -9,6 +9,7 @@ final ThemeData lightTheme = ThemeData(
     color: Colors.brown[500],
     titleTextStyle: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
     iconTheme: IconThemeData(color: Colors.white),
+    toolbarHeight: 40,
   ),
   textTheme: TextTheme(
     bodyLarge: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.brown[900]),
