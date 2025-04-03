@@ -147,7 +147,6 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
       }
     }
 
-
     await Future.delayed(Duration(milliseconds: 10));
   }
 
