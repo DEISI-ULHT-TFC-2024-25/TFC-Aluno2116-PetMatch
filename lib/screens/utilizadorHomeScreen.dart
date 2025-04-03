@@ -8,6 +8,7 @@ import 'package:tinder_para_caes/screens/allAnimalsList.dart';
 import 'package:tinder_para_caes/screens/allAssociacoesList.dart';
 import 'package:provider/provider.dart';
 import 'package:tinder_para_caes/firebaseLogic/utilizadorProvider.dart';
+import 'package:geocoding/geocoding.dart';
 
 class UtilizadorHomeScreen extends StatefulWidget {
   const UtilizadorHomeScreen({super.key});
@@ -23,20 +24,17 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
   late GoogleMapController mapController;
   bool isFullScreen = false;
 
+  BitmapDescriptor? _iconePatinha;
+  final Set<Marker> _marcadores = {};
+
   //cordenadas a substituir pelas da associação
-  final LatLng _center = const LatLng(38.7169, -9.1399);
+  LatLng _center = LatLng(38.7169, -9.1399); // Valor por defeito, será substituído
+
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
   }
 
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchAnimals();
-    _fetchSugestoesAssociacoes();
-  }
 
   Future<void> _fetchAnimals() async {
     final utilizador = Provider.of<UtilizadorProvider>(context, listen: false).user;
@@ -54,6 +52,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
     }
   }
 
+
   Future<void> _fetchSugestoesAssociacoes() async {
     final utilizador = Provider.of<UtilizadorProvider>(context, listen: false).user;
     String? distrito = utilizador?.distrito;
@@ -67,8 +66,105 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
         sugestoesAssociacoes = fetchedAssociacoes;
       });
     }
+    await Future.delayed(Duration(milliseconds: 10));
   }
 
+
+  Future<void> _carregarIconePatinha() async {
+    final icone = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(size: Size(48, 48)),
+      'assets/patinhaPin.png',
+    );
+
+    setState(() {
+      _iconePatinha = icone;
+    });
+    await Future.delayed(Duration(milliseconds: 10));
+    _adicionarMarcadoresDasAssociacoes();
+  }
+
+
+  Future<void> _adicionarMarcadoresDasAssociacoes() async {
+    if (_iconePatinha == null || sugestoesAssociacoes.isEmpty) return;
+    Set<Marker> novosMarcadores = {};
+    for (final associacao in sugestoesAssociacoes) {
+      try {
+        // Obter localização a partir do distrito
+        List<Location> locations = await locationFromAddress('${associacao.distrito}, Portugal');
+
+        if (locations.isNotEmpty) {
+          final loc = locations.first;
+
+          final marker = Marker(
+            markerId: MarkerId(associacao.name),
+            position: LatLng(loc.latitude, loc.longitude),
+            icon: _iconePatinha!,
+            infoWindow: InfoWindow(
+              title: associacao.name,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => VizualizarAssociacaoScreen(associacao: associacao),
+                  ),
+                );
+              },
+            ),
+          );
+
+          novosMarcadores.add(marker);
+        }
+      } catch (e) {
+        print('Erro ao geocodificar ${associacao.distrito}: $e');
+      }
+    }
+
+    setState(() {
+      _marcadores.addAll(novosMarcadores);
+    });
+    await Future.delayed(Duration(milliseconds: 10));
+  }
+
+
+  Future<void> _atualizarCenterComDistritoDoUtilizador() async {
+    final utilizador = Provider.of<UtilizadorProvider>(context, listen: false).user;
+
+    if (utilizador != null && utilizador.distrito != null) {
+      try {
+        List<Location> locations = await locationFromAddress('${utilizador.distrito}, Portugal');
+        if (locations.isNotEmpty) {
+          setState(() {
+            _center = LatLng(locations.first.latitude, locations.first.longitude);
+          });
+        }
+        if (mapController != null) {
+          mapController.animateCamera(CameraUpdate.newLatLng(_center));
+        }
+        //print("DEBUG: Coordenadas obtidas para ${utilizador.distrito}: ${locations.first.latitude}, ${locations.first.longitude}");
+
+      } catch (e) {
+        print("Erro ao obter coordenadas do distrito do utilizador: $e");
+      }
+    }
+
+
+    await Future.delayed(Duration(milliseconds: 10));
+  }
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    _inicializarTudo(); // chama as funções por ordem certa
+  }
+
+  Future<void> _inicializarTudo() async {
+    await _fetchAnimals();
+    await _fetchSugestoesAssociacoes();
+    await _atualizarCenterComDistritoDoUtilizador();
+    await _carregarIconePatinha();
+  }
 
 
 
@@ -146,7 +242,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                 ),
                 SizedBox(height: 16.0),
                 Text(
-                  "Associações Associadas",
+                  "Associações em que está envolvido",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 8.0),
@@ -259,15 +355,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                             target: _center,
                             zoom: 15.0,
                           ),
-                          markers: {
-                            Marker(
-                              markerId: MarkerId("associacao"),
-                              position: _center,
-                              infoWindow: InfoWindow(title: sugestoesAssociacoes[0].name),
-                            ),
-                          },
-                          zoomControlsEnabled: true, // Ícones de zoom visíveis
-                          zoomGesturesEnabled: true, // Gestos com dois dedos
+                          markers: _marcadores,
                         ),
                       ),
                       Positioned(
