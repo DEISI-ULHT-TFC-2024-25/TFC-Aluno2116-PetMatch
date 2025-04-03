@@ -33,9 +33,6 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
 //cordenadas a substituir pelas da associação
   final LatLng _center = const LatLng(38.7169, -9.1399);
 
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
 
   @override
   void initState() {
@@ -237,53 +234,6 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
             },
             child: Text("Tornar-se Família de Acolhimento Temporário"),
           ),
-
-          AnimatedContainer(
-            duration: Duration(milliseconds: 300),
-            height: isFullScreen ? MediaQuery.of(context).size.height * 0.8 : 200,
-            decoration: BoxDecoration(
-              border: Border.all(color: theme.dividerColor),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(6),
-                  child: GoogleMap(
-                    onMapCreated: _onMapCreated,
-                    initialCameraPosition: CameraPosition(
-                      target: _center,
-                      zoom: 15.0,
-                    ),
-                    markers: {
-                      Marker(
-                        markerId: MarkerId("associacao"),
-                        position: _center,
-                        infoWindow: InfoWindow(title: name),
-                      ),
-                    },
-                    zoomControlsEnabled: true, // Ícones de zoom visíveis
-                    zoomGesturesEnabled: true, // Gestos com dois dedos
-                  ),
-                ),
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: FloatingActionButton(
-                    mini: true,
-                    onPressed: () {
-                      setState(() {
-                        isFullScreen = !isFullScreen;
-                      });
-                    },
-                    child: Icon(isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 80),
-
 
         ],
       ),
