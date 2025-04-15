@@ -28,6 +28,7 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
   List<String> needs = [];
   String name = "";
   int numberOfAnimals = 0;
+  String uid = "";
 
 
 //cordenadas a substituir pelas da associação
@@ -51,6 +52,8 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
       name = assoE.name;
       numberOfAnimals = assoE.animais.length;
       isLoading = false;
+      uid = assoE.uid;
+
     });
   }
 
@@ -195,7 +198,7 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PassearCaoScreen(),
+                  builder: (context) => PassearCaoScreen(uidAssociacao: uid),
                 ),
               );
             },

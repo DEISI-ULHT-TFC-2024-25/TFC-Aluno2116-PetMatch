@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/screens/vizualizarAssociacaoScreen.dart';
 
 class PassearCaoScreen extends StatefulWidget {
-  const PassearCaoScreen({super.key});
+  final String uidAssociacao;
+  const PassearCaoScreen({Key? key, required this.uidAssociacao}) : super(key: key);
 
   @override
   _PassearCaoScreenState createState() => _PassearCaoScreenState();
@@ -42,12 +43,12 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
       final firestore = FirebaseFirestore.instance;
       final currentUser = FirebaseAuth.instance.currentUser;
 
-      // ⚠️ Substitui estes UIDs pelos reais no teu contexto
-      final String uidUtilizador = currentUser?.uid ?? "desconhecido";
-      final String uidAnimal = "uidAnimal123"; // <-- Obter do animal selecionado
-      final String uidAssociacao = "uidAssociacaoXYZ"; // <-- Obter da associação ligada
 
-      // Adiciona o documento com UID automático à coleção principal
+      final String uidUtilizador = currentUser?.uid ?? "desconhecido";
+      final String uidAnimal = "uidAnimal123";
+      final String uidAssociacao = widget.uidAssociacao;
+
+
       final docRef = await firestore.collection("pedidosENotificacoes").add({
         "utilizadorQueRealizaOpedido": uidUtilizador,
         "oQuePretendeFazer": "PassearCao",
@@ -82,7 +83,6 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
         },
       });
 
-      // Sucesso
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Pedido de passeio submetido com sucesso! ✅")),
       );
