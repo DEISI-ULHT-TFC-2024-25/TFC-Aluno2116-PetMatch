@@ -12,6 +12,7 @@ class Pedido {
   bool confirmouTodosOsRequisitos;
   String mensagemAdicional;
   String estado;
+  List<String> dadosPrenchidos;
 
   Pedido({
     required this.id,
@@ -22,6 +23,7 @@ class Pedido {
     required this.confirmouTodosOsRequisitos,
     required this.mensagemAdicional,
     required this.estado,
+    required this.dadosPrenchidos,
   });
 
   factory Pedido.fromMap(Map<String, dynamic> map, String documentId) {
@@ -45,6 +47,7 @@ class Pedido {
       confirmouTodosOsRequisitos: map['confirmouTodosOsRequisitos'] ?? false,
       mensagemAdicional: map['mensagemAdicional'] ?? '',
       estado: map['estado'] ?? '',
+      dadosPrenchidos: List<String>.from(map['dadosPrenchidos'] ?? []),
     );
   }
 
@@ -57,6 +60,7 @@ class Pedido {
       'confirmouTodosOsRequisitos': confirmouTodosOsRequisitos,
       'mensagemAdicional': mensagemAdicional,
       'estado': estado,
+      'dadosPrenchidos': dadosPrenchidos,
     };
   }
 }

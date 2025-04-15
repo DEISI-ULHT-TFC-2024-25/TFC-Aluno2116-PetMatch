@@ -1,5 +1,10 @@
 name: tinder_para_caes
-description: "A new Flutter project."
+description: "Este projeto consiste no desenvolvimento de uma aplicação móvel, que posteriormente será convertida para uma plataforma web. A ideia central da aplicação é criar uma plataforma que facilite e incentive o envolvimento das pessoas com os animais das associações de proteção animal, promovendo uma maior interação e visibilidade tanto para os animais quanto para as instituições.
+A aplicação permitirá que as associações criem perfis onde poderão apresentar informações sobre si mesmas e individualmente sobre os seus animais disponíveis para interação. Os utilizadores, por sua vez, poderão criar um perfil e ter acesso aos animais, com a possibilidade de agendar diretamente atividades, como passeios com cães. Para garantir a segurança e o bem-estar dos animais, será necessário que os utilizadores aceitem e cumpram os termos de responsabilidade apresentados na aplicação, previamente estabelecidos pelas associações.
+Esta ferramenta visa eliminar barreiras comuns ao voluntariado, como a dificuldade de contacto telefónico ou a necessidade de deslocação sem garantia de disponibilidade. Através da aplicação, as associações receberão notificações de pedidos e comprometer-se-ão a responder dentro de um prazo razoável, mantendo o processo organizado e ágil. Os utilizadores também terão informações claras sobre o estado dos seus pedidos.
+Além de melhorar a logística e o acesso ao voluntariado, a aplicação promove uma maior socialização dos animais, ajudando-os a interagir com um maior número de pessoas. Este contacto regular com novos rostos pode ser especialmente benéfico para animais que passaram por situações de abandono ou maus-tratos, ajudando-os a recuperar a confiança nos humanos.
+Por fim, a aplicação coloca sempre o bem-estar dos animais em primeiro lugar, permitindo que cada associação decida o que é melhor para os seus protegidos, respeitando as suas particularidades. O objetivo final é simplificar o processo de envolvimento das pessoas com esta causa e fortalecer a relação entre a comunidade e as associações, contribuindo para o bem-estar dos animais e o aumento das iniciativas de apoio, voluntariado e adoção.
+"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -50,6 +55,12 @@ dependencies:
   provider: any
   animate_do: ^4.2.0
   geocoding: ^3.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/app_icon.png"
 
 dev_dependencies:
   flutter_test:
@@ -65,15 +76,11 @@ dev_dependencies:
   mockito: ^5.4.2
   build_runner: ^2.4.6
 
-
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
 flutter:
-
-
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -86,6 +93,7 @@ flutter:
     - assets/paw.png
     - assets/distritos.txt
     - assets/patinhaPin.png
+    - assets/app_icon.png
 
 
   #   - images/a_dot_burr.jpeg

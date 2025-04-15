@@ -37,63 +37,64 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
   bool aceitaRegras = false; // Para o popup de confirmação
 
 
-  Future <void> _submeterFormulario() async {
+  Future<void> _submeterFormulario() async {
     try {
-      // Obtém o UID do utilizador autenticado (caso uses Firebase Authentication)
-      String uidAssociacao = FirebaseAuth.instance.currentUser?.uid ?? "desconhecido";
+      final firestore = FirebaseFirestore.instance;
+      final currentUser = FirebaseAuth.instance.currentUser;
 
-      // Referência ao Firestore
-      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      // ⚠️ Substitui estes UIDs pelos reais no teu contexto
+      final String uidUtilizador = currentUser?.uid ?? "desconhecido";
+      final String uidAnimal = "uidAnimal123"; // <-- Obter do animal selecionado
+      final String uidAssociacao = "uidAssociacaoXYZ"; // <-- Obter da associação ligada
 
-      // Criar um novo pedido na subcoleção "passearCao"
-      await firestore
-          .collection("pedidoENotificacoes") // 📂 Coleção principal
-          .doc(uidAssociacao) // 📄 Documento do utilizador
-          .collection("passearCao") // 📂 Subcoleção específica
-          .add({
-        "nomePasseador": nomePasseadorController.text,
-        "moradaFiscal": moradaFiscalController.text,
-        "moradaContacto": moradaContactoController.text,
-        "ccBi": ccBiController.text,
-        "validadeCC": validadeCCController.text,
-        "tlm": tlmController.text,
-        "idade": int.tryParse(idadeController.text) ?? 0,
+      // Adiciona o documento com UID automático à coleção principal
+      final docRef = await firestore.collection("pedidosENotificacoes").add({
+        "utilizadorQueRealizaOpedido": uidUtilizador,
+        "oQuePretendeFazer": "PassearCao",
+        "animalRequesitado": uidAnimal,
+        "associacao": uidAssociacao,
+        "confirmouTodosOsRequisitos": aceitaRegras,
+        "mensagemAdicional": "",
+        "estado": "pendente",
+        "dataCriacao": FieldValue.serverTimestamp(),
 
-        "nomeCao": nomeCaoController.text,
-        "chip": chipController.text,
+        "dadosPreenchidos": {
+          "nomePasseador": nomePasseadorController.text,
+          "moradaFiscal": moradaFiscalController.text,
+          "moradaContacto": moradaContactoController.text,
+          "ccBi": ccBiController.text,
+          "validadeCC": validadeCCController.text,
+          "tlm": tlmController.text,
+          "idade": int.tryParse(idadeController.text) ?? 0,
 
-        "temProblemaComportamento": temProblemaComportamento,
-        "comportamentoDescricao": comportamentoController.text,
-        "temAlergias": temAlergias,
-        "alergiasDescricao": alergiasController.text,
-        "portePeso": portePesoController.text,
-        "estaEsterilizado": estaEsterilizado,
+          "nomeCao": nomeCaoController.text,
+          "chip": chipController.text,
 
-        "matriculaVeiculo": matriculaVeiculoController.text,
-        "localPasseio": local.text,
+          "temProblemaComportamento": temProblemaComportamento,
+          "comportamentoDescricao": comportamentoController.text,
+          "temAlergias": temAlergias,
+          "alergiasDescricao": alergiasController.text,
+          "portePeso": portePesoController.text,
+          "estaEsterilizado": estaEsterilizado,
 
-        "status": "pendente", // Inicialmente, o pedido fica como "pendente"
-        "dataCriacao": FieldValue.serverTimestamp(), // Timestamp automático
+          "matriculaVeiculo": matriculaVeiculoController.text,
+          "localPasseio": local.text,
+        },
       });
 
-      // Mensagem de sucesso
+      // Sucesso
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Pedido de passeio submetido com sucesso! ✅")),
       );
 
-      // Redirecionar para outra página após submissão
-      //Navigator.of(context).pushReplacement(
-        //MaterialPageRoute(builder: (context) => VizualizarAssociacaoScreen()),
-      //);
-
     } catch (e) {
-      // Em caso de erro
       print("Erro ao submeter formulário: $e");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Erro ao submeter pedido! ❌")),
       );
     }
   }
+
 
 
   @override
