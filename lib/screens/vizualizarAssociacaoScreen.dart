@@ -209,7 +209,7 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => TornarVoluntarioScreen(),
+                  builder: (context) => TornarVoluntarioScreen(uidAssociacao: uid),
                 ),
               );
             },
@@ -220,7 +220,7 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => TornarSocioScreen(),
+                  builder: (context) => TornarSocioScreen(uidAssociacao: uid),
                 ),
               );
             },

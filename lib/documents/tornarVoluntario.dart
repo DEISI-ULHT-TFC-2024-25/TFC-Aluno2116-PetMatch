@@ -3,11 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class TornarVoluntarioScreen extends StatefulWidget {
-  const TornarVoluntarioScreen({super.key});
+  final String uidAssociacao;
+  const TornarVoluntarioScreen({super.key, required this.uidAssociacao});
 
   @override
   _TornarVoluntarioScreenState createState() => _TornarVoluntarioScreenState();
 }
+
 
 class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
   final _formKey = GlobalKey<FormState>();
@@ -27,6 +29,8 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
 
   bool hasTransport = false;
   bool aceitaRegras = false;
+  String mensagemAdicional = "";
+
 
   Map<String, bool> tasks = {
     "Campanhas de Angariação de alimentação e outros produtos": false,
@@ -113,8 +117,8 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
                 child: ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate() && aceitaRegras) {
-                      await _submeterFormulario(); // Salva no Firestore
-                      _mostrarPopupConfirmacao(); // Mostra o popup após salvar
+                      _mostrarPopupMensagemFinal(); // Mostra o popup com opção de mensagem
+
                     }
                   },
                   child: Text("Submeter Formulário ✅"),
@@ -150,41 +154,42 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
   /// Função para salvar no Firebase Firestore
   Future<void> _submeterFormulario() async {
     try {
-      // Obtém o ID do utilizador autenticado
-      String uidAssociacao = FirebaseAuth.instance.currentUser?.uid ?? "desconhecido";
+      final firestore = FirebaseFirestore.instance;
+      final currentUser = FirebaseAuth.instance.currentUser;
 
-      // Referência ao Firestore
-      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      final String uidUtilizador = currentUser?.uid ?? "desconhecido";
+      final String uidAssociacao = widget.uidAssociacao;
 
-      // Criar um novo pedido na subcoleção "voluntario"
-      await firestore
-          .collection("pedidoENotificacoes") // 📂 Coleção principal
-          .doc(uidAssociacao) // 📄 Documento do utilizador
-          .collection("voluntario") // 📂 Subcoleção específica
-          .add({
-        "nome": nomeController.text,
-        "morada": moradaController.text,
-        "localidade": localidadeController.text,
-        "codigoPostal": codigoPostalController.text,
-        "telemovel": telemovelController.text,
-        "telefone": telefoneController.text,
-        "email": emailController.text,
-        "cc": ccController.text,
-        "validade": validadeController.text,
-        "nif": nifController.text,
-        "temTransporte": hasTransport,
-        "tarefas": tasks.entries.where((entry) => entry.value).map((entry) => entry.key).toList(),
-        "outrasTarefas": outrasTarefasController.text,
-        "aceitaRegras": aceitaRegras,
-        "status": "pendente", // Inscrição começa como "pendente"
-        "dataCriacao": FieldValue.serverTimestamp(), // Timestamp automático
+      await firestore.collection("pedidosENotificacoes").add({
+        "utilizadorQueRealizaOpedido": uidUtilizador,
+        "oQuePretendeFazer": "TornarVoluntario",
+        "animalRequesitado": "",
+        "associacao": uidAssociacao,
+        "confirmouTodosOsRequisitos": aceitaRegras,
+        "mensagemAdicional": mensagemAdicional,
+        "estado": "pendente",
+        "dataCriacao": FieldValue.serverTimestamp(),
+
+        "dadosPreenchidos": {
+          "nome": nomeController.text,
+          "morada": moradaController.text,
+          "localidade": localidadeController.text,
+          "codigoPostal": codigoPostalController.text,
+          "telemovel": telemovelController.text,
+          "telefone": telefoneController.text,
+          "email": emailController.text,
+          "cc": ccController.text,
+          "validade": validadeController.text,
+          "nif": nifController.text,
+          "temTransporte": hasTransport,
+          "tarefas": tasks.entries.where((entry) => entry.value).map((entry) => entry.key).toList(),
+          "outrasTarefas": outrasTarefasController.text,
+        },
       });
 
-      // Mensagem de sucesso
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Inscrição submetida com sucesso! ✅")),
       );
-
     } catch (e) {
       print("Erro ao submeter inscrição: $e");
       ScaffoldMessenger.of(context).showSnackBar(
@@ -193,24 +198,66 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
     }
   }
 
+
   /// Popup de confirmação após submissão
-  void _mostrarPopupConfirmacao() {
+  void _mostrarPopupMensagemFinal() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("🎉 Inscrição Confirmada!"),
-          content: Text("Obrigado por se tornar voluntário! Em breve, entraremos em contacto."),
-          actions: [
-            TextButton(
-              child: Text("Fechar"),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
+        bool mostrarCampoMensagem = false;
+        TextEditingController mensagemController = TextEditingController();
+
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text("✨ Enviar Inscrição como Voluntário"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text("Deseja adicionar uma mensagem adicional à inscrição?"),
+                  if (mostrarCampoMensagem)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: TextField(
+                        controller: mensagemController,
+                        maxLines: 4,
+                        decoration: InputDecoration(
+                          labelText: "Mensagem adicional",
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      mostrarCampoMensagem = !mostrarCampoMensagem;
+                    });
+                  },
+                  child: Text(mostrarCampoMensagem
+                      ? "Esconder mensagem"
+                      : "Adicionar mensagem ✍️"),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    setState(() {
+                      mensagemAdicional = mensagemController.text;
+                    });
+                    Navigator.of(context).pop();
+                    await _submeterFormulario();
+                  },
+                  child: Text("Submeter ✅"),
+                ),
+              ],
+            );
+          },
         );
       },
     );
   }
+
 
   TextStyle _titleStyle() => TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
 }
