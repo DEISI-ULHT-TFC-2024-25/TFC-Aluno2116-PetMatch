@@ -15,7 +15,6 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
   // Controladores para capturar os inputs do utilizador
   final TextEditingController nomePasseadorController = TextEditingController();
   final TextEditingController moradaFiscalController = TextEditingController();
-  final TextEditingController moradaContactoController = TextEditingController();
   final TextEditingController ccBiController = TextEditingController();
   final TextEditingController validadeCCController = TextEditingController();
   final TextEditingController tlmController = TextEditingController();
@@ -62,7 +61,6 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
         "dadosPreenchidos": {
           "nomePasseador": nomePasseadorController.text,
           "moradaFiscal": moradaFiscalController.text,
-          "moradaContacto": moradaContactoController.text,
           "ccBi": ccBiController.text,
           "validadeCC": validadeCCController.text,
           "tlm": tlmController.text,
@@ -110,7 +108,6 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
             Text("📌 Dados do Passeador", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             TextField(controller: nomePasseadorController, decoration: InputDecoration(labelText: "Nome*")),
             TextField(controller: moradaFiscalController, decoration: InputDecoration(labelText: "Morada Fiscal*")),
-            TextField(controller: moradaContactoController, decoration: InputDecoration(labelText: "Morada de Contacto*")),
             TextField(controller: ccBiController, decoration: InputDecoration(labelText: "CC/BI*")),
             TextField(controller: validadeCCController, decoration: InputDecoration(labelText: "Data de Validade*")),
 
@@ -217,15 +214,21 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
                 Text("✅ Manter a integridade física do canídeo e evitar perigos."),
                 Text("✅ Apanhar os dejetos do canídeo."),
                 Text("✅ Limitar o passeio a duas horas."),
-                CheckboxListTile(
-                  title: Text("Confirmo que li e aceito as regras."),
-                  value: aceitaRegras,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      aceitaRegras = value!;
-                    });
+                StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setStateDialog) {
+                    return CheckboxListTile(
+                      title: Text("Confirmo que li e aceito as regras."),
+                      value: aceitaRegras,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          aceitaRegras = value!;
+                        });
+                        setStateDialog(() {}); // <- Atualiza só o conteúdo do popup
+                      },
+                    );
                   },
                 ),
+
               ],
             ),
           ),
