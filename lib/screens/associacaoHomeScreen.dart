@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/models/pedido.dart';
@@ -45,18 +46,52 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
   Future<void> _fetchPedidos() async {
     final associacao = Provider.of<AssociacaoProvider>(context, listen: false).association;
 
-    if (associacao != null) {
-      List<Pedido> fetchedPedidos = await associacao.fetchPedidos(associacao.pedidosRealizados, associacao.uid);
+    if (associacao == null) {
+      setState(() {
+        isLoading = false;
+      });
+      return;
+    }
+
+    try {
+      final firestore = FirebaseFirestore.instance;
+
+      // Obtem todos os pedidos com associacao == UID da associação logada
+      final querySnapshot = await firestore
+          .collection("pedidosENotificacoes")
+          .where("associacao", isEqualTo: associacao.uid)
+          .get();
+
+      // Extrai lista de documentos
+      final documentos = querySnapshot.docs;
+
+      // Extrai os IDs e guarda na associação
+      List<String> idsPedidos = documentos.map((doc) => doc.id).toList();
+      associacao.pedidosRealizados = idsPedidos;
+
+      // Converte os documentos em objetos Pedido (assumindo que tens um fromFirestore)
+      List<Pedido> fetchedPedidos = documentos.map((doc) {
+        return Pedido.fromMap(doc.data() as Map<String, dynamic>, doc.id);
+      }).toList();
+
       setState(() {
         pedidos = fetchedPedidos;
         isLoading = false;
       });
-    } else {
+    } catch (e) {
+      print("Erro ao buscar pedidos: $e");
       setState(() {
         isLoading = false;
       });
     }
   }
+
+
+  Future<String> fetchNomeUtilizador(String uid) async {
+    final doc = await FirebaseFirestore.instance.collection('utilizadores').doc(uid).get();
+    return doc['fullName'] ?? 'Utilizador desconhecido';
+  }
+
 
 
 
@@ -92,24 +127,25 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
               ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: associacao.pedidosRealizados.length,
+                itemCount: pedidos.length,
                 itemBuilder: (context, index) {
                   final pedido = pedidos[index];
                   return Card(
                     margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
                     child: ListTile(
-                      title: Text(pedido.utilizadorQueRealizaOpedido.fullName),
+                      title: Text("Pedido de: ${pedido.utilizadorId}"), // Mostra o UID
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Animal interessado: ${pedido.animalRequesitado.fullName}", maxLines: 2, overflow: TextOverflow.ellipsis),
-                          Text("Pedido: ${pedido.oQuePretendeFazer}"),
+                          Text("Animal: ${pedido.animalId}", maxLines: 2, overflow: TextOverflow.ellipsis),
+                          Text("Pretende: ${pedido.funcionalidade}"),
                         ],
                       ),
                     ),
                   );
                 },
               ),
+
               SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () {

@@ -1,25 +1,22 @@
-import 'package:tinder_para_caes/models/animal.dart' show Animal;
-import 'package:tinder_para_caes/models/associacao.dart';
-import 'package:tinder_para_caes/models/funcionalidades.dart';
-import 'package:tinder_para_caes/models/utilizador.dart' show Utilizador;
+import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseFirestore;
 
 class Pedido {
-  String id;
-  Utilizador utilizadorQueRealizaOpedido;
-  Funcionalidade oQuePretendeFazer;
-  Animal animalRequesitado;
-  Associacao associacao;
-  bool confirmouTodosOsRequisitos;
-  String mensagemAdicional;
+  final String id;
+  final String utilizadorId;
+  final String funcionalidade; // Ex: "Apadrinhar", "TornarSocio", etc.
+  final String animalId;
+  final String associacaoId;
+  final bool confirmouTodosOsRequisitos;
+  final String mensagemAdicional;
   String estado;
-  List<String> dadosPrenchidos;
+  final Map<String, dynamic> dadosPrenchidos;
 
   Pedido({
     required this.id,
-    required this.utilizadorQueRealizaOpedido,
-    required this.oQuePretendeFazer,
-    required this.animalRequesitado,
-    required this.associacao,
+    required this.utilizadorId,
+    required this.funcionalidade,
+    required this.animalId,
+    required this.associacaoId,
     required this.confirmouTodosOsRequisitos,
     required this.mensagemAdicional,
     required this.estado,
@@ -29,38 +26,39 @@ class Pedido {
   factory Pedido.fromMap(Map<String, dynamic> map, String documentId) {
     return Pedido(
       id: documentId,
-      utilizadorQueRealizaOpedido: Utilizador.fromMap(
-        map['utilizadorQueRealizaOpedido']['uid'] ?? '',
-        map['utilizadorQueRealizaOpedido'] as Map<String, dynamic>,
-      ),
-      oQuePretendeFazer: Funcionalidade.fromMap(
-        map['oQuePretendeFazer'] as Map<String, dynamic>,
-        map['oQuePretendeFazer']['id'] ?? '',
-      ),
-      animalRequesitado: Animal.fromMap(
-        map['animalRequesitado'] as Map<String, dynamic>,
-      ),
-      associacao: Associacao.fromMap(
-        map['associacao']['uid'] ?? '',
-        map['associacao'] as Map<String, dynamic>,
-      ),
+      utilizadorId: map['utilizadorQueRealizaOpedido'] ?? '',
+      funcionalidade: map['oQuePretendeFazer'] ?? '',
+      animalId: map['animalRequesitado'] ?? '',
+      associacaoId: map['associacao'] ?? '',
       confirmouTodosOsRequisitos: map['confirmouTodosOsRequisitos'] ?? false,
       mensagemAdicional: map['mensagemAdicional'] ?? '',
       estado: map['estado'] ?? '',
-      dadosPrenchidos: List<String>.from(map['dadosPrenchidos'] ?? []),
+      dadosPrenchidos: Map<String, dynamic>.from(map['dadosPreenchidos'] ?? {}),
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'utilizadorQueRealizaOpedido': utilizadorQueRealizaOpedido.toMap(),
-      'oQuePretendeFazer': oQuePretendeFazer.toMap(),
-      'animalRequesitado': animalRequesitado.toMap(),
-      'associacao': associacao.toMap(),
+      'utilizadorQueRealizaOpedido': utilizadorId,
+      'oQuePretendeFazer': funcionalidade,
+      'animalRequesitado': animalId,
+      'associacao': associacaoId,
       'confirmouTodosOsRequisitos': confirmouTodosOsRequisitos,
       'mensagemAdicional': mensagemAdicional,
       'estado': estado,
-      'dadosPrenchidos': dadosPrenchidos,
+      'dadosPreenchidos': dadosPrenchidos,
     };
   }
+
+
+  Future<void> atualizarEstadoNoFirestore(String novoEstado) async {
+    final firestore = FirebaseFirestore.instance;
+
+    await firestore.collection("pedidosENotificacoes").doc(id).update({
+      'estado': novoEstado,
+    });
+
+    estado = novoEstado; // Atualiza localmente também
+  }
+
 }
