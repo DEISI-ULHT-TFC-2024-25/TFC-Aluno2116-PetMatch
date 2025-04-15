@@ -35,6 +35,8 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
   bool temAlergias = false;
   bool estaEsterilizado = false;
   bool aceitaRegras = false; // Para o popup de confirmação
+  String mensagemAdicional = "";
+
 
 
   Future<void> _submeterFormulario() async {
@@ -54,7 +56,7 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
         "animalRequesitado": uidAnimal,
         "associacao": uidAssociacao,
         "confirmouTodosOsRequisitos": aceitaRegras,
-        "mensagemAdicional": "",
+        "mensagemAdicional": mensagemAdicional,
         "estado": "pendente",
         "dataCriacao": FieldValue.serverTimestamp(),
 
@@ -242,9 +244,9 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
             ElevatedButton(
               onPressed: aceitaRegras
                   ? () async {
-                await _submeterFormulario(); // 📝 Primeiro grava os dados no Firestore
-                Navigator.of(context).pop(); // 🔄 Fecha o popup depois de salvar
-                _mostrarPopupFinal(); // 🎉 Mostra o popup final
+                Navigator.of(context).pop(); // 🔄 Fecha o popup de regras
+                _mostrarPopupFinal();       // ✨ Abre o popup para submeter (com mensagem opcional)
+
               }
                   : null,
               child: Text("Aceitar ✅"),
@@ -261,38 +263,61 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("🐶 Passeio Registado com Sucesso!"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text("Obrigado por registar o passeio!"),
-              SizedBox(height: 10),
+        bool mostrarCampoMensagem = false;
+        TextEditingController mensagemController = TextEditingController();
 
-              SizedBox(height: 10),
-              Text(
-                "📸 Lembra-te de tirar fotos do passeio!\nPodes enviá-las para partilhar a experiência.",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text("🐶 Passeio Registado com Sucesso!"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text("Obrigado por registar o passeio!"),
+                  SizedBox(height: 10),
+                  Text(
+                    "📸 Lembra-te de tirar fotos do passeio!\nPodes enviá-las para partilhar a experiência.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  ),
+                  if (mostrarCampoMensagem)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16.0),
+                      child: TextField(
+                        controller: mensagemController,
+                        maxLines: 4,
+                        decoration: InputDecoration(
+                          labelText: "Mensagem adicional",
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                ],
               ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              child: Text("Fechar"),
-              onPressed: () {
-                //Navigator.of(context).pushReplacement(
-                  //MaterialPageRoute(builder: (context) => VizualizarAssociacaoScreen()),
-                //);
-              },
-            ),
-          ],
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      mostrarCampoMensagem = !mostrarCampoMensagem;
+                    });
+                  },
+                  child: Text(mostrarCampoMensagem ? "Esconder mensagem" : "Adicionar mensagem ✍️"),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    setState(() {
+                      mensagemAdicional = mensagemController.text;
+                    });
+                    Navigator.of(context).pop(); // fecha popup
+                    await _submeterFormulario(); // guarda os dados
+                  },
+                  child: Text("Submeter ✅"),
+                ),
+              ],
+            );
+          },
         );
       },
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Formulário submetido com sucesso! ✅")),
     );
   }
 }

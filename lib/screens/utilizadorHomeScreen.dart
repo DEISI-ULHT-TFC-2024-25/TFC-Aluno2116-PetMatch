@@ -226,6 +226,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                             builder: (context) => AllAnimalsList(
                               animais: animais,
                               isAssociacao: false,
+                              uidAssociacao: " ",
                             )));
                   },
                   child: Text("Ver todos"),

@@ -150,7 +150,7 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => AllAnimalsList(animais: animals, isAssociacao: false),
+                  builder: (context) => AllAnimalsList(animais: animals, isAssociacao: false, uidAssociacao: uid),
                 ),
               );
             },
@@ -176,7 +176,7 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => AllAnimalsList(animais: animals, isAssociacao: false),
+                  builder: (context) => AllAnimalsList(animais: animals, isAssociacao: false, uidAssociacao: uid),
                 ),
               );
             },
@@ -187,7 +187,7 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => TornarPadrinhoScreen(),
+                  builder: (context) => TornarPadrinhoScreen(uidAssociacao: uid),
                 ),
               );
             },
@@ -231,7 +231,7 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => TornarFAT(),
+                  builder: (context) => TornarFAT(uidAssociacao: uid),
                 ),
               );
             },

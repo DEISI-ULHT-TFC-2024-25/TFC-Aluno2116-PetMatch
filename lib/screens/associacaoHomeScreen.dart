@@ -156,7 +156,7 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AllAnimalsList(animais: animais, isAssociacao: true),
+                      builder: (context) => AllAnimalsList(animais: animais, isAssociacao: true, uidAssociacao: associacao.uid),
                     ),
                   );
                 },

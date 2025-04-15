@@ -9,17 +9,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class AnimalDetailsScreen extends StatelessWidget {
   final Animal animal;
   final bool isAssoci;
+  final String uidAssociacao;
+
 
   const AnimalDetailsScreen({
     super.key,
     required this.animal,
     required this.isAssoci,
+    required this.uidAssociacao,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final primaryColor = theme.colorScheme.primary;
+    final String uid = uidAssociacao;
 
     final String fullName = animal.fullName;
     final int age = animal.age;
@@ -114,7 +118,7 @@ class AnimalDetailsScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const TornarPadrinhoScreen()),
+                        MaterialPageRoute(builder: (context) => TornarPadrinhoScreen(uidAssociacao: uid)),
                       );
                     },
                     child: const Text("Apadrinhar este animal 🐾"),

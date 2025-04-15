@@ -4,10 +4,12 @@ import 'package:tinder_para_caes/screens/animalDetailsScreen.dart';
 import 'package:tinder_para_caes/screens/adicionarAnimalScreen.dart';
 
 class AllAnimalsList extends StatelessWidget {
+  final String uidAssociacao;
+
   final List<Animal?> animais ;
   final bool isAssociacao;
 
-  const AllAnimalsList({super.key, required this.animais, required this.isAssociacao});
+  const AllAnimalsList({super.key, required this.animais, required this.isAssociacao, required this.uidAssociacao});
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,7 @@ class AllAnimalsList extends StatelessWidget {
                           builder: (context) => AnimalDetailsScreen(
                             animal: animal,
                             isAssoci: isAssociacao,
+                            uidAssociacao: uidAssociacao
                           ),
                         ),
                       );

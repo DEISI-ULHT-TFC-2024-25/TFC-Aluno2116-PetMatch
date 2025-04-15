@@ -4,15 +4,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class TornarPadrinhoScreen extends StatefulWidget {
-  const TornarPadrinhoScreen({super.key});
+  final String uidAssociacao;
+
+  const TornarPadrinhoScreen({super.key, required this.uidAssociacao});
 
   @override
   _TornarPadrinhoScreenState createState() => _TornarPadrinhoScreenState();
 }
 
+
 class _TornarPadrinhoScreenState extends State<TornarPadrinhoScreen> {
   final _formKey = GlobalKey<FormState>();
   bool aceitaRegras = false;
+  String mensagemAdicional = "";
 
   // Controladores dos campos
   final TextEditingController nomeController = TextEditingController();
@@ -74,14 +78,18 @@ class _TornarPadrinhoScreenState extends State<TornarPadrinhoScreen> {
               SizedBox(height: 20),
               Center(
                 child: ElevatedButton(
-                  onPressed: () async {
+                  onPressed: () {
                     if (_formKey.currentState!.validate() && aceitaRegras) {
-                      await _submeterFormulario(); // Salva no Firestore
-                      _mostrarPopupConfirmacao(); // Mostra o popup após salvar
+                      _mostrarPopupMensagemFinal(); // ← Mostra o popup com opção de mensagem
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Por favor, preencha todos os campos e aceite os termos. ❗")),
+                      );
                     }
                   },
                   child: Text("Submeter Pedido ✅"),
                 ),
+
               ),
             ],
           ),
@@ -132,34 +140,37 @@ class _TornarPadrinhoScreenState extends State<TornarPadrinhoScreen> {
     );
   }
 
-  /// Função para salvar no Firebase Firestore
+  /// Função para guardar no Firebase Firestore
   Future<void> _submeterFormulario() async {
     try {
-      // Obtém o ID do utilizador autenticado
-      String uidAssociacao = FirebaseAuth.instance.currentUser?.uid ?? "desconhecido";
+      final firestore = FirebaseFirestore.instance;
+      final currentUser = FirebaseAuth.instance.currentUser;
 
-      // Referência ao Firestore
-      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      final String uidUtilizador = currentUser?.uid ?? "desconhecido";
+      final String uidAssociacao = widget.uidAssociacao;
 
-      // Criar um novo pedido na subcoleção "apadrinhar"
-      await firestore
-          .collection("pedidoENotificacoes") // 📂 Coleção principal
-          .doc(uidAssociacao) // 📄 Documento do utilizador
-          .collection("apadrinhar") // 📂 Subcoleção específica
-          .add({
-        "nomeCompleto": nomeController.text,
-        "morada": moradaController.text,
-        "codigoPostal": codigoPostalController.text,
-        "localidade": localidadeController.text,
-        "email": emailController.text,
-        "telemovel": telemovelController.text,
-        "nomeAnimal": nomeAnimalController.text,
-        "tipoApadrinhamento": selectedOpcao,
-        "status": "pendente", // Pedido começa como "pendente"
-        "dataCriacao": FieldValue.serverTimestamp(), // Timestamp automático
+      await firestore.collection("pedidosENotificacoes").add({
+        "utilizadorQueRealizaOpedido": uidUtilizador,
+        "oQuePretendeFazer": "Apadrinhar",
+        "animalRequesitado": "", // ← futuramente pode ser o UID do animal
+        "associacao": uidAssociacao,
+        "confirmouTodosOsRequisitos": aceitaRegras,
+        "mensagemAdicional": mensagemAdicional,
+        "estado": "pendente",
+        "dataCriacao": FieldValue.serverTimestamp(),
+
+        "dadosPreenchidos": {
+          "nomeCompleto": nomeController.text,
+          "morada": moradaController.text,
+          "codigoPostal": codigoPostalController.text,
+          "localidade": localidadeController.text,
+          "email": emailController.text,
+          "telemovel": telemovelController.text,
+          "nomeAnimal": nomeAnimalController.text,
+          "tipoApadrinhamento": selectedOpcao,
+        }
       });
 
-      // Mensagem de sucesso
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Pedido submetido com sucesso! ✅")),
       );
@@ -173,26 +184,60 @@ class _TornarPadrinhoScreenState extends State<TornarPadrinhoScreen> {
   }
 
   /// Popup de confirmação após submissão
-  void _mostrarPopupConfirmacao() {
+  void _mostrarPopupMensagemFinal() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("🎉 Pedido de Apadrinhamento Confirmado!"),
-          content: Text("Obrigado por querer ajudar! Em breve, entraremos em contacto."),
-          actions: [
-            TextButton(
-              child: Text("Fechar"),
-              onPressed: () {
-                //Navigator.pushReplacement(
-                  //context,
-                  //MaterialPageRoute(builder: (context) => VizualizarAssociacaoScreen()),
-                //);
-              },
-            ),
-          ],
+        bool mostrarCampoMensagem = false;
+        TextEditingController mensagemController = TextEditingController();
+
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text("✨ Enviar Pedido de Apadrinhamento"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text("Deseja adicionar uma mensagem adicional?"),
+                  if (mostrarCampoMensagem)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: TextField(
+                        controller: mensagemController,
+                        maxLines: 4,
+                        decoration: InputDecoration(
+                          labelText: "Mensagem adicional",
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      mostrarCampoMensagem = !mostrarCampoMensagem;
+                    });
+                  },
+                  child: Text(mostrarCampoMensagem ? "Esconder mensagem" : "Adicionar mensagem ✍️"),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    setState(() {
+                      mensagemAdicional = mensagemController.text;
+                    });
+                    Navigator.of(context).pop();
+                    await _submeterFormulario();
+                  },
+                  child: Text("Submeter ✅"),
+                ),
+              ],
+            );
+          },
         );
       },
     );
   }
+
 }

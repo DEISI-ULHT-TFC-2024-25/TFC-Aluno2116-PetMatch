@@ -3,11 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class TornarFAT extends StatefulWidget {
-  const TornarFAT({super.key});
-
+  final String uidAssociacao;
+  const TornarFAT({super.key, required this.uidAssociacao});
   @override
   _TornarFATState createState() => _TornarFATState();
 }
+
 
 class _TornarFATState extends State<TornarFAT> {
   final _formKey = GlobalKey<FormState>();
@@ -19,6 +20,8 @@ class _TornarFATState extends State<TornarFAT> {
   bool teveGatos = false;
   bool conscienteBarulho = false;
   bool condicaoFisica = false;
+  String mensagemAdicional = "";
+
 
   // Controladores de texto
   final TextEditingController nomeController = TextEditingController();
@@ -81,8 +84,7 @@ class _TornarFATState extends State<TornarFAT> {
                 child: ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      await _submeterFormulario(); // Guarda no Firestore
-                      _mostrarPopupConfirmacao(); // Mostra popup após salvar
+                      _mostrarPopupConfirmacao();
                     }
                   },
                   child: Text("Submeter Candidatura ✅"),
@@ -135,7 +137,7 @@ class _TornarFATState extends State<TornarFAT> {
     );
   }
 
-  /// Checkbox genérico
+
   Widget _buildCheckbox(String label, Function(bool) onChanged) {
     return CheckboxListTile(
       title: Text(label),
@@ -146,43 +148,53 @@ class _TornarFATState extends State<TornarFAT> {
     );
   }
 
-  /// Função para salvar no Firebase Firestore
   Future<void> _submeterFormulario() async {
     try {
-      // Obtém o ID do utilizador autenticado
-      String uidAssociacao = FirebaseAuth.instance.currentUser?.uid ?? "desconhecido";
+      final firestore = FirebaseFirestore.instance;
+      final currentUser = FirebaseAuth.instance.currentUser;
 
-      // Referência ao Firestore
-      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      final String uidUtilizador = currentUser?.uid ?? "desconhecido";
+      final String uidAssociacao = widget.uidAssociacao;
 
-      // Criar um novo pedido na subcoleção "familiaAcolhimentoTemporario"
-      await firestore
-          .collection("pedidoENotificacoes") // 📂 Coleção principal
-          .doc(uidAssociacao) // 📄 Documento do utilizador
-          .collection("familiaAcolhimentoTemporario") // 📂 Subcoleção específica
-          .add({
-        "nomeCompleto": nomeController.text,
-        "idade": int.tryParse(idadeController.text) ?? 0,
-        "morada": moradaController.text,
-        "codigoPostal": codigoPostalController.text,
-        "localidade": localidadeController.text,
-        "profissao": profissaoController.text,
-        "tipoHabitacao": tipoHabitacao,
-        "numPessoas": int.tryParse(numPessoasController.text) ?? 0,
-        "numCriancas": int.tryParse(numCriancasController.text) ?? 0,
-        "situacaoProfissional": situacaoProfissional,
-        "animaisCasa": animaisCasaController.text,
-        "teveGatos": teveGatos,
-        "conscienteBarulho": conscienteBarulho,
-        "aceitaWhatsApp": aceitaWhatsApp,
-        "condicaoFisica": condicaoFisica,
-        "motivacao": motivacaoController.text,
-        "status": "pendente",
+      await firestore.collection("pedidosENotificacoes").add({
+        "utilizadorQueRealizaOpedido": uidUtilizador,
+        "oQuePretendeFazer": "FamiliaAcolhimentoTemporario",
+        "animalRequesitado": "", // por agora vazio
+        "associacao": uidAssociacao,
+        "confirmouTodosOsRequisitos": true, // ou podes criar uma checkbox se quiseres
+        "mensagemAdicional": mensagemAdicional,
+        "estado": "pendente",
         "dataCriacao": FieldValue.serverTimestamp(),
+
+        "dadosPreenchidos": {
+          "nomeCompleto": nomeController.text,
+          "idade": int.tryParse(idadeController.text) ?? 0,
+          "morada": moradaController.text,
+          "codigoPostal": codigoPostalController.text,
+          "localidade": localidadeController.text,
+          "profissao": profissaoController.text,
+          "tipoHabitacao": tipoHabitacao,
+          "numPessoas": int.tryParse(numPessoasController.text) ?? 0,
+          "numCriancas": int.tryParse(numCriancasController.text) ?? 0,
+          "situacaoProfissional": situacaoProfissional,
+          "animaisCasa": animaisCasaController.text,
+          "teveGatos": teveGatos,
+          "conscienteBarulho": conscienteBarulho,
+          "aceitaWhatsApp": aceitaWhatsApp,
+          "condicaoFisica": condicaoFisica,
+          "motivacao": motivacaoController.text,
+        },
       });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Candidatura submetida com sucesso! ✅")),
+      );
 
     } catch (e) {
       print("Erro ao submeter candidatura: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Erro ao submeter a candidatura ❌")),
+      );
     }
   }
 
@@ -191,15 +203,57 @@ class _TornarFATState extends State<TornarFAT> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("🎉 Candidatura Enviada!"),
-          content: Text("Obrigado por se candidatar! Entraremos em contacto em breve."),
-          actions: [
-            TextButton(
-              child: Text("Fechar"),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
+        bool mostrarCampoMensagem = false;
+        TextEditingController mensagemController = TextEditingController();
+
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text("🎉 Candidatura pronta a enviar"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text("Deseja adicionar alguma mensagem adicional antes de submeter?"),
+                  if (mostrarCampoMensagem)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: TextField(
+                        controller: mensagemController,
+                        maxLines: 4,
+                        decoration: InputDecoration(
+                          labelText: "Mensagem adicional",
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text("Cancelar ❌"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      mostrarCampoMensagem = !mostrarCampoMensagem;
+                    });
+                  },
+                  child: Text(mostrarCampoMensagem ? "Esconder mensagem" : "Adicionar mensagem ✍️"),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    setState(() {
+                      mensagemAdicional = mensagemController.text;
+                    });
+                    Navigator.of(context).pop(); // Fecha o popup
+                    await _submeterFormulario(); // Submete com mensagem
+                  },
+                  child: Text("Submeter ✅"),
+                ),
+              ],
+            );
+          },
         );
       },
     );
