@@ -111,14 +111,14 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, decoration: TextDecoration.none),
               ),
               SizedBox(height: 16.0),
-              Text("Notificações", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, decoration: TextDecoration.none)),
+              Text("Pedidos:", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, decoration: TextDecoration.none)),
               SizedBox(height: 20.0),
 
               // Notifications List
               ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: pedidos.length,
+                itemCount: pedidos.length > 3 ? 3 : pedidos.length,
                 itemBuilder: (context, index) {
                   final pedido = pedidos[index];
                   return Card(
@@ -143,7 +143,7 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => AllPedidosList(pedidos: pedidos)));
                 },
-                child: Text("Ver todas"),
+                child: Text("Ver todos os pedidos pendentes"),
               ),
 
               // Animals Section
@@ -164,7 +164,7 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                   mainAxisSpacing: 8.0,
                   childAspectRatio: 1,
                 ),
-                itemCount: animais.length,
+                itemCount: animais.length> 9? 9: animais.length,
                 itemBuilder: (context, index) {
                   return Card(
                     color: Colors.brown[300],
