@@ -150,32 +150,6 @@ class Associacao {
   }
 
 
-  static Associacao procurarAssociacao(int id) {
-    if (id < 0 || id >= todasAssociacoes.length) {
-      throw Exception("Índice $id fora dos limites.");
-    }
-    return todasAssociacoes[id];
-  }
 }
 
-List<Associacao> todasAssociacoes = [
-  Associacao(
-    uid: "associacaoF456",
-    name: "Associação F",
-    distrito: "Porto",
-    nif: 0,
-    sigla: '',
-    generalEmail: '',
-    secundaryEmail: '',
-    mainCellphone: " ",
-    address: '',
-    secundaryCellphone: " ",
-    showAddress: false,
-    site: '',
-    funcionalidades: [],
-    animais: [],
-    pedidosRealizados: [],
-    eventos: [],
-    necessidades: [],
-  ),
-];
+

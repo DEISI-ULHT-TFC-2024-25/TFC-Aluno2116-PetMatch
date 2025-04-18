@@ -80,24 +80,4 @@ class Animal {
     return response.split('\n').map((line) => line.trim()).toList();
   }
 
-  static final List<Animal> todosAnimais = [
-    Animal(
-      chip: 1111,
-      fullName: "Nikitta Coelho",
-      age: 10,
-      sterilized: true,
-      gender: "Femenino",
-      legalOwner: "Catia Coelho",
-      allergies: "só ao juizo",
-      size: "Medium",
-      behavior: "Acusada injustamente de todos os danos causados em casa",
-      breed: "diabo-da-tasmânia",
-      species: "dog",
-      numeroDePasseiosDados: 0,
-      hasGodFather: true,
-      hasFat: false,
-      imagens: [],
-    ),
-
-  ];
 }

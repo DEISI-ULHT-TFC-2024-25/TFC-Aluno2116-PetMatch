@@ -61,7 +61,7 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
         "dataCriacao": FieldValue.serverTimestamp(),
 
         "dadosPreenchidos": {
-          "nomePasseador": nomePasseadorController.text,
+          "nomeCompleto": nomePasseadorController.text,
           "moradaFiscal": moradaFiscalController.text,
           "ccBi": ccBiController.text,
           "validadeCC": validadeCCController.text,

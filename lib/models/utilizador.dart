@@ -18,6 +18,7 @@ class Utilizador {
     List<Associacao> associacoesEmQueEstaEnvolvido;
     List<String> osSeusAnimais;
     bool associacao;
+    
 
     Utilizador({
         required this.uid,
@@ -102,40 +103,4 @@ class Utilizador {
     }
 
 
-    static final Utilizador user = Utilizador(
-        uid: "123456", //
-        nif: 1234567,
-        fullName: "Batata",
-        cellphone: " ",
-        isAdult: true,
-        gender: "Masculino",
-        email: "batata@ulusofona.pt",
-        address: "Campo Grande 376",
-        distrito: "Lisboa",
-        zipCode: "123456-123",
-        password: "123abc",
-        associacoesEmQueEstaEnvolvido: [
-            Associacao(
-                uid:"jfkd",
-                name: "Associação A",
-                distrito: "Lisboa",
-                nif: 0,
-                sigla: '',
-                generalEmail: '',
-                secundaryEmail: '',
-                mainCellphone: " ",
-                address: '',
-                secundaryCellphone: " ",
-                showAddress: false,
-                site: '',
-                eventos: [],
-                necessidades: [],
-                funcionalidades: [],
-                animais: [],
-                pedidosRealizados: [],
-            ),
-        ],
-        osSeusAnimais: [],
-        associacao: false,
-    );
 }

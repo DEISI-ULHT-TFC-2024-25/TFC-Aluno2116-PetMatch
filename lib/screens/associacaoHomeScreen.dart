@@ -87,19 +87,10 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
   }
 
 
-  Future<String> fetchNomeUtilizador(String uid) async {
-    final doc = await FirebaseFirestore.instance.collection('utilizadores').doc(uid).get();
-    return doc['fullName'] ?? 'Utilizador desconhecido';
-  }
-
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
     final associacao = Provider.of<AssociacaoProvider>(context).association;
+
 
     if (associacao == null || isLoading) {
       return const Scaffold(
@@ -133,7 +124,8 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                   return Card(
                     margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
                     child: ListTile(
-                      title: Text("Pedido de: ${pedido.utilizadorId}"), // Mostra o UID
+
+                      title: Text("Pedido de: ${pedido.dadosPrenchidos['nomeCompleto']}"),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

@@ -171,7 +171,7 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
         "dataCriacao": FieldValue.serverTimestamp(),
 
         "dadosPreenchidos": {
-          "nome": nomeController.text,
+          "nomeCompleto": nomeController.text,
           "morada": moradaController.text,
           "localidade": localidadeController.text,
           "codigoPostal": codigoPostalController.text,

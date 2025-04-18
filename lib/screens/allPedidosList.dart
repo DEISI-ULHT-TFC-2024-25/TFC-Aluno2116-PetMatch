@@ -63,7 +63,7 @@ class _AllPedidosListState extends State<AllPedidosList> {
                     children: [
                       Expanded(
                         child: Text(
-                          "Utilizador: ${pedido.utilizadorId}",
+                          "Utilizador: ${pedido.dadosPrenchidos['nomeCompleto']}",
                           softWrap: true,
                           overflow: TextOverflow.fade,
                           maxLines: 3, // Limita o número de linhas se quiseres
@@ -89,7 +89,8 @@ class _AllPedidosListState extends State<AllPedidosList> {
                   if (isExpanded) ...[
                     SizedBox(height: 8),
                     Text("Detalhes: ${pedido.mensagemAdicional ?? "Sem detalhes"}"),
-                    // Podes adicionar mais campos aqui conforme o modelo Pedido
+                    for (var entry in pedido.dadosPrenchidos.entries)
+                      Text('${entry.key}: ${entry.value}'),
                   ],
 
                   SizedBox(height: 12),
