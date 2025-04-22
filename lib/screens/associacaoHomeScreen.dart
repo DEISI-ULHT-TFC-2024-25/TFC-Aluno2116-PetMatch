@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/models/animal.dart';
@@ -125,8 +126,7 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                     margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
                     child: ListTile(
 
-                      title: Text("Pedido de: ${pedido.dadosPreenchidos['nomeCompleto'] ?? 'Nome indisponível'}"),
-
+                      title: Text("Pedido de: ${pedido.dadosPrenchidos['nomeCompleto']}"),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

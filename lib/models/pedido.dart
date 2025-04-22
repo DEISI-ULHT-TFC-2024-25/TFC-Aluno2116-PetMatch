@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseFirestore;
 
 class Pedido {
@@ -9,7 +10,7 @@ class Pedido {
   final bool confirmouTodosOsRequisitos;
   final String mensagemAdicional;
   String estado;
-  final Map<String, dynamic> dadosPreenchidos;
+  final Map<String, dynamic> dadosPrenchidos;
 
   Pedido({
     required this.id,
@@ -20,9 +21,8 @@ class Pedido {
     required this.confirmouTodosOsRequisitos,
     required this.mensagemAdicional,
     required this.estado,
-    required this.dadosPreenchidos,
+    required this.dadosPrenchidos,
   });
-
 
   factory Pedido.fromMap(Map<String, dynamic> map, String documentId) {
     return Pedido(
@@ -34,10 +34,9 @@ class Pedido {
       confirmouTodosOsRequisitos: map['confirmouTodosOsRequisitos'] ?? false,
       mensagemAdicional: map['mensagemAdicional'] ?? '',
       estado: map['estado'] ?? '',
-      dadosPreenchidos: Map<String, dynamic>.from(map['dadosPreenchidos'] ?? {}),
+      dadosPrenchidos: Map<String, dynamic>.from(map['dadosPreenchidos'] ?? {}),
     );
   }
-
 
   Map<String, dynamic> toMap() {
     return {
@@ -48,7 +47,7 @@ class Pedido {
       'confirmouTodosOsRequisitos': confirmouTodosOsRequisitos,
       'mensagemAdicional': mensagemAdicional,
       'estado': estado,
-      'dadosPreenchidos': dadosPreenchidos,
+      'dadosPreenchidos': dadosPrenchidos,
     };
   }
 

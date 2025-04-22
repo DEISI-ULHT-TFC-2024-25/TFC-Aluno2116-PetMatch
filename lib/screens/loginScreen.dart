@@ -132,7 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const Text(
                 "Bem-vindo",
                 style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.center, 
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
               TextField(
