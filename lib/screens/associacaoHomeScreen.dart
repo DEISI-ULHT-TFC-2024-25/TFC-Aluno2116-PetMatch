@@ -125,7 +125,8 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                     margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
                     child: ListTile(
 
-                      title: Text("Pedido de: ${pedido.dadosPrenchidos['nomeCompleto']}"),
+                      title: Text("Pedido de: ${pedido.dadosPreenchidos['nomeCompleto'] ?? 'Nome indisponível'}"),
+
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

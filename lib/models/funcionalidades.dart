@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 enum Funcionalidades {
-  passeiosDosCandeos,
+  passeioDeCao,
   apradinhamento,
   socios,
   partilhaEventos,
@@ -24,7 +24,7 @@ class Funcionalidade {
       id: id,
       tipo: Funcionalidades.values.firstWhere(
             (e) => e.toString() == data['tipo'],
-        orElse: () => Funcionalidades.passeiosDosCandeos,
+        orElse: () => Funcionalidades.passeioDeCao,
       ),
     );
   }
