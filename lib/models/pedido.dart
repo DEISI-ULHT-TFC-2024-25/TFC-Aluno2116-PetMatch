@@ -23,6 +23,7 @@ class Pedido {
     required this.dadosPrenchidos,
   });
 
+
   factory Pedido.fromMap(Map<String, dynamic> map, String documentId) {
     return Pedido(
       id: documentId,
