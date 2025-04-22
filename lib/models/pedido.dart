@@ -9,7 +9,7 @@ class Pedido {
   final bool confirmouTodosOsRequisitos;
   final String mensagemAdicional;
   String estado;
-  final Map<String, dynamic> dadosPrenchidos;
+  final Map<String, dynamic> dadosPreenchidos;
 
   Pedido({
     required this.id,
@@ -20,7 +20,7 @@ class Pedido {
     required this.confirmouTodosOsRequisitos,
     required this.mensagemAdicional,
     required this.estado,
-    required this.dadosPrenchidos,
+    required this.dadosPreenchidos,
   });
 
 
@@ -34,7 +34,7 @@ class Pedido {
       confirmouTodosOsRequisitos: map['confirmouTodosOsRequisitos'] ?? false,
       mensagemAdicional: map['mensagemAdicional'] ?? '',
       estado: map['estado'] ?? '',
-      dadosPrenchidos: Map<String, dynamic>.from(map['dadosPreenchidos'] ?? {}),
+      dadosPreenchidos: Map<String, dynamic>.from(map['dadosPreenchidos'] ?? {}),
     );
   }
 
@@ -48,7 +48,7 @@ class Pedido {
       'confirmouTodosOsRequisitos': confirmouTodosOsRequisitos,
       'mensagemAdicional': mensagemAdicional,
       'estado': estado,
-      'dadosPreenchidos': dadosPrenchidos,
+      'dadosPreenchidos': dadosPreenchidos,
     };
   }
 
