@@ -16,9 +16,7 @@ Eventos/noticias - Eventos que a Associação vai realizar numa determinada data
 
 TODO:--------------------------------------------------------- 
 Ecras
-- mostrar erros de registo, e de sucesso (popup)
-- limpar o isAssocicacao do firebaase e do codigo das classes (fazer a verificação do tipo de utilizador para as restrições de tipo de utilizador)
-- testar o login 
+
 
 Firebase:
 - 
@@ -29,6 +27,9 @@ DONE:-----------------------------------------------------------
 - animal (ids) nos objetos do utilizador e da associação
 - subcoleções das associações funcionalidades e eventos(DONE)
 - pagina para abrir os pedidos efectuados pelos uutilizadores
+- mostrar erros de registo, e de sucesso (popup)
+- limpar o isAssocicacao do firebaase e do codigo das classes (fazer a verificação do tipo de utilizador para as restrições de tipo de utilizador)
+- testar o login 
 
 
 
