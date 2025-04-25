@@ -38,8 +38,6 @@ TO DO LATER:----------------------------------------------------
 
 
 ERROS/PROBLEMAS:------------------------------------------------
-- login a entrar para o tipo de utilizador correto
-- API do mapa
-- aspeto (criar o tema)
+
 - politicas de privacidade e etc dos chats de mensagens ????
 - como fazer historico
