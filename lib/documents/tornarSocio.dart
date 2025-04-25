@@ -77,7 +77,7 @@ class _TornarSocioScreenState extends State<TornarSocioScreen> {
                   onPressed: () async {
                     if (_formKey.currentState!.validate() && aceitaRegras) {
                       _mostrarPopupMensagemFinal();
-                      // Mostra o popup após salvar
+
                     }
                   },
                   child: Text("Submeter Inscrição ✅"),
@@ -132,7 +132,7 @@ class _TornarSocioScreenState extends State<TornarSocioScreen> {
     );
   }
 
-  /// Função para salvar no Firebase Firestore
+  /// Função para Firestore
   Future<void> _submeterFormulario() async {
     try {
       final firestore = FirebaseFirestore.instance;

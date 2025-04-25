@@ -161,7 +161,7 @@ class _TornarFATState extends State<TornarFAT> {
         "oQuePretendeFazer": "FamiliaAcolhimentoTemporario",
         "animalRequesitado": "", // por agora vazio
         "associacao": uidAssociacao,
-        "confirmouTodosOsRequisitos": true, // ou podes criar uma checkbox se quiseres
+        "confirmouTodosOsRequisitos": true,
         "mensagemAdicional": mensagemAdicional,
         "estado": "pendente",
         "dataCriacao": FieldValue.serverTimestamp(),

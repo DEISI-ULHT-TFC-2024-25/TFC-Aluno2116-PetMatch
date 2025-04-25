@@ -151,7 +151,7 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
     );
   }
 
-  /// Função para salvar no Firebase Firestore
+  /// Função para Firestore
   Future<void> _submeterFormulario() async {
     try {
       final firestore = FirebaseFirestore.instance;
@@ -257,7 +257,6 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
       },
     );
   }
-
 
   TextStyle _titleStyle() => TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
 }

@@ -83,7 +83,7 @@ class _AllPedidosListState extends State<AllPedidosList> {
 
 
                   Text("Pretende: ${pedido.funcionalidade}"),
-                  Text("Associação: ${pedido.associacaoId}"),
+                  //Text("Associação: ${pedido.associacaoId}"),
                   Text("Estado atual: ${pedido.estado}"),
 
 

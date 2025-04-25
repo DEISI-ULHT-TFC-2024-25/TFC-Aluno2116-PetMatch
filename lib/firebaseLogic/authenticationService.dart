@@ -5,7 +5,6 @@ class Authenticationservice {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // 🔹 REGISTAR UTILIZADOR
   Future<User?> registerUtilizador(String email, String password, Map<String, dynamic> userData) async {
     try {
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
@@ -25,7 +24,7 @@ class Authenticationservice {
     }
   }
 
-  // 🔹 REGISTAR ASSOCIAÇÃO
+
   Future<User?> registerAssociacao(String email, String password, Map<String, dynamic> associacaoData) async {
     try {
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
@@ -66,12 +65,12 @@ class Authenticationservice {
     await _auth.signOut();
   }
 
-  // PEGAR Utilizador
+
   User? getCurrentUser() {
     return _auth.currentUser;
   }
 
-  //DADOS DO Utilizador
+
   Future<Map<String, dynamic>?> getUserData(String uid) async {
     DocumentSnapshot userDoc = await _firestore.collection("users").doc(uid).get();
     return userDoc.data() as Map<String, dynamic>?;
