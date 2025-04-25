@@ -1,9 +1,6 @@
-# tinder_para_caes
-
-- A colecção é um conjunto de objectos
-- O documento é um objecto (instância de classe)
-- O documento pode ter uma subcoleção
-
+# PetMatch
+Este projeto consiste no desenvolvimento de uma aplicação movel que visa facilitar e incentivar o envolvimento das pessoas com os animais de associações de proteção animal,
+promovendo uma maior interação e visibilidade tanto para os animais como para as próprias instituições.
 
 GLOSSARIO:--------------------------------------------------
 Utilizador - pessoa que se regista e usa a aplicação para contactar associações e/ou registar os seus p..e. animais.
@@ -14,21 +11,9 @@ Funcionalidades - São as "tarefas/acções" que a Associação aceita que um Ut
 Eventos/noticias - Eventos que a Associação vai realizar numa determinada data. Por exemplo: "Venha conhecer os nossos animais novos".
 
 
-TODO:--------------------------------------------------------- 
-Ecras
-- mostrar erros de registo, e de sucesso (popup)
-- limpar o isAssocicacao do firebaase e do codigo das classes (fazer a verificação do tipo de utilizador para as restrições de tipo de utilizador)
-- testar o login 
-
-Firebase:
-- 
 
 
 DONE:-----------------------------------------------------------
-- replicar as coleções Utilizador(DONE) e Associação(DONE) e pedidos/notificacoes e animal
-- animal (ids) nos objetos do utilizador e da associação
-- subcoleções das associações funcionalidades e eventos(DONE)
-- pagina para abrir os pedidos efectuados pelos uutilizadores
 
 
 
@@ -37,8 +22,9 @@ TO DO LATER:----------------------------------------------------
 
 
 ERROS/PROBLEMAS:------------------------------------------------
-- login a entrar para o tipo de utilizador correto
-- API do mapa
-- aspeto (criar o tema)
-- politicas de privacidade e etc dos chats de mensagens ????
+- politicas de privacidade e etc dos chats de mensagens
 - como fazer historico
+----------------------------------------------
+- A colecção é um conjunto de objectos
+- O documento é um objecto (instância de classe)
+- O documento pode ter uma subcoleção
