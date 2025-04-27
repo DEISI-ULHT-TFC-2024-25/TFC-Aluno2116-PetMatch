@@ -2,6 +2,19 @@
 Este projeto consiste no desenvolvimento de uma aplicação movel que visa facilitar e incentivar o envolvimento das pessoas com os animais de associações de proteção animal,
 promovendo uma maior interação e visibilidade tanto para os animais como para as próprias instituições.
 
+
+## Indicações de Instalação:
+
+Para instalação e utilização desta aplicação é necessário nesta fase ter o android studio,
+é aconselhado fazer a clonagem do projeto através do GitHub e abrir o mesmo no android studio;
+no terminal executar a linha de comando "flutter pub get", 
+de seguida escolher o dispositivo onde pretende executar a aplicação 
+(se for num telemóvel android é necessário ligar ao computador o telemóvel por cabo ) 
+e de seguida executar o Run
+
+-----------------------------------------------------------------------------------------------
+
+
 GLOSSARIO:--------------------------------------------------
 Utilizador - pessoa que se regista e usa a aplicação para contactar associações e/ou registar os seus p..e. animais.
 Associação - Associação de protecção dos animais. Procuram voluntários para ajudar em tarefas diversas: passear os animais, levar comida, dar banho, etc.
@@ -12,8 +25,6 @@ Eventos/noticias - Eventos que a Associação vai realizar numa determinada data
 
 
 
-
-DONE:-----------------------------------------------------------
 
 
 
