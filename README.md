@@ -27,7 +27,6 @@ Eventos/noticias - Eventos que a Associação vai realizar numa determinada data
 
 
 
-
 TO DO LATER:----------------------------------------------------
 1  botão para historico de caes (home screen do utilizador)
 
