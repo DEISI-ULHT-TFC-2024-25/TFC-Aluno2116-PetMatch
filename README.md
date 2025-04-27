@@ -1,16 +1,16 @@
 # PetMatch
-Este projeto consiste no desenvolvimento de uma aplicação movel que visa facilitar e incentivar o envolvimento das pessoas com os animais de associações de proteção animal,
+Este projeto consiste no desenvolvimento de uma aplicação móvel que visa facilitar e incentivar o envolvimento das pessoas com os animais de associações de proteção animal,
 promovendo uma maior interação e visibilidade tanto para os animais como para as próprias instituições.
 
 
 ## Indicações de Instalação:
 
-Para instalação e utilização desta aplicação é necessário nesta fase ter o android studio,
-é aconselhado fazer a clonagem do projeto através do GitHub e abrir o mesmo no android studio;
-no terminal executar a linha de comando "flutter pub get", 
-de seguida escolher o dispositivo onde pretende executar a aplicação 
-(se for num telemóvel android é necessário ligar ao computador o telemóvel por cabo ) 
-e de seguida executar o Run
+1. Para instalação e utilização desta aplicação é necessário nesta fase ter o android studio,
+2. é aconselhado fazer a clonagem do projeto através do GitHub e abrir o mesmo no android studio;
+3. no terminal executar a linha de comando "flutter pub get", 
+4. de seguida escolher o dispositivo onde pretende executar a aplicação 
+5. (se for num telemóvel android é necessário ligar ao computador o telemóvel por cabo ) 
+6. Executar o programa carregando em Run
 
 -----------------------------------------------------------------------------------------------
 
