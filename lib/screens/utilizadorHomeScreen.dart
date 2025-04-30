@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tinder_para_caes/models/associacao.dart';
+import 'package:tinder_para_caes/models/pedido.dart';
+import 'package:tinder_para_caes/screens/allPedidosAceitesList.dart';
 import 'package:tinder_para_caes/screens/vizualizarAssociacaoScreen.dart';
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/screens/adicionarAnimalScreen.dart';
@@ -23,6 +25,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
   List<Associacao> sugestoesAssociacoes = [];
   late GoogleMapController mapController;
   bool isFullScreen = false;
+  List <Pedido> pedidosAceites = [];
 
   BitmapDescriptor? _iconePatinha;
   final Set<Marker> _marcadores = {};
@@ -180,7 +183,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
       );
     }
 
-    List<Associacao> associacoesEnvolvido = utilizador.associacoesEmQueEstaEnvolvido;
+    //List<Associacao> associacoesEnvolvido = utilizador.associacoesEmQueEstaEnvolvido;
 
       return Scaffold(
         appBar: AppBar(
@@ -218,76 +221,85 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                     )),
                   ],
                 ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AllAnimalsList(
-                              animais: animais,
-                              isAssociacao: false,
-                              uidAssociacao: " ",
-                            )));
-                  },
-                  child: Text("Ver todos"),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AdicionarAnimalScreen()));
-                  },
-                  child: Text("Adicionar patudo"),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AllAnimalsList(
+                                animais: animais,
+                                isAssociacao: false,
+                                uidAssociacao: " ",
+                              ),
+                            ),
+                          );
+                        },
+                        child: Text("Ver todos"),
+                      ),
+                    ),
+                    SizedBox(width: 8), // Espaçamento entre os botões
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AdicionarAnimalScreen(),
+                            ),
+                          );
+                        },
+                        child: Text("Adicionar patudo"),
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(height: 16.0),
                 Text(
-                  "Associações em que está envolvido",
+                  "Notificações: ",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 8.0),
                 SizedBox(
-                  height: (associacoesEnvolvido.length > 4)
+                  height: (pedidosAceites.length > 4)
                       ? 300
-                      : associacoesEnvolvido.length * 75.0,
+                      : pedidosAceites.length * 75.0,
                   child: Column(
                     children: [
                       Expanded(
                         child: ListView.builder(
                           shrinkWrap: true,
-                          itemCount: associacoesEnvolvido.length > 4 ? 4 : associacoesEnvolvido.length,
+                          itemCount: pedidosAceites.length > 4 ? 4 : pedidosAceites.length,
                           itemBuilder: (context, index) {
-                            final associacao = associacoesEnvolvido[index];
+                            final pedido = pedidosAceites[index];
                             return Card(
                               margin: EdgeInsets.symmetric(vertical: 4.0),
                               child: ListTile(
-                                title: Text(associacao.name),
-                                subtitle: Text("Localidade: ${associacao.distrito}"),
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => VizualizarAssociacaoScreen(associacao: associacao,),
-                                    ),
-                                  );
-                                },
+                                title: Text(pedido.funcionalidade ?? 'Ação não disponivel'),
+                                subtitle: Text("Associação: ${pedido.estado ?? 'Desconhecida'}"),
                               ),
                             );
                           },
                         ),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => AllAssociacoesList(associacoes: associacoesEnvolvido))
-                          );
-                        },
-                        child: Text("Ver todas"),
-                      ),
+
                     ],
                   ),
                 ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AllPedidosAceitesList(pedidos: pedidosAceites),
+                      ),
+                    );
+                  },
+                  child: Text("Ver todos os pedidos aceites"),
+                ),
+
                 SizedBox(height: 16.0),
                 Text(
                   "Sugestões de Associações",
