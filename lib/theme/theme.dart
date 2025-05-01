@@ -27,6 +27,29 @@ final ThemeData lightTheme = ThemeData(
     backgroundColor: Colors.brown[500],
     foregroundColor: Colors.white,
   ),
+  textButtonTheme: TextButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: Colors.brown[400],
+      foregroundColor: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    ),
+  ),
+  cardTheme: CardTheme(
+    color: Colors.white,
+    elevation: 3,
+    margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+  ),
+  listTileTheme: ListTileThemeData(
+    tileColor: Colors.white,
+    contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+    iconColor: Colors.brown[600],
+    textColor: Colors.brown[900],
+  ),
+  dividerTheme: DividerThemeData(
+    color: Colors.brown[200],
+    thickness: 1,
+  ),
 
 );
 
@@ -56,5 +79,30 @@ final ThemeData darkTheme = ThemeData(
     backgroundColor: Colors.brown[700],
     foregroundColor: Colors.white,
   ),
+  textButtonTheme: TextButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: Colors.brown[800],
+      foregroundColor: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    ),
+  ),
+  cardTheme: CardTheme(
+    color: Colors.brown[800],
+    elevation: 3,
+    margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+  ),
+  listTileTheme: ListTileThemeData(
+    tileColor: Colors.brown[800],
+    contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+    iconColor: Colors.brown[100],
+    textColor: Colors.white,
+  ),
+  dividerTheme: DividerThemeData(
+    color: Colors.brown[700],
+    thickness: 1,
+  ),
+
+
 
 );

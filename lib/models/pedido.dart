@@ -5,7 +5,7 @@ class Pedido {
   final String id;
   final String utilizadorId;
   final String funcionalidade; // Ex: "Apadrinhar", "TornarSocio", etc.
-  final String animalId;
+  final String utilizadorUid;
   final String associacaoId;
   final bool confirmouTodosOsRequisitos;
   final String mensagemAdicional;
@@ -16,7 +16,7 @@ class Pedido {
     required this.id,
     required this.utilizadorId,
     required this.funcionalidade,
-    required this.animalId,
+    required this.utilizadorUid,
     required this.associacaoId,
     required this.confirmouTodosOsRequisitos,
     required this.mensagemAdicional,
@@ -29,7 +29,7 @@ class Pedido {
       id: documentId,
       utilizadorId: map['utilizadorQueRealizaOpedido'] ?? '',
       funcionalidade: map['oQuePretendeFazer'] ?? '',
-      animalId: map['animalRequesitado'] ?? '',
+      utilizadorUid: map['utilizadorUid'] ?? '',
       associacaoId: map['associacao'] ?? '',
       confirmouTodosOsRequisitos: map['confirmouTodosOsRequisitos'] ?? false,
       mensagemAdicional: map['mensagemAdicional'] ?? '',
@@ -42,7 +42,7 @@ class Pedido {
     return {
       'utilizadorQueRealizaOpedido': utilizadorId,
       'oQuePretendeFazer': funcionalidade,
-      'animalRequesitado': animalId,
+      'utilizadorUid': utilizadorUid,
       'associacao': associacaoId,
       'confirmouTodosOsRequisitos': confirmouTodosOsRequisitos,
       'mensagemAdicional': mensagemAdicional,
@@ -54,11 +54,9 @@ class Pedido {
 
   Future<void> atualizarEstadoNoFirestore(String novoEstado) async {
     final firestore = FirebaseFirestore.instance;
-
     await firestore.collection("pedidosENotificacoes").doc(id).update({
       'estado': novoEstado,
     });
-
     estado = novoEstado; // Atualiza localmente também
   }
 

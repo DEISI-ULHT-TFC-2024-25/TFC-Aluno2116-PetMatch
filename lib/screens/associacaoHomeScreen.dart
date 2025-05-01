@@ -70,7 +70,7 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
       List<String> idsPedidos = documentos.map((doc) => doc.id).toList();
       associacao.pedidosRealizados = idsPedidos;
 
-      // Converte os documentos em objetos Pedido (assumindo que tens um fromFirestore)
+      // Converte os documentos em objetos Pedido
       List<Pedido> fetchedPedidos = documentos.map((doc) {
         return Pedido.fromMap(doc.data() as Map<String, dynamic>, doc.id);
       }).toList();
@@ -80,7 +80,7 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
         isLoading = false;
       });
     } catch (e) {
-      print("Erro ao buscar pedidos: $e");
+      print("Erro nos pedidos: $e");
       setState(() {
         isLoading = false;
       });
@@ -130,7 +130,7 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Animal: ${pedido.animalId}", maxLines: 2, overflow: TextOverflow.ellipsis),
+                          Text("Animal: ${pedido.utilizadorUid}", maxLines: 2, overflow: TextOverflow.ellipsis),
                           Text("Pretende: ${pedido.funcionalidade}"),
                         ],
                       ),

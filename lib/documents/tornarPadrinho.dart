@@ -150,9 +150,8 @@ class _TornarPadrinhoScreenState extends State<TornarPadrinhoScreen> {
       final String uidAssociacao = widget.uidAssociacao;
 
       await firestore.collection("pedidosENotificacoes").add({
-        "utilizadorQueRealizaOpedido": uidUtilizador,
+        "uidUtilizador": uidUtilizador,
         "oQuePretendeFazer": "Apadrinhar",
-        "animalRequesitado": "", // ← futuramente pode ser o UID do animal
         "associacao": uidAssociacao,
         "confirmouTodosOsRequisitos": aceitaRegras,
         "mensagemAdicional": mensagemAdicional,

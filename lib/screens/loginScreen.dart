@@ -131,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
             children: <Widget>[
               const Text(
                 "Bem-vindo",
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 24),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),

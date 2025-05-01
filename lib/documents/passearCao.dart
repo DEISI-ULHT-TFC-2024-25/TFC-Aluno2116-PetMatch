@@ -51,9 +51,8 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
 
 
       final docRef = await firestore.collection("pedidosENotificacoes").add({
-        "utilizadorQueRealizaOpedido": uidUtilizador,
         "oQuePretendeFazer": "PassearCao",
-        "animalRequesitado": uidAnimal,
+        "utilizadorUid": uidUtilizador,
         "associacao": uidAssociacao,
         "confirmouTodosOsRequisitos": aceitaRegras,
         "mensagemAdicional": mensagemAdicional,

@@ -142,9 +142,8 @@ class _TornarSocioScreenState extends State<TornarSocioScreen> {
       final String uidAssociacao = widget.uidAssociacao;
 
       await firestore.collection("pedidosENotificacoes").add({
-        "utilizadorQueRealizaOpedido": uidUtilizador,
+        "uidUtilizador": uidUtilizador,
         "oQuePretendeFazer": "TornarSocio",
-        "animalRequesitado": "",
         "associacao": uidAssociacao,
         "confirmouTodosOsRequisitos": aceitaRegras,
         "mensagemAdicional": mensagemAdicional,

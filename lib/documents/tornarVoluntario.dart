@@ -31,106 +31,6 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
   bool aceitaRegras = false;
   String mensagemAdicional = "";
 
-
-  Map<String, bool> tasks = {
-    "Campanhas de Angariação de alimentação e outros produtos": false,
-    "Venda em Feiras de bens doados à Associação": false,
-    "Conhecimentos de construção (arranjos no nosso abrigo)": false,
-    "Ajuda na captura de animais em risco": false,
-    "Limpeza das boxes e passear animais no nosso abrigo": false,
-    "Boleias aos animais (de/para o abrigo ou clínicas/veterinários)": false,
-    "Ser FAT de cães": false,
-    "Disponibilidade para fazer recobro de animais": false,
-  };
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Tornar-se Voluntário 🏠"),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("📌 Dados Pessoais", style: _titleStyle()),
-              _buildTextField("Nome", nomeController),
-              _buildTextField("Morada", moradaController),
-              _buildTextField("Localidade", localidadeController),
-              _buildTextField("Código Postal", codigoPostalController),
-              _buildTextField("Telemóvel", telemovelController),
-              _buildTextField("Telefone", telefoneController),
-              _buildTextField("E-mail", emailController),
-              _buildTextField("CC/BI", ccController),
-              _buildTextField("Validade", validadeController),
-              _buildTextField("NIF", nifController),
-              SizedBox(height: 10),
-
-              Row(
-                children: [
-                  Text("🚗 Transporte Próprio"),
-                  Switch(
-                    value: hasTransport,
-                    onChanged: (value) {
-                      setState(() {
-                        hasTransport = value;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              SizedBox(height: 10),
-
-              Text("📋 Que tarefas está disponível para efectuar", style: _titleStyle()),
-              Column(
-                children: tasks.keys.map((String key) {
-                  return CheckboxListTile(
-                    title: Text(key),
-                    value: tasks[key],
-                    onChanged: (bool? value) {
-                      setState(() {
-                        tasks[key] = value ?? false;
-                      });
-                    },
-                  );
-                }).toList(),
-              ),
-              SizedBox(height: 10),
-
-              _buildTextField("Outras tarefas", outrasTarefasController),
-
-              CheckboxListTile(
-                title: Text("Confirmo que li e aceito as regras."),
-                value: aceitaRegras,
-                onChanged: (bool? value) {
-                  setState(() {
-                    aceitaRegras = value ?? false;
-                  });
-                },
-              ),
-              SizedBox(height: 20),
-
-              Center(
-                child: ElevatedButton(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate() && aceitaRegras) {
-                      _mostrarPopupMensagemFinal(); // Mostra o popup com opção de mensagem
-
-                    }
-                  },
-                  child: Text("Submeter Formulário ✅"),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   /// Função para capturar dados dos campos de texto
   Widget _buildTextField(String label, TextEditingController controller) {
     return Padding(
@@ -161,9 +61,8 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
       final String uidAssociacao = widget.uidAssociacao;
 
       await firestore.collection("pedidosENotificacoes").add({
-        "utilizadorQueRealizaOpedido": uidUtilizador,
+        "uidUtilizador": uidUtilizador,
         "oQuePretendeFazer": "TornarVoluntario",
-        "animalRequesitado": "",
         "associacao": uidAssociacao,
         "confirmouTodosOsRequisitos": aceitaRegras,
         "mensagemAdicional": mensagemAdicional,
@@ -176,7 +75,7 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
           "localidade": localidadeController.text,
           "codigoPostal": codigoPostalController.text,
           "telemovel": telemovelController.text,
-          "telefone": telefoneController.text,
+
           "email": emailController.text,
           "cc": ccController.text,
           "validade": validadeController.text,
@@ -258,5 +157,105 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
     );
   }
 
-  TextStyle _titleStyle() => TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
+
+
+  Map<String, bool> tasks = {
+    "Campanhas de Angariação de alimentação e outros produtos": false,
+    "Venda em Feiras de bens doados à Associação": false,
+    "Conhecimentos de construção (arranjos no nosso abrigo)": false,
+    "Ajuda na captura de animais em risco": false,
+    "Limpeza das boxes e passear animais no nosso abrigo": false,
+    "Boleias aos animais (de/para o abrigo ou clínicas/veterinários)": false,
+    "Ser FAT de cães": false,
+    "Disponibilidade para fazer recobro de animais": false,
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Tornar-se Voluntário 🏠"),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("📌 Dados Pessoais"),
+              _buildTextField("Nome", nomeController),
+              _buildTextField("Morada", moradaController),
+              _buildTextField("Localidade", localidadeController),
+              _buildTextField("Código Postal", codigoPostalController),
+              _buildTextField("Telemóvel", telemovelController),
+              _buildTextField("E-mail", emailController),
+              _buildTextField("CC/BI", ccController),
+              _buildTextField("Validade", validadeController),
+              _buildTextField("NIF", nifController),
+              SizedBox(height: 10),
+
+              Row(
+                children: [
+                  Text("🚗 Transporte Próprio"),
+                  Switch(
+                    value: hasTransport,
+                    onChanged: (value) {
+                      setState(() {
+                        hasTransport = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+
+              Text("📋 Que tarefas está disponível para efectuar"),
+              Column(
+                children: tasks.keys.map((String key) {
+                  return CheckboxListTile(
+                    title: Text(key),
+                    value: tasks[key],
+                    onChanged: (bool? value) {
+                      setState(() {
+                        tasks[key] = value ?? false;
+                      });
+                    },
+                  );
+                }).toList(),
+              ),
+              SizedBox(height: 10),
+
+              _buildTextField("Outras tarefas", outrasTarefasController),
+
+              CheckboxListTile(
+                title: Text("Confirmo que li e aceito as regras."),
+                value: aceitaRegras,
+                onChanged: (bool? value) {
+                  setState(() {
+                    aceitaRegras = value ?? false;
+                  });
+                },
+              ),
+              SizedBox(height: 20),
+
+              Center(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate() && aceitaRegras) {
+                      _mostrarPopupMensagemFinal(); // Mostra o popup com opção de mensagem
+
+                    }
+                  },
+                  child: Text("Submeter Formulário ✅"),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+
 }

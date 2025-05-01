@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tinder_para_caes/models/associacao.dart';
@@ -30,7 +31,6 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
   BitmapDescriptor? _iconePatinha;
   final Set<Marker> _marcadores = {};
 
-  //cordenadas a substituir pelas da associação
   LatLng _center = LatLng(38.7169, -9.1399); // Valor por defeito, será substituído
 
 
@@ -70,6 +70,48 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
       });
     }
     await Future.delayed(Duration(milliseconds: 10));
+  }
+
+
+  Future<void> _fetchPedidos() async {
+    final utilizador = Provider.of<UtilizadorProvider>(context, listen: false).user;
+
+    if (utilizador == null) {
+      setState(() {
+        isLoading = false;
+      });
+      return;
+    }
+
+    try {
+      final firestore = FirebaseFirestore.instance;
+
+      // Obtem todos os pedidos com utilizador == UID da associação logada
+      final querySnapshot = await firestore
+          .collection("pedidosENotificacoes")
+          .where("uidUtilizador", isEqualTo: utilizador.uid)
+          .where("estado", isEqualTo: "Aceite")
+          .get();
+
+      // Extrai lista de documentos
+      final documentos = querySnapshot.docs;
+
+
+      // Converte os documentos em objetos Pedido
+      List<Pedido> fetchedPedidos = documentos.map((doc) {
+        return Pedido.fromMap(doc.data() as Map<String, dynamic>, doc.id);
+      }).toList();
+
+      setState(() {
+        pedidosAceites = fetchedPedidos;
+        isLoading = false;
+      });
+    } catch (e) {
+      print("Erro nos pedidos: $e");
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
 

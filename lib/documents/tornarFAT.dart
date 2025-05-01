@@ -157,9 +157,8 @@ class _TornarFATState extends State<TornarFAT> {
       final String uidAssociacao = widget.uidAssociacao;
 
       await firestore.collection("pedidosENotificacoes").add({
-        "utilizadorQueRealizaOpedido": uidUtilizador,
+        "uidUtilizador": uidUtilizador,
         "oQuePretendeFazer": "FamiliaAcolhimentoTemporario",
-        "animalRequesitado": "", // por agora vazio
         "associacao": uidAssociacao,
         "confirmouTodosOsRequisitos": true,
         "mensagemAdicional": mensagemAdicional,
