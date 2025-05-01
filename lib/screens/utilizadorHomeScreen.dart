@@ -205,6 +205,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
 
   Future<void> _inicializarTudo() async {
     await _fetchAnimals();
+    await _fetchPedidos();
     await _fetchSugestoesAssociacoes();
     await _atualizarCenterComDistritoDoUtilizador();
     await _carregarIconePatinha();

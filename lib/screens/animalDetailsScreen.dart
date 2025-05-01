@@ -22,7 +22,7 @@ class AnimalDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final primaryColor = theme.colorScheme.primary;
+    final primaryColor = theme.primaryColor;
     final String uid = uidAssociacao;
 
     final String fullName = animal.fullName;
@@ -149,7 +149,7 @@ class AnimalDetailsScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
-          Icon(icon, color: theme.colorScheme.primary),
+          Icon(icon, color: theme.primaryColor),
           const SizedBox(width: 8),
           Text(
             label,

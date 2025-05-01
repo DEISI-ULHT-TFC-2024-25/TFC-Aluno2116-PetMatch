@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseFirestore;
 
 class Pedido {
   final String id;
-  final String utilizadorId;
   final String funcionalidade; // Ex: "Apadrinhar", "TornarSocio", etc.
   final String utilizadorUid;
   final String associacaoId;
@@ -14,9 +13,8 @@ class Pedido {
 
   Pedido({
     required this.id,
-    required this.utilizadorId,
-    required this.funcionalidade,
     required this.utilizadorUid,
+    required this.funcionalidade,
     required this.associacaoId,
     required this.confirmouTodosOsRequisitos,
     required this.mensagemAdicional,
@@ -27,9 +25,8 @@ class Pedido {
   factory Pedido.fromMap(Map<String, dynamic> map, String documentId) {
     return Pedido(
       id: documentId,
-      utilizadorId: map['utilizadorQueRealizaOpedido'] ?? '',
       funcionalidade: map['oQuePretendeFazer'] ?? '',
-      utilizadorUid: map['utilizadorUid'] ?? '',
+      utilizadorUid: map['Uidutilizador'] ?? '',
       associacaoId: map['associacao'] ?? '',
       confirmouTodosOsRequisitos: map['confirmouTodosOsRequisitos'] ?? false,
       mensagemAdicional: map['mensagemAdicional'] ?? '',
@@ -40,9 +37,8 @@ class Pedido {
 
   Map<String, dynamic> toMap() {
     return {
-      'utilizadorQueRealizaOpedido': utilizadorId,
       'oQuePretendeFazer': funcionalidade,
-      'utilizadorUid': utilizadorUid,
+      'Uidutilizador': utilizadorUid,
       'associacao': associacaoId,
       'confirmouTodosOsRequisitos': confirmouTodosOsRequisitos,
       'mensagemAdicional': mensagemAdicional,
