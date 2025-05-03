@@ -45,30 +45,26 @@ class _LoginScreenState extends State<LoginScreen> {
         throw Exception("❌ Error: User not found.");
       }
 
-      print("✅ Login successful! UID: ${user.uid}");
-
-
       DocumentSnapshot<Map<String, dynamic>> userSnapshot =
       await _firestore.collection('utilizador').doc(user.uid).get();
 
       String? userType;
 
       if (userSnapshot.exists) {
-        userType = "utilizador"; // Usuário normal
+        userType = "utilizador"; // Utilizador normal
       } else {
 
         DocumentSnapshot<Map<String, dynamic>> assocSnapshot =
         await _firestore.collection('associacao').doc(user.uid).get();
 
         if (assocSnapshot.exists) {
-          userType = "associacao"; // Usuário do tipo associação
+          userType = "associacao"; // utilizador do tipo associação
         }
       }
 
       if (userType == null) {
         throw Exception("⚠️ User type not found in Firestore!");
       }
-
       print(" User type: $userType");
 
 
