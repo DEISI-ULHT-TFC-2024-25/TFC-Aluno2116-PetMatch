@@ -8,6 +8,7 @@ import 'package:tinder_para_caes/screens/adicionarAnimalScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:tinder_para_caes/firebaseLogic/associacaoProvider.dart';
 import 'package:tinder_para_caes/screens/allPedidosList.dart';
+import 'package:tinder_para_caes/screens/loginScreen.dart';
 
 class AssociacaoHomeScreen extends StatefulWidget {
   const AssociacaoHomeScreen({super.key});
@@ -100,7 +101,20 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+              );
+            },
+          ),
+        ],
+      ),
+
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -189,7 +203,7 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                     ),
                   );
                 },
-                child: Text("Ver Animais"),
+                child: Text("Ver todos os animais"),
               ),
 
               Padding(

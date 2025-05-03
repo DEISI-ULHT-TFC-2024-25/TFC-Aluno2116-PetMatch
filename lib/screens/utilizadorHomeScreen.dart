@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tinder_para_caes/models/associacao.dart';
 import 'package:tinder_para_caes/models/pedido.dart';
 import 'package:tinder_para_caes/screens/allPedidosAceitesList.dart';
+import 'package:tinder_para_caes/screens/loginScreen.dart';
 import 'package:tinder_para_caes/screens/vizualizarAssociacaoScreen.dart';
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/screens/adicionarAnimalScreen.dart';
@@ -200,7 +201,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
   @override
   void initState() {
     super.initState();
-    _inicializarTudo(); // chama as funções por ordem certa
+    _inicializarTudo();
   }
 
   Future<void> _inicializarTudo() async {
@@ -219,18 +220,25 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
 
-
     if (utilizador == null) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
       );
     }
 
-    //List<Associacao> associacoesEnvolvido = utilizador.associacoesEmQueEstaEnvolvido;
-
       return Scaffold(
         appBar: AppBar(
-          //title: Text("Home Page - $utilizador.fullName"),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                );
+              },
+            ),
+          ],
         ),
         body: SingleChildScrollView(
           child: Padding(
