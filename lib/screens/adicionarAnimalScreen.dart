@@ -187,9 +187,7 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
                     "Chinchilas",
                     "Porquinhos da Índia",
                     "Cavalos",
-                    "Cacatuas",
                     "Ovelhas",
-                    "Peixes",
                     "Hamsters"
                   ].map((String value) {
                     return DropdownMenuItem<String>(
