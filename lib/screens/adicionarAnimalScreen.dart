@@ -34,6 +34,7 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
   String? _especie;
   bool _temPadrinho = false;
   bool _temFat = false;
+  bool _visivel = true;
 
   List<String> racas = [];
   List<String> _racasFiltradas = [];
@@ -293,7 +294,12 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
     CollectionReference associacoesRef = FirebaseFirestore.instance.collection('associacao');
 
     try {
-      DocumentReference novoAnimalRef = await animaisRef.add({
+      // Gerar UID manualmente
+      String novoId = animaisRef.doc().id;
+
+      // Criar o documento com UID definido
+      await animaisRef.doc(novoId).set({
+        'uid': novoId,
         'nome': _nomeController.text.trim(),
         'chip': _chipController.text.isNotEmpty ? int.tryParse(_chipController.text) : null,
         'idade': int.tryParse(_idadeController.text) ?? 0,
@@ -312,18 +318,22 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
         'donoID': donoID,
         'criado_em': Timestamp.now(),
         'imagens': [],
+        'visivel': _visivel,
       });
 
+      // Atualizar a lista de animais do dono
       if (isAssociacao) {
         await associacoesRef.doc(donoID).update({
-          'animais': FieldValue.arrayUnion([novoAnimalRef.id])
+          'animais': FieldValue.arrayUnion([novoId])
         });
       } else {
         await usersRef.doc(donoID).update({
-          'osSeusAnimais': FieldValue.arrayUnion([novoAnimalRef.id])
+          'osSeusAnimais': FieldValue.arrayUnion([novoId])
         });
       }
-      await mostrarPopupAdicionarFotos(novoAnimalRef.id);
+
+
+      await mostrarPopupAdicionarFotos(novoId);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Animal adicionado com sucesso!")),
@@ -336,6 +346,7 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
       );
     }
   }
+
 
   Future<void> mostrarPopupAdicionarFotos(String animalId) async {
     return showDialog(

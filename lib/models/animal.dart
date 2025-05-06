@@ -15,7 +15,9 @@ class Animal {
   int numeroDePasseiosDados;
   bool hasGodFather;
   bool hasFat;
-  List<String> imagens; // NOVO CAMPO
+  List<String> imagens;
+  String uid;
+  bool visivel;
 
   Animal({
     required this.chip,
@@ -33,6 +35,8 @@ class Animal {
     required this.hasGodFather,
     required this.hasFat,
     required this.imagens,
+    required this.uid,
+    required this.visivel,
   });
 
   factory Animal.fromMap(Map<String, dynamic> map) {
@@ -52,6 +56,8 @@ class Animal {
       hasGodFather: map['temPadrinho'] ?? false,
       hasFat: map['temFat']?? false,
       imagens: List<String>.from(map['imagens'] ?? []),
+      uid: map['uid'] ?? '',
+      visivel: map['visivel'] ?? false,
     );
   }
 
@@ -72,6 +78,8 @@ class Animal {
       'hasGodFather': hasGodFather,
       'hasFat': hasFat,
       'imagens': imagens,
+      'uid' : uid,
+      'visivel' : visivel,
     };
   }
 

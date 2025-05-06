@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tinder_para_caes/models/associacao.dart';
 import 'package:tinder_para_caes/models/pedido.dart';
 import 'package:tinder_para_caes/screens/allPedidosAceitesList.dart';
+import 'package:tinder_para_caes/screens/animalDetailsScreen.dart';
 import 'package:tinder_para_caes/screens/loginScreen.dart';
 import 'package:tinder_para_caes/screens/vizualizarAssociacaoScreen.dart';
 import 'package:tinder_para_caes/models/animal.dart';
@@ -258,6 +259,15 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                     : Row(
                   children: [
                     ...animais.take(3).map((animal) => Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AnimalDetailsScreen(animal: animal, isAssoci: false, uidAssociacao: ""),
+                            ),
+                          );
+                        },
                       child: Card(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -269,9 +279,10 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                           ),
                         ),
                       ),
-                    )),
+                    ))),
                   ],
                 ),
+
                 Row(
                   children: [
                     Expanded(
