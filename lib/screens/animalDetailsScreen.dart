@@ -121,7 +121,7 @@ class AnimalDetailsScreen extends StatelessWidget {
                         MaterialPageRoute(builder: (context) => TornarPadrinhoScreen(uidAssociacao: uid)),
                       );
                     },
-                    child: const Text("Apadrinhar este animal 🐾"),
+                    child: const Text("Apadrinhar este animal "),
                   ),
                 ),
 

@@ -8,6 +8,7 @@ import 'package:tinder_para_caes/screens/adicionarAnimalScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:tinder_para_caes/firebaseLogic/associacaoProvider.dart';
 import 'package:tinder_para_caes/screens/allPedidosList.dart';
+import 'package:tinder_para_caes/screens/animalDetailsScreen.dart';
 import 'package:tinder_para_caes/screens/loginScreen.dart';
 
 class AssociacaoHomeScreen extends StatefulWidget {
@@ -181,7 +182,18 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                 ),
                 itemCount: animais.length> 9? 9: animais.length,
                 itemBuilder: (context, index) {
-                  return Card(
+                  final animal = animais[index];
+                  String uidAssociacao = AssociacaoProvider().association!.uid;
+                  return InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AnimalDetailsScreen(animal: animal, isAssoci:true, uidAssociacao: uidAssociacao ),
+                          ),
+                        );
+                      },
+                  child:  Card(
                     color: Colors.brown[300],
                     child: Center(
                       child: Text(
@@ -190,6 +202,7 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                         textAlign: TextAlign.center,
                       ),
                     ),
+                  ),
                   );
                 },
               ),

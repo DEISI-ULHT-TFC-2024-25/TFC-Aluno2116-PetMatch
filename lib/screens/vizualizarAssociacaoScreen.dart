@@ -10,6 +10,8 @@ import 'package:tinder_para_caes/documents/tornarFAT.dart';
 import 'package:tinder_para_caes/documents/tornarSocio.dart';
 import 'package:tinder_para_caes/documents/tornarVoluntario.dart';
 
+import 'animalDetailsScreen.dart';
+
 class VizualizarAssociacaoScreen extends StatefulWidget {
   final Associacao associacao;
 
@@ -118,9 +120,15 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
             itemCount: animals.length,
             itemBuilder: (context, index) {
               final animal = animals[index];
-              return GestureDetector(
+              return InkWell(
+                borderRadius: BorderRadius.circular(8),
                 onTap: () {
-                  Navigator.pushNamed(context, '/animal', arguments: animal);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AnimalDetailsScreen(animal: animal, isAssoci:false, uidAssociacao: " " ),
+                    ),
+                  );
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -135,9 +143,13 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
                       child: Icon(Icons.pets, size: 50, color: theme.colorScheme.onSurfaceVariant),
                     ),
                     SizedBox(height: 5),
-                    Text(animal.fullName, style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
+                    Text(
+                      animal.fullName,
+                      style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
                     Text("${animal.age} anos", style: textTheme.bodyMedium),
-                    Text(animal.gender , style: textTheme.bodyMedium),
+                    Text(animal.gender, style: textTheme.bodyMedium),
                     Text(animal.sterilized ? "Castrado" : "Não castrado", style: textTheme.bodyMedium),
                   ],
                 ),
