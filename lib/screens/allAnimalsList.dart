@@ -25,6 +25,9 @@ class _AllAnimalsListState extends State<AllAnimalsList> {
   String? filtroEspecie;
   String? filtroGenero;
   String termoPesquisa = '';
+  String filtroVisibilidade = 'Visíveis'; // Valor por defeito
+
+
 
   final TextEditingController _pesquisaController = TextEditingController();
 
@@ -41,23 +44,38 @@ class _AllAnimalsListState extends State<AllAnimalsList> {
   void aplicarFiltros() {
     setState(() {
       animaisFiltrados = widget.animais.where((animal) {
-        final nomeMatch = animal!.fullName.toLowerCase().contains(termoPesquisa.toLowerCase());
+        if (animal == null) return false;
+
+        final nomeMatch = animal.fullName.toLowerCase().contains(termoPesquisa.toLowerCase());
         final especieMatch = filtroEspecie == null || animal.species == filtroEspecie;
         final generoMatch = filtroGenero == null || animal.gender == filtroGenero;
-        return nomeMatch && especieMatch && generoMatch;
+
+        bool visibilidadeMatch;
+        if (filtroVisibilidade == 'Todos') {
+          visibilidadeMatch = true;
+        } else if (filtroVisibilidade == 'Visíveis') {
+          visibilidadeMatch = animal.visivel == true;
+        } else {
+          visibilidadeMatch = animal.visivel == false;
+        }
+
+        return nomeMatch && especieMatch && generoMatch && visibilidadeMatch;
       }).toList();
     });
   }
+
 
   void limparFiltros() {
     setState(() {
       termoPesquisa = '';
       filtroEspecie = null;
       filtroGenero = null;
+      filtroVisibilidade = 'Visíveis';
       _pesquisaController.clear();
-      animaisFiltrados = widget.animais;
+      aplicarFiltros();
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +144,7 @@ class _AllAnimalsListState extends State<AllAnimalsList> {
                 aplicarFiltros();
               },
             ),
-
+            //limpar filtros
             if (filtrosAtivos()) ...[
               SizedBox(height: 8),
               Align(
@@ -138,8 +156,28 @@ class _AllAnimalsListState extends State<AllAnimalsList> {
                 ),
               ),
             ],
-
             SizedBox(height: 8),
+
+            //filtrar se for associacao por visibilidade
+            if (widget.isAssociacao) ...[
+              SizedBox(height: 8),
+              DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                  labelText: "Filtrar por visibilidade",
+                  border: OutlineInputBorder(),
+                ),
+                value: filtroVisibilidade,
+                items: ["Visíveis", "Não Visíveis", "Todos"].map((opcao) {
+                  return DropdownMenuItem(value: opcao, child: Text(opcao));
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    filtroVisibilidade = value!;
+                    aplicarFiltros();
+                  });
+                },
+              ),
+            ],
 
             // Lista de animais
             Expanded(
