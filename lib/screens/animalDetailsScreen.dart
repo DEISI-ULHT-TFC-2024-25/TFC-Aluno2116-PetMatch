@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tinder_para_caes/screens/utilizadorHomeScreen.dart';
 
 class AnimalDetailsScreen extends StatelessWidget {
   final Animal animal;
@@ -67,6 +68,11 @@ class AnimalDetailsScreen extends StatelessWidget {
                 style: TextStyle(color: Colors.white),
               ),
             ),
+          IconButton(
+            icon: Icon(Icons.delete, color: Colors.white),
+            tooltip: 'Eliminar animal',
+            onPressed: () => confirmarRemocaoAnimal(context, animal),
+          ),
         ],
       ),
 
@@ -138,7 +144,7 @@ class AnimalDetailsScreen extends StatelessWidget {
               _buildInfoRow(context, Icons.directions_walk, 'Passeios dados:', '$numeroDePasseiosDados'),
               _buildInfoRow(context, Icons.family_restroom, 'Pode apadrinhar:', asGoFather ? 'Não' : 'Sim'),
 
-              if (!isAssoci )
+              if (!isAssoci && !animal.hasGodFather )
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: ElevatedButton(
@@ -263,4 +269,68 @@ class AnimalDetailsScreen extends StatelessWidget {
       );
     }
   }
+
+  void confirmarRemocaoAnimal(BuildContext context, Animal animal) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Eliminar Animal'),
+        content: Text('De certeza que pretendes eliminar este animal? Esta ação é irreversível.'),
+        actions: [
+          TextButton(
+            child: Text('Cancelar'),
+            onPressed: () => Navigator.pop(context),
+          ),
+          TextButton(
+            child: Text('Eliminar', style: TextStyle(color: Colors.red[300])),
+            onPressed: () async {
+
+
+              await apagarAnimal(animal, context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UtilizadorHomeScreen(),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> apagarAnimal(Animal animal, BuildContext context) async {
+    final firestore = FirebaseFirestore.instance;
+
+    try {
+      // Apaga imagens no Firebase Storage
+      for (String url in animal.imagens) {
+        try {
+          final ref = FirebaseStorage.instance.refFromURL(url);
+          await ref.delete();
+        } catch (e) {
+          print('Erro a apagar imagem: $e');
+        }
+      }
+
+      // Apaga documento Firestore
+      await firestore.collection('animal').doc(animal.uid.toString()).delete();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Animal eliminado com sucesso.')),
+      );
+
+      Navigator.pop(context); // Volta ao ecrã anterior
+    } catch (e) {
+      print('Erro ao eliminar animal: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao eliminar o animal.')),
+      );
+    }
+  }
+
+
+
+
 }

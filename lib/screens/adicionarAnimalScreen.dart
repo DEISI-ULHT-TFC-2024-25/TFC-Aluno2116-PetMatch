@@ -330,6 +330,11 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
         });
       }
 
+      //se for utilizador campos a true
+      if (!isAssociacao) {
+        _temPadrinho = true;
+        _temFat = true;
+      }
 
       await mostrarPopupAdicionarFotos(novoId);
 

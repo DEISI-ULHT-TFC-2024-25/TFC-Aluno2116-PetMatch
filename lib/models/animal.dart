@@ -7,6 +7,7 @@ class Animal {
   bool sterilized;
   String gender;
   String legalOwner;
+  String donoID;
   String allergies;
   String size;
   String behavior;
@@ -26,6 +27,7 @@ class Animal {
     required this.sterilized,
     required this.gender,
     required this.legalOwner,
+    required this.donoID,
     required this.allergies,
     required this.size,
     required this.behavior,
@@ -47,6 +49,7 @@ class Animal {
       sterilized: map['castrado'] ?? false,
       gender: map['genero'] ?? "",
       legalOwner: map['donoLegal'] ?? '',
+      donoID: map['donoID'] ?? '',
       allergies: map['alergias'] ?? '',
       size: map['porte'] ?? '',
       behavior: map['comportamento'] ?? '',
@@ -69,6 +72,7 @@ class Animal {
       'sterilized': sterilized,
       'gender': gender,
       'legalOwner': legalOwner,
+      'donoID': donoID,
       'allergies': allergies,
       'size': size,
       'behavior': behavior,
