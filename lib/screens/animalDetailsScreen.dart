@@ -42,7 +42,34 @@ class AnimalDetailsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Perfil do Animal'),
         backgroundColor: primaryColor,
+        actions: [
+          if (isAssoci)
+            TextButton(
+              onPressed: () async {
+                final novoValor = !animal.visivel;
+                await FirebaseFirestore.instance
+                    .collection('animal')
+                    .doc(animal.chip.toString())
+                    .update({'visivel': novoValor});
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(novoValor
+                        ? 'Animal visível novamente.'
+                        : 'Animal não visível.'),
+                  ),
+                );
+
+                Navigator.pop(context);
+              },
+              child: Text(
+                animal.visivel ? 'Tornar não visível' : 'Tornar visível',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+        ],
       ),
+
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -111,7 +138,7 @@ class AnimalDetailsScreen extends StatelessWidget {
               _buildInfoRow(context, Icons.directions_walk, 'Passeios dados:', '$numeroDePasseiosDados'),
               _buildInfoRow(context, Icons.family_restroom, 'Pode apadrinhar:', asGoFather ? 'Não' : 'Sim'),
 
-              if (!isAssoci && !asGoFather)
+              if (!isAssoci )
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: ElevatedButton(
