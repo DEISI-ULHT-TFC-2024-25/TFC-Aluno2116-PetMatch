@@ -199,7 +199,7 @@ class _AllAnimalsListState extends State<AllAnimalsList> {
                             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: 8),
-                          Text("Idade: ${animal.age} anos"),
+                          Text("Idade: ${animal.calcularIdade()}"),
                           Text("Sexo: ${animal.gender}"),
                           Text("Castrado: ${animal.sterilized ? "Sim" : "Não"}"),
                           Text("Número de Passeios: ${animal.numeroDePasseiosDados}"),

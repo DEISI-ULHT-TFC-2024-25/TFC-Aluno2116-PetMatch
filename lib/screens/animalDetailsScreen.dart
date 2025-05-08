@@ -27,7 +27,7 @@ class AnimalDetailsScreen extends StatelessWidget {
     final String uid = uidAssociacao;
 
     final String fullName = animal.fullName;
-    final int age = animal.age;
+    final String age = animal.calcularIdade();
     final bool sterilized = animal.sterilized;
     final String gender = animal.gender;
     final String allergies = animal.allergies;
@@ -130,7 +130,7 @@ class AnimalDetailsScreen extends StatelessWidget {
               const SizedBox(height: 8),
               _buildInfoRow(context, Icons.pets, 'Espécie:', species),
               _buildInfoRow(context, Icons.badge, 'Raça:', breed),
-              _buildInfoRow(context, Icons.cake, 'Idade:', '$age anos'),
+              _buildInfoRow(context, Icons.cake, 'Idade:', age ),
               _buildInfoRow(
                 context,
                 gender == "0" ? Icons.female : Icons.male,

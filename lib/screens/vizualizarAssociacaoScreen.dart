@@ -148,7 +148,7 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
                       style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
-                    Text("${animal.age} anos", style: textTheme.bodyMedium),
+                    Text("${animal.calcularIdade()} anos", style: textTheme.bodyMedium),
                     Text(animal.gender, style: textTheme.bodyMedium),
                     Text(animal.sterilized ? "Castrado" : "Não castrado", style: textTheme.bodyMedium),
                   ],

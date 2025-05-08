@@ -26,7 +26,7 @@ void main() {
 
       expect(animal.chip, 12345);
       expect(animal.fullName, 'Buddy');
-      expect(animal.age, 5);
+      expect(animal.dataNascimento, 5);
       expect(animal.sterilized, true);
       expect(animal.gender, 'Male');
       expect(animal.legalOwner, 'John Doe');
@@ -53,7 +53,7 @@ void main() {
 
       expect(animal.chip, 12345);
       expect(animal.fullName, 'Bella');
-      expect(animal.age, 0); // Default value when not provided
+      expect(animal.dataNascimento, 0); // Default value when not provided
       expect(animal.sterilized, false); // Default value
       expect(animal.gender, ''); // Default value
       expect(animal.legalOwner, ''); // Default value
@@ -75,7 +75,7 @@ void main() {
 
       expect(animal.chip, 0); // Default value
       expect(animal.fullName, ''); // Default value
-      expect(animal.age, 0); // Default value
+      expect(animal.dataNascimento, 0); // Default value
       expect(animal.sterilized, false); // Default value
       expect(animal.gender, ''); // Default value
       expect(animal.legalOwner, ''); // Default value

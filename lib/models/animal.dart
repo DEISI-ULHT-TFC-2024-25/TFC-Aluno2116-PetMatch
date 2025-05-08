@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 
 class Animal {
   int chip;
   String fullName;
-  int age;
+  DateTime dataNascimento;
   bool sterilized;
   String gender;
   String legalOwner;
@@ -23,7 +24,7 @@ class Animal {
   Animal({
     required this.chip,
     required this.fullName,
-    required this.age,
+    required this.dataNascimento,
     required this.sterilized,
     required this.gender,
     required this.legalOwner,
@@ -45,7 +46,7 @@ class Animal {
     return Animal(
       chip: map['chip'] ?? 0,
       fullName: map['nome'] ?? '',
-      age: map['idade'] ?? 0,
+      dataNascimento: (map['dataNascimento'] as Timestamp).toDate(),
       sterilized: map['castrado'] ?? false,
       gender: map['genero'] ?? "",
       legalOwner: map['donoLegal'] ?? '',
@@ -68,7 +69,7 @@ class Animal {
     return {
       'chip': chip,
       'fullName': fullName,
-      'age': age,
+      'dataNascimento': dataNascimento,
       'sterilized': sterilized,
       'gender': gender,
       'legalOwner': legalOwner,
@@ -91,5 +92,26 @@ class Animal {
     final String response = await rootBundle.loadString('assets/dogBreeds.txt');
     return response.split('\n').map((line) => line.trim()).toList();
   }
+
+  String calcularIdade() {
+    final hoje = DateTime.now();
+    int anos = hoje.year - dataNascimento.year;
+    int meses = hoje.month - dataNascimento.month;
+    int dias = hoje.day - dataNascimento.day;
+    if (dias < 0) {
+      meses--;
+    }
+    if (meses < 0) {
+      anos--;
+      meses += 12;
+    }
+    if (anos < 1) {
+      return '$meses mês${meses == 1 ? '' : 'es'}';
+    } else {
+      return '$anos ano${anos == 1 ? '' : 's'}';
+    }
+  }
+
+
 
 }

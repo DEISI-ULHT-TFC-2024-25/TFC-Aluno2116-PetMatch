@@ -22,7 +22,7 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
 
   final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _chipController = TextEditingController();
-  final TextEditingController _idadeController = TextEditingController();
+  TextEditingController _dataNascimentoController = TextEditingController();
   final TextEditingController _donoLegalController = TextEditingController();
   final TextEditingController _alergiasController = TextEditingController();
   final TextEditingController _comportamentoController = TextEditingController();
@@ -35,6 +35,8 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
   bool _temPadrinho = false;
   bool _temFat = false;
   bool _visivel = true;
+  DateTime? _dataNascimento;
+
 
   List<String> racas = [];
   List<String> _racasFiltradas = [];
@@ -89,12 +91,31 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
                 ),
                 SizedBox(height: 10),
                 TextField(
-                  controller: _idadeController,
+                  controller: _dataNascimentoController,
+                  readOnly: true,
                   decoration: InputDecoration(
-                    labelText: "Idade",
+                    labelText: "Data de Nascimento",
                     border: OutlineInputBorder(),
+                    suffixIcon: Icon(Icons.calendar_today),
                   ),
-                  keyboardType: TextInputType.number,
+                  onTap: () async {
+                    DateTime? dataEscolhida = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime.now(),
+                    );
+
+                    if (dataEscolhida != null) {
+                      setState(() {
+                        _dataNascimento = dataEscolhida; // ✅ Guarda a data como DateTime
+                        _dataNascimentoController.text =
+                        '${dataEscolhida.day.toString().padLeft(2, '0')}/'
+                            '${dataEscolhida.month.toString().padLeft(2, '0')}/'
+                            '${dataEscolhida.year}';
+                      });
+                    }
+                  },
                 ),
                 SizedBox(height: 10),
                 DropdownButtonFormField<String>(
@@ -300,7 +321,7 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
         'uid': novoId,
         'nome': _nomeController.text.trim(),
         'chip': _chipController.text.isNotEmpty ? int.tryParse(_chipController.text) : null,
-        'idade': int.tryParse(_idadeController.text) ?? 0,
+        'dataNascimento': _dataNascimento != null ? Timestamp.fromDate(_dataNascimento!) : null,
         'genero': _genero,
         'castrado': _castrado,
         'donoLegal': _donoLegalController.text.trim().isNotEmpty ? _donoLegalController.text.trim() : null,
