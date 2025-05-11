@@ -26,9 +26,13 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
   List<Animal> animais = [];
   bool isLoading = true;//
   List<Associacao> sugestoesAssociacoes = [];
+  List<Associacao> todasAssociacoes = [];
+  List<Associacao> todasAssociacoesFiltradas = [];
   late GoogleMapController mapController;
   bool isFullScreen = false;
   List <Pedido> pedidosAceites = [];
+  TextEditingController pesquisaController = TextEditingController();
+  String termoPesquisa = "";
 
   BitmapDescriptor? _iconePatinha;
   final Set<Marker> _marcadores = {};
@@ -41,7 +45,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
   }
 
 
-  Future<void> _fetchAnimals() async {
+  Future<void> fetchAnimals() async {
     final utilizador = Provider.of<UtilizadorProvider>(context, listen: false).user;
 
     if (utilizador != null) {
@@ -58,7 +62,20 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
   }
 
 
-  Future<void> _fetchSugestoesAssociacoes() async {
+  Future<void> fetchTodasAssociacoes() async {
+    final utilizador = Provider.of<UtilizadorProvider>(context, listen: false).user;
+    if (utilizador != null) {
+      List<Associacao> fetchedTodasAssociacoes = await Associacao.getTodasAssociacoesFirebase();
+      setState(() {
+        todasAssociacoes = fetchedTodasAssociacoes;
+        todasAssociacoesFiltradas = fetchedTodasAssociacoes;
+      });
+      await Future.delayed(Duration(milliseconds: 10));
+    }
+  }
+
+
+  Future<void> fetchSugestoesAssociacoes() async {
     final utilizador = Provider.of<UtilizadorProvider>(context, listen: false).user;
     String? distrito = utilizador?.distrito;
 
@@ -75,7 +92,19 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
   }
 
 
-  Future<void> _fetchPedidos() async {
+  void filtrarAssociacoes(String termo) {
+    setState(() {
+      todasAssociacoesFiltradas = todasAssociacoes.where((a) {
+        final nome = a.name.toLowerCase();
+        final termoPesquisa = termo.toLowerCase();
+        return nome.contains(termoPesquisa);
+      }).toList();
+    });
+  }
+
+
+
+  Future<void> fetchPedidos() async {
     final utilizador = Provider.of<UtilizadorProvider>(context, listen: false).user;
 
     if (utilizador == null) {
@@ -117,7 +146,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
   }
 
 
-  Future<void> _carregarIconePatinha() async {
+  Future<void> carregarIconePatinha() async {
     final icone = await BitmapDescriptor.fromAssetImage(
       const ImageConfiguration(size: Size(48, 48)),
       'assets/patinhaPin.png',
@@ -127,14 +156,14 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
       _iconePatinha = icone;
     });
     await Future.delayed(Duration(milliseconds: 10));
-    _adicionarMarcadoresDasAssociacoes();
+    adicionarMarcadoresDasAssociacoes();
   }
 
 
-  Future<void> _adicionarMarcadoresDasAssociacoes() async {
-    if (_iconePatinha == null || sugestoesAssociacoes.isEmpty) return;
+  Future<void> adicionarMarcadoresDasAssociacoes() async {
+    if (_iconePatinha == null || todasAssociacoes.isEmpty) return;
     Set<Marker> novosMarcadores = {};
-    for (final associacao in sugestoesAssociacoes) {
+    for (final associacao in todasAssociacoes) {
       try {
         // Obter localização a partir do distrito
         List<Location> locations = await locationFromAddress('${associacao.distrito}, Portugal');
@@ -173,7 +202,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
   }
 
 
-  Future<void> _atualizarCenterComDistritoDoUtilizador() async {
+  Future<void> atualizarCenterComDistritoDoUtilizador() async {
     final utilizador = Provider.of<UtilizadorProvider>(context, listen: false).user;
 
     if (utilizador != null && utilizador.distrito != null) {
@@ -198,21 +227,20 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
   }
 
 
-
   @override
   void initState() {
     super.initState();
-    _inicializarTudo();
+    inicializarTudo();
   }
 
-  Future<void> _inicializarTudo() async {
-    await _fetchAnimals();
-    await _fetchPedidos();
-    await _fetchSugestoesAssociacoes();
-    await _atualizarCenterComDistritoDoUtilizador();
-    await _carregarIconePatinha();
+  Future<void> inicializarTudo() async {
+    await fetchAnimals();
+    await fetchPedidos();
+    await fetchTodasAssociacoes();
+    await fetchSugestoesAssociacoes();
+    await atualizarCenterComDistritoDoUtilizador();
+    await carregarIconePatinha();
   }
-
 
 
   @override
