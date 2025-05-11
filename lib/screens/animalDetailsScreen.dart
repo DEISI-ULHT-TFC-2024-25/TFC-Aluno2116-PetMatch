@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/documents/tornarPadrinho.dart';
@@ -39,6 +40,11 @@ class AnimalDetailsScreen extends StatelessWidget {
     final bool asGoFather = animal.hasGodFather;
     final String? imagemPerfil = animal.imagens.isNotEmpty ? animal.imagens.first : null;
 
+    final uidAtual = FirebaseAuth.instance.currentUser?.uid;
+    final bool donoDoAnimal = animal.donoID == uidAtual;
+
+
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Perfil do Animal'),
@@ -68,11 +74,12 @@ class AnimalDetailsScreen extends StatelessWidget {
                 style: TextStyle(color: Colors.white),
               ),
             ),
-          IconButton(
-            icon: Icon(Icons.delete, color: Colors.white),
-            tooltip: 'Eliminar animal',
-            onPressed: () => confirmarRemocaoAnimal(context, animal),
-          ),
+          if( donoDoAnimal)
+            IconButton(
+              icon: Icon(Icons.delete, color: Colors.white),
+              tooltip: 'Eliminar animal',
+              onPressed: () => confirmarRemocaoAnimal(context, animal),
+            ),
         ],
       ),
 
@@ -107,7 +114,7 @@ class AnimalDetailsScreen extends StatelessWidget {
                     : null,
               ),
 
-              if (isAssoci)
+            if (donoDoAnimal)
                 Align(
                   alignment: Alignment.topRight,
                   child: IconButton(
