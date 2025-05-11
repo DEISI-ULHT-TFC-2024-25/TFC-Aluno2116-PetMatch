@@ -395,6 +395,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                   "Sugestões de Associações",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
+
                 SizedBox(height: 8.0),
                 SizedBox(
                   height: (sugestoesAssociacoes.length > 4)
