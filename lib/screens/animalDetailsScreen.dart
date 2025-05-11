@@ -113,7 +113,7 @@ class AnimalDetailsScreen extends StatelessWidget {
                   child: IconButton(
                     icon: Icon(Icons.add_a_photo, color: primaryColor),
                     onPressed: () async {
-                      await mostrarPopupAdicionarFotos(context, animal);
+                      await mostrarPopupAdicionarFotos(context, animal.uid);
                     },
                   ),
                 ),
@@ -201,35 +201,39 @@ class AnimalDetailsScreen extends StatelessWidget {
     );
   }
 
-  Future<void> mostrarPopupAdicionarFotos(BuildContext context, Animal animal) async {
+  Future<void> mostrarPopupAdicionarFotos(BuildContext context, String animalId) async {
     return showDialog(
       context: context,
-      barrierDismissible: true,
+      barrierDismissible: false,
       builder: (context) {
         return Dialog(
-          insetPadding: const EdgeInsets.all(20),
+          insetPadding: EdgeInsets.all(20),
           child: Container(
             height: MediaQuery.of(context).size.height * 0.8,
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(20),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Deseja adicionar fotos ao perfil?',
-                  style: Theme.of(context).textTheme.headlineSmall,
+                  'Deseja adicionar fotos ao animal agora?',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 30),
+                SizedBox(height: 30),
                 ElevatedButton.icon(
                   onPressed: () async {
-                    Navigator.pop(context);
-                    await selecionarEGuardarFotos(context, animal);
+                    Navigator.pop(context); // fecha o popup
+                    await selecionarEGuardarFotos(context,animalId);
                   },
-                  icon: const Icon(Icons.photo),
-                  label: const Text('Escolher e adicionar'),
+                  icon: Icon(Icons.photo),
+                  label: Text('Adicionar fotos agora'),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancelar'),
+                  onPressed: () {
+                    Navigator.pop(context); // fecha o popup
+                  },
+                  child: Text('Mais tarde'),
                 ),
               ],
             ),
@@ -238,38 +242,38 @@ class AnimalDetailsScreen extends StatelessWidget {
       },
     );
   }
-
-  Future<void> selecionarEGuardarFotos(BuildContext context, Animal animal) async {
+  Future<void> selecionarEGuardarFotos(BuildContext context, String animalId) async {
     final picker = ImagePicker();
-    final pickedFiles = await picker.pickMultiImage();
+    final pickedFiles = await picker.pickMultiImage(); // permite selecionar várias imagens
 
     if (pickedFiles != null && pickedFiles.isNotEmpty) {
-      List<String> urls = [];
+      List<String> downloadUrls = [];
 
-      for (var file in pickedFiles) {
-        File imageFile = File(file.path);
-        final ref = FirebaseStorage.instance
+      for (var pickedFile in pickedFiles) {
+        File imageFile = File(pickedFile.path);
+        final fileName = DateTime.now().millisecondsSinceEpoch.toString();
+        final storageRef = FirebaseStorage.instance
             .ref()
-            .child('animais/${animal.chip}/${DateTime.now().millisecondsSinceEpoch}.jpg');
+            .child('animais/$animalId/$fileName.jpg');
 
-        await ref.putFile(imageFile);
-        String url = await ref.getDownloadURL();
-        urls.add(url);
+        await storageRef.putFile(imageFile);
+        String url = await storageRef.getDownloadURL();
+        downloadUrls.add(url);
       }
 
+      // Atualizar Firestore com os URLs das imagens
       await FirebaseFirestore.instance
           .collection('animal')
-          .doc(animal.chip.toString())
+          .doc(animalId)
           .update({
-        'imagens': FieldValue.arrayUnion(urls),
+        'imagens': FieldValue.arrayUnion(downloadUrls),
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Fotos adicionadas com sucesso!')),
+        SnackBar(content: Text("Fotos adicionadas com sucesso!")),
       );
     }
   }
-
   void confirmarRemocaoAnimal(BuildContext context, Animal animal) {
     showDialog(
       context: context,

@@ -183,7 +183,7 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                 itemCount: animais.length> 9? 9: animais.length,
                 itemBuilder: (context, index) {
                   final animal = animais[index];
-                  String uidAssociacao = AssociacaoProvider().association!.uid;
+                  String uidAssociacao = associacao?.uid ?? ''  ;
                   return InkWell(
                       onTap: () {
                         Navigator.push(

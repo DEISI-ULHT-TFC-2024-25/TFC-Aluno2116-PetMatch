@@ -258,25 +258,7 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
                     ),
                   ),
                 SizedBox(height: 10),
-                CheckboxListTile(
-                  title: Text("Tem Padrinho"),
-                  value: _temPadrinho,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _temPadrinho = value ?? false;
-                    });
-                  },
-                ),
-                CheckboxListTile(
-                  title: Text("Tem FAT(Familia de Acolhimento Temporario"),
-                  value: _temFat,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _temFat = value ?? false;
-                    });
-                  },
-                ),
-                SizedBox(height: 16.0),
+
                 ElevatedButton(
                   onPressed: _especie != null && _nomeController.text.isNotEmpty ? guardarAnimal : null,
                   child: Text("Registar animal"),

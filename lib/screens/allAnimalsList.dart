@@ -218,7 +218,7 @@ class _AllAnimalsListState extends State<AllAnimalsList> {
                               );
                             },
                             icon: Icon(Icons.info_outline),
-                            label: Text("Ver mais informações 👀"),
+                            label: Text("Ver mais informações "),
                           ),
                         ],
                       ),
