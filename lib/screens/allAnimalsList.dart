@@ -187,42 +187,79 @@ class _AllAnimalsListState extends State<AllAnimalsList> {
                 itemCount: animaisFiltrados.length,
                 itemBuilder: (context, index) {
                   final animal = animaisFiltrados[index]!;
+                  final String? imagemPerfil = animal.imagens.isNotEmpty ? animal.imagens.first : null;
                   return Card(
                     margin: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
-                      child: Column(
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            animal.fullName,
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 8),
-                          Text("Idade: ${animal.calcularIdade()}"),
-                          Text("Sexo: ${animal.gender}"),
-                          Text("Castrado: ${animal.sterilized ? "Sim" : "Não"}"),
-                          Text("Número de Passeios: ${animal.numeroDePasseiosDados}"),
-                          SizedBox(height: 12),
-                          ElevatedButton.icon(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AnimalDetailsScreen(
-                                    animal: animal,
-                                    isAssoci: widget.isAssociacao,
-                                    uidAssociacao: widget.uidAssociacao,
-                                  ),
+                          // COLUNA DE TEXTO
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  animal.fullName,
+                                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                 ),
-                              );
-                            },
-                            icon: Icon(Icons.info_outline),
-                            label: Text("Ver mais informações "),
+                                SizedBox(height: 8),
+                                Text("Idade: ${animal.calcularIdade()}"),
+                                Text("Sexo: ${animal.gender}"),
+                                Text("Castrado: ${animal.sterilized ? "Sim" : "Não"}"),
+                                SizedBox(height: 12),
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AnimalDetailsScreen(
+                                          animal: animal,
+                                          isAssoci: widget.isAssociacao,
+                                          uidAssociacao: widget.uidAssociacao,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  icon: Icon(Icons.info_outline),
+                                  label: Text("Ver mais informações "),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          // ESPAÇO ENTRE TEXTO E IMAGEM
+                          SizedBox(width: 12),
+
+                          // IMAGEM
+                          Container(
+                            width: 100,
+                            height: 120,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              image: imagemPerfil != null
+                                  ? DecorationImage(
+                                image: NetworkImage(imagemPerfil),
+                                fit: BoxFit.cover,
+                              )
+                                  : null,
+                              color: theme.primaryColor,
+                            ),
+                            child: imagemPerfil == null
+                                ? Center(
+                              child: Icon(
+                                Icons.pets,
+                                size: 50,
+                                color: theme.colorScheme.onSurface,
+                              ),
+                            )
+                                : null,
                           ),
                         ],
                       ),
                     ),
+
                   );
                 },
               ),
@@ -231,7 +268,7 @@ class _AllAnimalsListState extends State<AllAnimalsList> {
         ),
       ),
 
-      // Apenas Associações podem adicionar animais
+      // Apenas Associações podem adicionar animais neste screen
       floatingActionButton: widget.isAssociacao
           ? FloatingActionButton(
         onPressed: () {

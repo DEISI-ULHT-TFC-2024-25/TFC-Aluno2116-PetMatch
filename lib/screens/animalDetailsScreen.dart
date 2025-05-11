@@ -94,7 +94,7 @@ class AnimalDetailsScreen extends StatelessWidget {
                     fit: BoxFit.cover,
                   )
                       : null,
-                  color: theme.colorScheme.surfaceVariant,
+                  color: theme.primaryColor,
                 ),
                 child: imagemPerfil == null
                     ? Center(
@@ -144,7 +144,7 @@ class AnimalDetailsScreen extends StatelessWidget {
               _buildInfoRow(context, Icons.directions_walk, 'Passeios dados:', '$numeroDePasseiosDados'),
               _buildInfoRow(context, Icons.family_restroom, 'Pode apadrinhar:', asGoFather ? 'Não' : 'Sim'),
 
-              if (!isAssoci && !animal.hasGodFather )
+              if (!isAssoci && animal.hasGodFather )
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: ElevatedButton(
@@ -176,6 +176,7 @@ class AnimalDetailsScreen extends StatelessWidget {
     );
   }
 
+
   Widget _buildInfoRow(BuildContext context, IconData icon, String label, String value) {
     final theme = Theme.of(context);
     return Padding(
@@ -200,6 +201,7 @@ class AnimalDetailsScreen extends StatelessWidget {
       ),
     );
   }
+
 
   Future<void> mostrarPopupAdicionarFotos(BuildContext context, String animalId) async {
     return showDialog(
@@ -242,6 +244,8 @@ class AnimalDetailsScreen extends StatelessWidget {
       },
     );
   }
+
+
   Future<void> selecionarEGuardarFotos(BuildContext context, String animalId) async {
     final picker = ImagePicker();
     final pickedFiles = await picker.pickMultiImage(); // permite selecionar várias imagens
@@ -274,6 +278,8 @@ class AnimalDetailsScreen extends StatelessWidget {
       );
     }
   }
+
+
   void confirmarRemocaoAnimal(BuildContext context, Animal animal) {
     showDialog(
       context: context,
@@ -303,6 +309,7 @@ class AnimalDetailsScreen extends StatelessWidget {
       ),
     );
   }
+
 
   Future<void> apagarAnimal(Animal animal, BuildContext context) async {
     final firestore = FirebaseFirestore.instance;
