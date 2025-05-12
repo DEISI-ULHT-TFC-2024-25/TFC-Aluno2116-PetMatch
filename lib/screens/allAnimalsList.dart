@@ -27,8 +27,6 @@ class _AllAnimalsListState extends State<AllAnimalsList> {
   String termoPesquisa = '';
   String filtroVisibilidade = 'Visíveis'; // Valor por defeito
 
-
-
   final TextEditingController _pesquisaController = TextEditingController();
 
   @override
@@ -63,7 +61,6 @@ class _AllAnimalsListState extends State<AllAnimalsList> {
       }).toList();
     });
   }
-
 
   void limparFiltros() {
     setState(() {

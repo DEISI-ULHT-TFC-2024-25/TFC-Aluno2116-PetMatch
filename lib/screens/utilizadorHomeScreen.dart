@@ -399,8 +399,8 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                 SizedBox(height: 8.0),
                 SizedBox(
                   height: (sugestoesAssociacoes.length > 4)
-                      ? 300
-                      : sugestoesAssociacoes.length * 75.0,
+                    ? 300
+                    : sugestoesAssociacoes.length * 75.0,
                   child: Column(
                     children: [
                       Expanded(
@@ -427,21 +427,27 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                           },
                         ),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => AllAssociacoesList(associacoes: sugestoesAssociacoes))
-                          );
-                        },
-                        child: Text("Ver todas"),
-                      ),
-
                     ],
                   ),
                 ),
 
-                AnimatedContainer(
+                TextButton(
+                onPressed: () {
+                  final lista = termoPesquisa.isEmpty
+                      ? sugestoesAssociacoes
+                      : todasAssociacoesFiltradas;
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          AllAssociacoesList(associacoes: lista),
+                    ),
+                  );
+                },
+                child: Text("Ver todas"),
+              ),
+
+              AnimatedContainer(
                   duration: Duration(milliseconds: 300),
                   height: isFullScreen ? MediaQuery.of(context).size.height * 0.8 : 200,
                   decoration: BoxDecoration(
