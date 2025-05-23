@@ -27,7 +27,6 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
   bool isLoading = true;//
   List<Associacao> sugestoesAssociacoes = [];
   List<Associacao> todasAssociacoes = [];
-  List<Associacao> todasAssociacoesFiltradas = [];
   late GoogleMapController mapController;
   bool isFullScreen = false;
   List <Pedido> pedidosAceites = [];
@@ -68,7 +67,6 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
       List<Associacao> fetchedTodasAssociacoes = await Associacao.getTodasAssociacoesFirebase();
       setState(() {
         todasAssociacoes = fetchedTodasAssociacoes;
-        todasAssociacoesFiltradas = fetchedTodasAssociacoes;
       });
       await Future.delayed(Duration(milliseconds: 10));
     }
@@ -90,18 +88,6 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
     }
     await Future.delayed(Duration(milliseconds: 10));
   }
-
-
-  void filtrarAssociacoes(String termo) {
-    setState(() {
-      todasAssociacoesFiltradas = todasAssociacoes.where((a) {
-        final nome = a.name.toLowerCase();
-        final termoPesquisa = termo.toLowerCase();
-        return nome.contains(termoPesquisa);
-      }).toList();
-    });
-  }
-
 
 
   Future<void> fetchPedidos() async {
@@ -319,11 +305,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => AllAnimalsList(
-                                animais: animais,
-                                isAssociacao: false,
-                                uidAssociacao: " ",
-                              ),
+                              builder: (context) => AllAnimalsList(animais: animais,isAssociacao: false,uidAssociacao: " "),
                             ),
                           );
                         },
@@ -353,9 +335,9 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                 ),
                 SizedBox(height: 8.0),
                 SizedBox(
-                  height: (pedidosAceites.length > 4)
+                  height: (pedidosAceites.length > 2)
                       ? 300
-                      : pedidosAceites.length * 75.0,
+                      : pedidosAceites.length * 100.0,
                   child: Column(
                     children: [
                       Expanded(
@@ -400,7 +382,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                 SizedBox(
                   height: (sugestoesAssociacoes.length > 4)
                     ? 300
-                    : sugestoesAssociacoes.length * 75.0,
+                    : sugestoesAssociacoes.length * 100.0,
                   child: Column(
                     children: [
                       Expanded(
@@ -413,7 +395,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                               margin: EdgeInsets.symmetric(vertical: 4.0),
                               child: ListTile(
                                 title: Text(associacao.name),
-                                subtitle: Text("Localidade: ${associacao.distrito}"),
+                                subtitle: Text("Distrito: ${associacao.distrito}"),
                                 onTap: () {
                                   Navigator.push(
                                     context,
@@ -433,14 +415,11 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
 
                 TextButton(
                 onPressed: () {
-                  final lista = termoPesquisa.isEmpty
-                      ? sugestoesAssociacoes
-                      : todasAssociacoesFiltradas;
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          AllAssociacoesList(associacoes: lista),
+                          AllAssociacoesList(associacoes: todasAssociacoes),
                     ),
                   );
                 },

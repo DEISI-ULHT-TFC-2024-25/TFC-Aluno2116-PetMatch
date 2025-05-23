@@ -105,56 +105,40 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
 
           numberOfAnimals == 0 ?
             Text("Sem patudos para visualizar"):
-            GridView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: 0.8,
-              ),
-              itemCount: animals.length,
-              itemBuilder: (context, index) {
-                final animal = animals[index];
+            GridView.count(
+              crossAxisCount: 3, // 3 por linha
+              shrinkWrap: true, // para caber dentro de Column
+              physics: NeverScrollableScrollPhysics(), // evitar scroll dentro de scroll
+              crossAxisSpacing: 5,
+              mainAxisSpacing: 5,
+              children: animals.take(9).map((animal) {
                 return InkWell(
-                  borderRadius: BorderRadius.circular(8),
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AnimalDetailsScreen(animal: animal, isAssoci:false, uidAssociacao: " " ),
+                        builder: (context) => AnimalDetailsScreen(
+                          animal: animal,
+                          isAssoci: false,
+                          uidAssociacao: "",
+                        ),
                       ),
                     );
                   },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 100,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.surfaceVariant,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Icon(Icons.pets, size: 50, color: theme.colorScheme.onSurfaceVariant),
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Icon(Icons.pets, size: 50),
+                          Text(animal.fullName),
+                        ],
                       ),
-                      SizedBox(height: 5),
-                      Text(
-                        animal.fullName,
-                        style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
-                      ),
-                      Text("${animal.calcularIdade()} anos", style: textTheme.bodyMedium),
-                      Text(animal.gender, style: textTheme.bodyMedium),
-                      Text(animal.sterilized ? "Castrado" : "Não castrado", style: textTheme.bodyMedium),
-                    ],
+                    ),
                   ),
                 );
-              },
+              }).toList(),
             ),
-
-
 
           SizedBox(height: 10),
           ElevatedButton(
