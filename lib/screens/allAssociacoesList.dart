@@ -138,7 +138,7 @@ class _AllAssociacoesListState extends State<AllAssociacoesList> {
                               );
                             },
                             icon: Icon(Icons.visibility),
-                            label: Text("Ver mais informações 👀"),
+                            label: Text("Ver mais informações"),
                           ),
                         ],
                       ),
