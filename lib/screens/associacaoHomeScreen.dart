@@ -89,6 +89,45 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
     }
   }
 
+  void _mostrarPopupConfirmarTerminarSessao(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text("Tem a certeza que pretende terminar sessão?"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text("Esta ação irá terminar a sua sessão atual."),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context); // Fecha sem fazer nada
+                  },
+                  child: Text("Cancelar"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const LoginScreen()),
+                    );
+                  },
+                  child: Text("Terminar"),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -107,10 +146,7 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginScreen()),
-              );
+              _mostrarPopupConfirmarTerminarSessao(context);
             },
           ),
         ],
