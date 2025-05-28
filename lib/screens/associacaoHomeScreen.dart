@@ -22,6 +22,7 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
   List<Animal> animais = []; // Store fetched animals
   bool isLoading = true;// Track loading state
   List<Pedido> pedidos = [];
+  int numberOfAnimals = 0;
 
   @override
   void initState() {
@@ -132,6 +133,7 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
   @override
   Widget build(BuildContext context) {
     final associacao = Provider.of<AssociacaoProvider>(context).association;
+    numberOfAnimals = associacao!.animais.length;
 
 
     if (associacao == null || isLoading) {
@@ -142,6 +144,7 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        title: Text(associacao.name),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -154,14 +157,10 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
 
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Home Page - ${associacao.name}",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, decoration: TextDecoration.none),
-              ),
               SizedBox(height: 16.0),
               Text("Pedidos:", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, decoration: TextDecoration.none)),
               SizedBox(height: 20.0),
@@ -252,7 +251,7 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                     ),
                   );
                 },
-                child: Text("Ver todos os animais"),
+                child: Text("Ver Todos ($numberOfAnimals)"),
               ),
 
               Padding(

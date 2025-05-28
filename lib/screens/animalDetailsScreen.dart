@@ -50,30 +50,6 @@ class AnimalDetailsScreen extends StatelessWidget {
         title: const Text('Perfil do Animal'),
         backgroundColor: primaryColor,
         actions: [
-          if (isAssoci)
-            TextButton(
-              onPressed: () async {
-                final novoValor = !animal.visivel;
-                await FirebaseFirestore.instance
-                    .collection('animal')
-                    .doc(animal.chip.toString())
-                    .update({'visivel': novoValor});
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(novoValor
-                        ? 'Animal visível novamente.'
-                        : 'Animal não visível.'),
-                  ),
-                );
-
-                Navigator.pop(context);
-              },
-              child: Text(
-                animal.visivel ? 'Tornar não visível' : 'Tornar visível',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
           if( donoDoAnimal)
             IconButton(
               icon: Icon(Icons.delete, color: Colors.white),
@@ -115,17 +91,18 @@ class AnimalDetailsScreen extends StatelessWidget {
               ),
 
             if (donoDoAnimal)
-                Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    icon: Icon(Icons.add_a_photo, color: primaryColor),
-                    onPressed: () async {
-                      await mostrarPopupAdicionarFotos(context, animal.uid);
-                    },
-                  ),
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  icon: Icon(Icons.add_a_photo, color: primaryColor),
+                  onPressed: () async {
+                    await mostrarPopupAdicionarFotos(context, animal.uid);
+                  },
                 ),
+              ),
 
-              const SizedBox(height: 16),
+
+              const SizedBox(height: 10),
               Text(
                 fullName,
                 style: theme.textTheme.headlineSmall?.copyWith(
@@ -160,7 +137,36 @@ class AnimalDetailsScreen extends StatelessWidget {
                   ),
                 ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
+              if (isAssoci)
+                Align(
+                    alignment: Alignment.center,
+                    child: TextButton(
+                      onPressed: () async {
+                        final novoValor = !animal.visivel;
+                        await FirebaseFirestore.instance
+                            .collection('animal')
+                            .doc(animal.uid.toString())
+                            .update({'visivel': novoValor});
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(novoValor
+                                ? 'Animal visível novamente.'
+                                : 'Animal não visível.'),
+                          ),
+                        );
+
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        animal.visivel ? 'Tornar não visível' : 'Tornar visível',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )
+                ),
+
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -300,7 +306,6 @@ class AnimalDetailsScreen extends StatelessWidget {
           TextButton(
             child: Text('Eliminar', style: TextStyle(color: Colors.red[300])),
             onPressed: () async {
-
 
               await apagarAnimal(animal, context);
               Navigator.push(

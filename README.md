@@ -25,14 +25,6 @@ Eventos/noticias - Eventos que a Associação vai realizar numa determinada data
 
 
 
-
-TO DO LATER:----------------------------------------------------
-1  botão para historico de caes (home screen do utilizador)
-
-
-ERROS/PROBLEMAS:------------------------------------------------
-- politicas de privacidade e etc dos chats de mensagens
-- como fazer historico
 ----------------------------------------------
 - A colecção é um conjunto de objectos
 - O documento é um objecto (instância de classe)

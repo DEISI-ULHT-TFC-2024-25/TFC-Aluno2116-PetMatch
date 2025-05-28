@@ -124,7 +124,7 @@ class _AllAssociacoesListState extends State<AllAssociacoesList> {
                             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: 8),
-                          Text("Local: ${associacao.distrito}"),
+                          Text("Distrito: ${associacao.distrito}"),
                           Text("Número de Animais: ${associacao.animais.length}"),
                           Text("Tarefas Necessárias: ${associacao.funcionalidades}"),
                           SizedBox(height: 12),
