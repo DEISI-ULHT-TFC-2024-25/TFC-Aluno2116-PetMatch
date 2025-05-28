@@ -90,7 +90,7 @@ class AnimalDetailsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                height: 200,
+                height: 300,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
@@ -108,7 +108,7 @@ class AnimalDetailsScreen extends StatelessWidget {
                   child: Icon(
                     Icons.pets,
                     size: 50,
-                    color: theme.colorScheme.onSurface,
+                    color: Colors.white,
                   ),
                 )
                     : null,
@@ -138,11 +138,9 @@ class AnimalDetailsScreen extends StatelessWidget {
               _buildInfoRow(context, Icons.pets, 'Espécie:', species),
               _buildInfoRow(context, Icons.badge, 'Raça:', breed),
               _buildInfoRow(context, Icons.cake, 'Idade:', age ),
-              _buildInfoRow(
-                context,
-                gender == "Feminino" ? Icons.female : Icons.male,'Gênero:',gender),
+              _buildInfoRow(context, gender == "Feminino" ? Icons.female : Icons.male,'Gênero:',gender),
               _buildInfoRow(context, Icons.healing, 'Castrado/Esterilizada:', sterilized ? 'Sim' : 'Não'),
-              _buildInfoRow(context, Icons.warning, 'Alergias:', allergies.isEmpty ? 'Nenhuma' : allergies),
+              _buildInfoRow(context, Icons.warning, 'Problemas de Saude/Alergias:', allergies.isEmpty ? 'Nenhuma' : allergies),
               _buildInfoRow(context, Icons.rule, 'Porte:', size),
               _buildInfoRow(context, Icons.emoji_emotions, 'Comportamento:', behavior),
               _buildInfoRow(context, Icons.directions_walk, 'Passeios dados:', '$numeroDePasseiosDados'),
@@ -186,19 +184,23 @@ class AnimalDetailsScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(icon, color: theme.primaryColor),
           const SizedBox(width: 8),
-          Text(
-            label,
-            style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(width: 8),
           Expanded(
-            child: Text(
-              value,
-              style: theme.textTheme.bodyLarge,
-              overflow: TextOverflow.ellipsis,
+            child: Text.rich(
+              TextSpan(
+                text: '$label ',
+                style: theme.textTheme.bodyLarge,
+                children: [
+                  TextSpan(
+                    text: value,
+                    style: theme.textTheme.bodyMedium,
+                  ),
+                ],
+              ),
+              softWrap: true,
             ),
           ),
         ],

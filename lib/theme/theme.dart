@@ -12,8 +12,8 @@ final ThemeData lightTheme = ThemeData(
     toolbarHeight: 40,
   ),
   textTheme: TextTheme(
-    bodyLarge: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.brown[900]),
-    bodyMedium: TextStyle(fontSize: 16,fontWeight: FontWeight.bold, color: Colors.brown[600]),
+    bodyLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.brown[900]),
+    bodyMedium: TextStyle(fontSize: 18,fontWeight: FontWeight.bold, color: Colors.brown[600]),
     bodySmall: TextStyle(fontSize: 16,fontWeight: FontWeight.bold, color: Colors.brown[400]),
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
@@ -64,9 +64,9 @@ final ThemeData darkTheme = ThemeData(
     iconTheme: IconThemeData(color: Colors.white),
   ),
   textTheme: TextTheme(
-    bodyLarge: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-    bodyMedium: TextStyle(fontSize: 16, color: Colors.white70),
-    bodySmall: TextStyle(fontSize: 14, color: Colors.grey),
+    bodyLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+    bodyMedium: TextStyle(fontSize: 18, color: Colors.white70),
+    bodySmall: TextStyle(fontSize: 16, color: Colors.grey),
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
