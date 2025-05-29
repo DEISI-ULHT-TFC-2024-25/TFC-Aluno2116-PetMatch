@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/models/animal.dart';
@@ -10,6 +9,8 @@ import 'package:tinder_para_caes/firebaseLogic/associacaoProvider.dart';
 import 'package:tinder_para_caes/screens/allPedidosList.dart';
 import 'package:tinder_para_caes/screens/animalDetailsScreen.dart';
 import 'package:tinder_para_caes/screens/loginScreen.dart';
+
+import 'editarNecessidades.dart';
 
 class AssociacaoHomeScreen extends StatefulWidget {
   const AssociacaoHomeScreen({super.key});
@@ -267,7 +268,7 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        // Implementar ação para "Editar necessidades"
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => EditarNecessidades()));
                       },
                       child: Text("Editar necessidades"),
                     ),

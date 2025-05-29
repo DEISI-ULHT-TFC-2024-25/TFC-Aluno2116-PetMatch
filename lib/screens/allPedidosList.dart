@@ -35,7 +35,7 @@ class _AllPedidosListState extends State<AllPedidosList> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Notificações"),
+        title: Text("Pedidos"),
         backgroundColor: Colors.brown[400],
       ),
       backgroundColor: Colors.brown[100],
