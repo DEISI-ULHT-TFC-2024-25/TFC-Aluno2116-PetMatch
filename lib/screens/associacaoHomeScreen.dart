@@ -10,7 +10,8 @@ import 'package:tinder_para_caes/screens/allPedidosList.dart';
 import 'package:tinder_para_caes/screens/animalDetailsScreen.dart';
 import 'package:tinder_para_caes/screens/loginScreen.dart';
 
-import 'editarNecessidades.dart';
+import 'editarFuncionalidades.dart';
+import 'editarPerfilAssociação.dart';
 
 class AssociacaoHomeScreen extends StatefulWidget {
   const AssociacaoHomeScreen({super.key});
@@ -268,9 +269,9 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => EditarNecessidades()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => EditarPerfilAssociacao()));
                       },
-                      child: Text("Editar necessidades"),
+                      child: Text("Editar perfil"),
                     ),
                   ],
                 ),

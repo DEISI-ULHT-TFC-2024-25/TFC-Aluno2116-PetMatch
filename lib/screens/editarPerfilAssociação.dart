@@ -6,17 +6,18 @@ import 'package:tinder_para_caes/models/associacao.dart';
 import 'package:tinder_para_caes/firebaseLogic/authenticationService.dart';
 import 'package:provider/provider.dart';
 import 'package:tinder_para_caes/firebaseLogic/associacaoProvider.dart';
+import 'package:tinder_para_caes/screens/editarFuncionalidades.dart';
 import '../models/funcionalidades.dart' show Funcionalidades;
 import '../theme/theme.dart'; // Importação do tema
 
-class CriarAssociacao extends StatefulWidget {
-  const CriarAssociacao({super.key});
+class EditarPerfilAssociacao extends StatefulWidget {
+  const EditarPerfilAssociacao({super.key});
 
   @override
-  _CriarAssociacaoState createState() => _CriarAssociacaoState();
+  _EditarPerfilAssociacaoState createState() => _EditarPerfilAssociacaoState();
 }
 
-class _CriarAssociacaoState extends State<CriarAssociacao> {
+class _EditarPerfilAssociacaoState extends State<EditarPerfilAssociacao> {
   bool shareLocation = false;
   final Authenticationservice authService = Authenticationservice();
   final TextEditingController nomeController = TextEditingController();
@@ -29,123 +30,72 @@ class _CriarAssociacaoState extends State<CriarAssociacao> {
   final TextEditingController moradaController = TextEditingController();
   final TextEditingController distritoController = TextEditingController();
 
-  List<Funcionalidades> funcionalidadesSelecionadas = [];
 
-  void _mostrarPopUpFuncionalidades() async {
-    List<Funcionalidades> selecionadasTemp = List.from(funcionalidadesSelecionadas);
+  void atualizar() async {
+    final associacaoProvider = Provider.of<AssociacaoProvider>(context, listen: false);
+    final associacao = associacaoProvider.association;
 
-    bool? resultado = await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Escolha as Funcionalidades"),
-          content: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.9,
-            height: MediaQuery.of(context).size.height * 0.7,
-            child: StatefulBuilder(
-              builder: (context, setStateDialog) {
-                return ListView(
-                  children: Funcionalidades.values.map((func) {
-                    return CheckboxListTile(
-                      title: Text(func.toString().split('.').last),
-                      value: selecionadasTemp.contains(func),
-                      onChanged: (bool? value) {
-                        setStateDialog(() {
-                          if (value == true) {
-                            selecionadasTemp.add(func);
-                          } else {
-                            selecionadasTemp.remove(func);
-                          }
-                        });
-                      },
-                    );
-                  }).toList(),
-                );
-              },
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text("Cancelar"),
-            ),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  funcionalidadesSelecionadas = selecionadasTemp;
-                });
-                Navigator.pop(context, true);
-              },
-              child: const Text("Confirmar"),
-            ),
-          ],
-        );
-      },
-    );
+    if (associacao == null) return;
 
-    if (resultado == true) {
-      setState(() {});
+    final Map<String, dynamic> dadosAtualizados = {};
+
+    if (nomeController.text.trim().isNotEmpty) {
+      dadosAtualizados['nome'] = nomeController.text.trim();
     }
-  }
-
-  void register() async {
-    if (passwordController.text != confirmPasswordController.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("❌ As palavras-passe não coincidem!")),
-      );
-      return;
+    if (email1Controller.text.trim().isNotEmpty) {
+      dadosAtualizados['email1'] = email1Controller.text.trim();
     }
-    if (passwordController.text.isEmpty || email1Controller.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("❌ Email e senha são obrigatórios")),
-      );
-      return;
+    if (email2Controller.text.trim().isNotEmpty) {
+      dadosAtualizados['email2'] = email2Controller.text.trim();
     }
-
-    Map<String, dynamic> associacaoData = {
-      "nome": nomeController.text,
-      "emailGeral": email1Controller.text,
-      "emailParaAlgumaCoisa": email2Controller.text.isNotEmpty ? email2Controller.text : null,
-      "telemovelPrincipal": telefone1Controller.text,
-      "telemovelSecundario": telefone2Controller.text,
-      "morada": shareLocation ? moradaController.text : null, // Morada apenas se shareLocation for true
-      "distrito": distritoController.text, // Distrito sempre presente
-      "tipo": "associacao",
-      "animais": [],
-      "pedidos": [],
-      "eventos": [],
-      "necessidades": [],
-      "funcionalidades": funcionalidadesSelecionadas.map((f) => f.toString().split('.').last).toList(),
-    };
-
-    var firebaseUser = await authService.registerAssociacao(
-      email1Controller.text,
-      passwordController.text,
-      associacaoData,
-    );
-
-    if (firebaseUser != null) {
-      final uid = firebaseUser.uid;
-      final docRef = FirebaseFirestore.instance.collection('associacao').doc(uid);
-      final docSnap = await docRef.get();
-      final data = docSnap.data();
-
-      if (data != null) {
-        final minhaAssociacao = Associacao.fromMap(uid, data);
-        Provider.of<AssociacaoProvider>(context, listen: false).setAssociation(minhaAssociacao);
+    if (telefone1Controller.text.trim().isNotEmpty) {
+      dadosAtualizados['telemovel1'] = telefone1Controller.text.trim();
+    }
+    if (telefone2Controller.text.trim().isNotEmpty) {
+      dadosAtualizados['telemovel2'] = telefone2Controller.text.trim();
+    }
+    if (distritoController.text.trim().isNotEmpty) {
+      dadosAtualizados['distrito'] = distritoController.text.trim();
+    }
+    if (shareLocation) {
+      dadosAtualizados['partilharLocalizacao'] = true;
+      if (moradaController.text.trim().isNotEmpty) {
+        dadosAtualizados['morada'] = moradaController.text.trim();
       }
-
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AssociacaoHomeScreen()),);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("✅ Associação registada com sucesso!")),
-      );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("❌ Erro ao registrar associação")),
-      );
+      dadosAtualizados['partilharLocalizacao'] = false;
+      dadosAtualizados['morada'] = ""; // limpa se o utilizador desativar
     }
+
+    // Atualizar palavra-passe se for válida e coincidir
+    if (passwordController.text.trim().isNotEmpty &&
+        passwordController.text == confirmPasswordController.text) {
+      await authService.atualizarPassword(passwordController.text.trim());
+    }
+
+    // Atualizar o email se for diferente do atual
+    if (email1Controller.text.trim().isNotEmpty &&
+        email1Controller.text.trim() != associacao.generalEmail) {
+      await authService.atualizarEmail(email1Controller.text.trim());
+      dadosAtualizados['email1'] = email1Controller.text.trim();
+    }
+
+    await FirebaseFirestore.instance
+        .collection('associacao')
+        .doc(associacao.uid)
+        .update(dadosAtualizados);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Perfil atualizado com sucesso!')),
+    );
+
+    // Atualizar o provider local (opcional)
+    await associacaoProvider.recarregarAssociacao();
+
+    // Voltar atrás ou navegar
+    Navigator.pop(context);
   }
+
 
   List<String> distritos = [];
 
@@ -176,7 +126,7 @@ class _CriarAssociacaoState extends State<CriarAssociacao> {
     final theme = Theme.of(context); // Obtém o tema
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Formulário de Associação')),
+      appBar: AppBar(title: const Text('Alteração dos seus dados')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
@@ -257,14 +207,16 @@ class _CriarAssociacaoState extends State<CriarAssociacao> {
             const SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: theme.primaryColor),
-              onPressed: _mostrarPopUpFuncionalidades,
-              child: const Text("Escolher Funcionalidades"),
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const EditarFuncionalidades()));
+              },
+              child: Text("Escolher Funcionalidades"),
             ),
             const SizedBox(height: 10),
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: theme.primaryColor),
-              onPressed: register,
-              child: const Text("Submeter"),
+              onPressed: atualizar,
+              child: const Text("Atualizar Perfil"),
             ),
           ],
         ),

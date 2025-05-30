@@ -5,14 +5,14 @@ import 'package:tinder_para_caes/firebaseLogic/associacaoProvider.dart';
 import 'package:tinder_para_caes/models/funcionalidades.dart';
 import 'package:tinder_para_caes/models/associacao.dart';
 
-class EditarNecessidades extends StatefulWidget {
-  const EditarNecessidades({super.key});
+class EditarFuncionalidades extends StatefulWidget {
+  const EditarFuncionalidades({super.key});
 
   @override
-  _EditarNecessidadesState createState() => _EditarNecessidadesState();
+  _EditarFuncionalidadesState createState() => _EditarFuncionalidadesState();
 }
 
-class _EditarNecessidadesState extends State<EditarNecessidades> {
+class _EditarFuncionalidadesState extends State<EditarFuncionalidades> {
   List<Funcionalidades> funcionalidadesSelecionadas = [];
 
 
@@ -25,10 +25,7 @@ class _EditarNecessidadesState extends State<EditarNecessidades> {
     final associacao = Provider.of<AssociacaoProvider>(context, listen: false).association;
     funcionalidadesSelecionadas = Provider.of<AssociacaoProvider>(context, listen: false).association!.funcionalidades;
 
-    await FirebaseFirestore.instance
-        .collection('associacao')
-        .doc(associacao?.uid)
-        .update({
+    await FirebaseFirestore.instance.collection('associacao').doc(associacao?.uid).update({
       'funcionalidades': funcionalidadesSelecionadas.map((f) => f.toString().split('.').last).toList(),
     });
 

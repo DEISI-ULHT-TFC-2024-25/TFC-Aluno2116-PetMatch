@@ -5,6 +5,7 @@ class Authenticationservice {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+
   Future<User?> registerUtilizador(String email, String password, Map<String, dynamic> userData) async {
     try {
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
@@ -75,4 +76,19 @@ class Authenticationservice {
     DocumentSnapshot userDoc = await _firestore.collection("users").doc(uid).get();
     return userDoc.data() as Map<String, dynamic>?;
   }
+
+  Future<void> atualizarPassword(String novaPassword) async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      await user.updatePassword(novaPassword);
+    }
+  }
+
+  Future<void> atualizarEmail(String novoEmail) async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      await user.updateEmail(novoEmail);
+    }
+  }
+
 }
