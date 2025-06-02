@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:tinder_para_caes/firebaseLogic/associacaoProvider.dart';
 import 'package:tinder_para_caes/screens/editarFuncionalidades.dart';
 import '../models/funcionalidades.dart' show Funcionalidades;
-import '../theme/theme.dart'; // Importação do tema
+import '../theme/theme.dart';
 
 class EditarPerfilAssociacao extends StatefulWidget {
   const EditarPerfilAssociacao({super.key});
