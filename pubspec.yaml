@@ -94,6 +94,8 @@ flutter:
     - assets/distritos.txt
     - assets/patinhaPin.png
     - assets/app_icon.png
+    - assets/inconCao.png
+    - assets/inconGato.png
 
 
   #   - images/a_dot_burr.jpeg
