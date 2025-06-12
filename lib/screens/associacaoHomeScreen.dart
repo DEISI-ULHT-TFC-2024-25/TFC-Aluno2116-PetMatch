@@ -10,8 +10,8 @@ import 'package:tinder_para_caes/screens/allPedidosList.dart';
 import 'package:tinder_para_caes/screens/animalDetailsScreen.dart';
 import 'package:tinder_para_caes/screens/loginScreen.dart';
 
-import 'editarFuncionalidades.dart';
-import 'editarPerfilAssociação.dart';
+import 'package:tinder_para_caes/screens/editarFuncionalidades.dart';
+import 'package:tinder_para_caes/screens/editarPerfilAssociação.dart';
 
 class AssociacaoHomeScreen extends StatefulWidget {
   const AssociacaoHomeScreen({super.key});
@@ -198,6 +198,7 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                 },
                 child: Text("Ver todos os pedidos pendentes"),
               ),
+              SizedBox(height: 20.0),
 
               // Animals Section
               Text(
@@ -207,15 +208,16 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
               SizedBox(height: 20.0),
 
               // Animals Grid
+
               GridView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                padding: const EdgeInsets.all(8.0),
+
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   crossAxisSpacing: 8.0,
                   mainAxisSpacing: 8.0,
-                  childAspectRatio: 1,
+                  childAspectRatio: 0.8,
                 ),
                 itemCount: animais.length> 9? 9: animais.length,
                 itemBuilder: (context, index) {
@@ -230,19 +232,25 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                           ),
                         );
                       },
-                  child:  Card(
-                    color: Colors.brown[300],
-                    child: Center(
-                      child: Text(
-                        animais[index].fullName,
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                        textAlign: TextAlign.center,
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Column(
+                          children: [
+                            Image.asset(
+                                animal.species == 'Cão' ? 'assets/iconCao.png':
+                                animal.species == 'Gato' ? 'assets/iconGato.png':
+                                'assets/iconPatinhaGeral.png'
+                            ),
+                            Text(animal.fullName),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
                   );
                 },
               ),
+
               SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {

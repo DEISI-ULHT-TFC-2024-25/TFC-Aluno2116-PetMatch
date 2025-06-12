@@ -245,13 +245,16 @@ class _AllAnimalsListState extends State<AllAnimalsList> {
                             ),
                             child: imagemPerfil == null
                                 ? Center(
-                              child: Icon(
-                                Icons.pets,
-                                size: 50,
-                                color: theme.colorScheme.onSurface,
+                              child: Image.asset(
+                                animal.species == 'Cão'
+                                    ? 'assets/iconCao.png'
+                                    : animal.species == 'Gato'
+                                    ? 'assets/iconGato.png'
+                                    : 'assets/iconPatinhaGeral.png',
+                                  fit: BoxFit.cover,
                               ),
                             )
-                                : null,
+                                : null, // Isto evita erro quando imagem existe
                           ),
                         ],
                       ),

@@ -105,40 +105,47 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
 
           numberOfAnimals == 0 ?
             Text("Sem patudos para visualizar"):
-            GridView.count(
-              crossAxisCount: 3, // 3 por linha
-              shrinkWrap: true, // para caber dentro de Column
-              physics: NeverScrollableScrollPhysics(), // evitar scroll dentro de scroll
-              crossAxisSpacing: 5,
-              mainAxisSpacing: 5,
-              children: animals.take(9).map((animal) {
-                return InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AnimalDetailsScreen(
-                          animal: animal,
-                          isAssoci: false,
-                          uidAssociacao: "",
+          GridView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              crossAxisSpacing: 0.0,
+              mainAxisSpacing: 0.0,
+              childAspectRatio: 0.85,
+            ),
+            itemCount: animals.length> 12 ? 12: animals.length,
+            itemBuilder: (context, index) {
+              final animal = animals[index];
+              String uidAssociacao = uid ?? ''  ;
+              return InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AnimalDetailsScreen(animal: animal, isAssoci:true, uidAssociacao: uidAssociacao ),
+                    ),
+                  );
+                },
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(0),
+                    child: Column(
+                      children: [
+                        Image.asset(
+                            animal.species == 'Cão' ? 'assets/iconCao.png':
+                            animal.species == 'Gato' ? 'assets/iconGato.png':
+                            'assets/iconPatinhaGeral.png'
                         ),
-                      ),
-                    );
-                  },
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          Icon(Icons.pets, size: 50),
-                          Text(animal.fullName),
-                        ],
-                      ),
+                        Text(animal.fullName, style: TextStyle(fontSize: 14)),
+                      ],
                     ),
                   ),
-                );
-              }).toList(),
-            ),
+                ),
+              );
+            },
+          ),
 
           SizedBox(height: 10),
           ElevatedButton(

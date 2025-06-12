@@ -14,6 +14,7 @@ import 'package:tinder_para_caes/screens/allAssociacoesList.dart';
 import 'package:provider/provider.dart';
 import 'package:tinder_para_caes/firebaseLogic/utilizadorProvider.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:tinder_para_caes/screens/editarPerfilUtilizador.dart';
 
 class UtilizadorHomeScreen extends StatefulWidget {
   const UtilizadorHomeScreen({super.key});
@@ -324,7 +325,11 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
                             children: [
-                              Icon(Icons.pets, size: 50),
+                              Image.asset(
+                                animal.species == 'Cão' ? 'assets/iconCao.png':
+                                    animal.species == 'Gato' ? 'assets/iconGato.png':
+                                        'assets/iconPatinhaGeral.png'
+                              ),
                               Text(animal.fullName),
                             ],
                           ),
@@ -498,6 +503,18 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                       ),
                     ],
                   ),
+                ),
+                SizedBox(height: 16.0),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditarPerfilUtilizador(),
+                      ),
+                    );
+                  },
+                  child: Text("Editar Perfil"),
                 ),
 
 
