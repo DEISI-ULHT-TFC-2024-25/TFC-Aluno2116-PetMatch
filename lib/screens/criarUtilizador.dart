@@ -51,7 +51,7 @@ class UtilizadorFormScreenState extends State<CriarUtilizador> {
       "morada": moradaController.text,
       "distrito": distritoController.text,
       "zipcode": zipcodeController.text,
-      "sexo": gender,
+      "genero": gender,
       "maior_de_idade": isAdult,
       "tipo": "utilizador",
       "associacoesEmQueEstaEnvolvido": [],

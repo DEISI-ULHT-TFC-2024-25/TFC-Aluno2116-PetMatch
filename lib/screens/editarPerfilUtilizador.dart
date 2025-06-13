@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:tinder_para_caes/screens/associacaoHomeScreen.dart';
-import 'package:tinder_para_caes/models/associacao.dart';
+import 'package:tinder_para_caes/firebaseLogic/utilizadorProvider.dart';
 import 'package:tinder_para_caes/firebaseLogic/authenticationService.dart';
 import 'package:provider/provider.dart';
-import 'package:tinder_para_caes/firebaseLogic/associacaoProvider.dart';
-import 'package:tinder_para_caes/screens/editarFuncionalidades.dart';
-import '../models/funcionalidades.dart' show Funcionalidades;
 import '../theme/theme.dart';
 
 class EditarPerfilUtilizador extends StatefulWidget {
@@ -18,53 +14,51 @@ class EditarPerfilUtilizador extends StatefulWidget {
 }
 
 class _EditarPerfilUtilizadorState extends State<EditarPerfilUtilizador> {
-  bool shareLocation = false;
+
   final Authenticationservice authService = Authenticationservice();
   final TextEditingController nomeController = TextEditingController();
-  final TextEditingController email1Controller = TextEditingController();
-  final TextEditingController email2Controller = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController nifController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
-  final TextEditingController telefone1Controller = TextEditingController();
-  final TextEditingController telefone2Controller = TextEditingController();
+  final TextEditingController telefoneController = TextEditingController();
+  final TextEditingController generoController = TextEditingController();
   final TextEditingController moradaController = TextEditingController();
   final TextEditingController distritoController = TextEditingController();
+  final TextEditingController codigoPostalController = TextEditingController();
+
+  String gender = 'Feminino';
+  final List<String> genders = ['Feminino', 'Masculino', 'Outro'];
 
 
   void atualizar() async {
-    final associacaoProvider = Provider.of<AssociacaoProvider>(context, listen: false);
-    final associacao = associacaoProvider.association;
+    final utilizadorProvider = Provider.of<UtilizadorProvider>(context, listen: false);
+    final utilizador = utilizadorProvider.user;
 
-    if (associacao == null) return;
+    if (utilizador == null) return;
 
     final Map<String, dynamic> dadosAtualizados = {};
 
     if (nomeController.text.trim().isNotEmpty) {
       dadosAtualizados['nome'] = nomeController.text.trim();
     }
-    if (email1Controller.text.trim().isNotEmpty) {
-      dadosAtualizados['email1'] = email1Controller.text.trim();
+    if (emailController.text.trim().isNotEmpty) {
+      dadosAtualizados['email'] = emailController.text.trim();
     }
-    if (email2Controller.text.trim().isNotEmpty) {
-      dadosAtualizados['email2'] = email2Controller.text.trim();
+    if (nifController.text.trim().isNotEmpty) {
+      dadosAtualizados['nif'] = nifController.text.trim();
     }
-    if (telefone1Controller.text.trim().isNotEmpty) {
-      dadosAtualizados['telemovel1'] = telefone1Controller.text.trim();
+    if (telefoneController.text.trim().isNotEmpty) {
+      dadosAtualizados['telefone'] = telefoneController.text.trim();
     }
-    if (telefone2Controller.text.trim().isNotEmpty) {
-      dadosAtualizados['telemovel2'] = telefone2Controller.text.trim();
+    if (generoController.text.trim().isNotEmpty) {
+      dadosAtualizados['gender'] = generoController.text.trim();
     }
     if (distritoController.text.trim().isNotEmpty) {
       dadosAtualizados['distrito'] = distritoController.text.trim();
     }
-    if (shareLocation) {
-      dadosAtualizados['partilharLocalizacao'] = true;
-      if (moradaController.text.trim().isNotEmpty) {
-        dadosAtualizados['morada'] = moradaController.text.trim();
-      }
-    } else {
-      dadosAtualizados['partilharLocalizacao'] = false;
-      dadosAtualizados['morada'] = ""; // limpa se o utilizador desativar
+    if (codigoPostalController.text.trim().isNotEmpty) {
+      dadosAtualizados['zipcode'] = codigoPostalController.text.trim();
     }
 
     // Atualizar palavra-passe se for válida e coincidir
@@ -74,25 +68,25 @@ class _EditarPerfilUtilizadorState extends State<EditarPerfilUtilizador> {
     }
 
     // Atualizar o email se for diferente do atual
-    if (email1Controller.text.trim().isNotEmpty &&
-        email1Controller.text.trim() != associacao.generalEmail) {
-      await authService.atualizarEmail(email1Controller.text.trim());
-      dadosAtualizados['email1'] = email1Controller.text.trim();
+    if (emailController.text.trim().isNotEmpty &&
+        emailController.text.trim() != utilizador.email) {
+      await authService.atualizarEmail(emailController.text.trim());
+      dadosAtualizados['email'] = emailController.text.trim();
     }
 
     await FirebaseFirestore.instance
-        .collection('associacao')
-        .doc(associacao.uid)
+        .collection('utilizador')
+        .doc(utilizador.uid)
         .update(dadosAtualizados);
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Perfil atualizado com sucesso!')),
     );
 
-    // Atualizar o provider local (opcional)
-    await associacaoProvider.recarregarAssociacao();
+    // Atualizar o provider local
+    await utilizadorProvider.recarregarUtilizador();
 
-    // Voltar atrás ou navegar
+    // Voltar atrás
     Navigator.pop(context);
   }
 
@@ -137,6 +131,11 @@ class _EditarPerfilUtilizadorState extends State<EditarPerfilUtilizador> {
             ),
             const SizedBox(height: 10),
             TextField(
+              controller: emailController,
+              decoration: InputDecoration(labelText: 'Email'),
+            ),
+            const SizedBox(height: 10),
+            TextField(
               controller: passwordController,
               decoration: InputDecoration(labelText: 'Palavra-passe'),
               obscureText: true,
@@ -149,34 +148,37 @@ class _EditarPerfilUtilizadorState extends State<EditarPerfilUtilizador> {
             ),
             const SizedBox(height: 10),
             TextField(
-              controller: telefone1Controller,
-              decoration: InputDecoration(labelText: 'Telemóvel 1'),
+              controller: telefoneController,
+              decoration: InputDecoration(labelText: 'Telemóvel'),
             ),
             const SizedBox(height: 10),
-            TextField(
-              controller: telefone2Controller,
-              decoration: InputDecoration(labelText: 'Telemóvel 2'),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: email1Controller,
-              decoration: InputDecoration(labelText: 'Email 1'),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: email2Controller,
-              decoration: InputDecoration(labelText: 'Email 2'),
-            ),
-            const SizedBox(height: 10),
-            CheckboxListTile(
-              title: const Text('Partilhar localização?'),
-              value: shareLocation,
-              onChanged: (bool? value) {
+            DropdownButtonFormField<String>(
+              decoration: const InputDecoration(labelText: 'Género'),
+              value: gender,
+              items: genders.map((String g) {
+                return DropdownMenuItem<String>(
+                  value: g,
+                  child: Text(g),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
                 setState(() {
-                  shareLocation = value ?? false;
+                  gender = newValue ?? 'Feminino';
                 });
               },
             ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: nifController,
+              decoration: InputDecoration(labelText: 'NIF'),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: codigoPostalController,
+              decoration: InputDecoration(labelText: 'CodigoPostal'),
+            ),
+            const SizedBox(height: 10),
+
             Autocomplete<String>(
               optionsBuilder: (TextEditingValue textEditingValue) {
                 if (textEditingValue.text.isEmpty) {
@@ -198,21 +200,8 @@ class _EditarPerfilUtilizadorState extends State<EditarPerfilUtilizador> {
               },
             ),
 
-            if (shareLocation) ...[
-              TextField(
-                controller: moradaController,
-                decoration: const InputDecoration(labelText: 'Morada'),
-              ),
-            ],
             const SizedBox(height: 20),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: theme.primaryColor),
-              onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const EditarFuncionalidades()));
-              },
-              child: Text("Escolher Funcionalidades"),
-            ),
-            const SizedBox(height: 10),
+
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: theme.primaryColor),
               onPressed: atualizar,

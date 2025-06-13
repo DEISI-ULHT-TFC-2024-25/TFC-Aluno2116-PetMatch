@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:tinder_para_caes/screens/associacaoHomeScreen.dart';
-import 'package:tinder_para_caes/models/associacao.dart';
 import 'package:tinder_para_caes/firebaseLogic/authenticationService.dart';
 import 'package:provider/provider.dart';
 import 'package:tinder_para_caes/firebaseLogic/associacaoProvider.dart';
 import 'package:tinder_para_caes/screens/editarFuncionalidades.dart';
-import '../models/funcionalidades.dart' show Funcionalidades;
 import '../theme/theme.dart';
 
 class EditarPerfilAssociacao extends StatefulWidget {
@@ -89,10 +86,10 @@ class _EditarPerfilAssociacaoState extends State<EditarPerfilAssociacao> {
       const SnackBar(content: Text('Perfil atualizado com sucesso!')),
     );
 
-    // Atualizar o provider local (opcional)
+    // Atualizar o provider local
     await associacaoProvider.recarregarAssociacao();
 
-    // Voltar atrás ou navegar
+    // Voltar atrás
     Navigator.pop(context);
   }
 
