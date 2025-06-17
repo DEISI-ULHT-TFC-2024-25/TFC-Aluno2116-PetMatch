@@ -16,6 +16,8 @@ import 'package:tinder_para_caes/firebaseLogic/utilizadorProvider.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:tinder_para_caes/screens/editarPerfilUtilizador.dart';
 
+import '../models/funcionalidades.dart';
+
 class UtilizadorHomeScreen extends StatefulWidget {
   const UtilizadorHomeScreen({super.key});
 
@@ -385,7 +387,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                       Expanded(
                         child: ListView.builder(
                           shrinkWrap: true,
-                          itemCount: pedidosAceites.length > 4 ? 4 : pedidosAceites.length,
+                          itemCount: pedidosAceites.length > 2 ? 2 : pedidosAceites.length,
                           itemBuilder: (context, index) {
                             final pedido = pedidosAceites[index];
                             return Card(

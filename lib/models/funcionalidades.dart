@@ -7,8 +7,35 @@ enum Funcionalidades {
   partilhaEventos,
   voluntariado,
   familiaAcolhimentoTemporaria,
-  listaDeNecessidades
+  listaDeNecessidades;
+
+
+  @override
+  String toString() {
+    switch (this) {
+      case Funcionalidades.passeiosDosCandeos:
+        return 'Ir passear um Cão';
+      case Funcionalidades.apradinhamento:
+        return 'Apadrinhamento de um animal';
+      case Funcionalidades.socios:
+        return 'Tornar-se Sócio';
+      case Funcionalidades.partilhaEventos:
+        return 'Partilha de Eventos';
+      case Funcionalidades.voluntariado:
+        return 'Voluntariado';
+      case Funcionalidades.familiaAcolhimentoTemporaria:
+        return 'Tornar-se em Família de Acolhimento Temporária';
+      case Funcionalidades.listaDeNecessidades:
+        return 'Lista de Necessidades';
+      default:
+        return 'Desconhecido';
+
+    }
+  }
+
 }
+
+
 
 class Funcionalidade {
   String id;
@@ -19,11 +46,17 @@ class Funcionalidade {
     required this.tipo,
   });
 
+  @override
+  String toString() {
+    return tipo.toString();
+  }
+
+
   factory Funcionalidade.fromMap(Map<String, dynamic> data, String id) {
     return Funcionalidade(
       id: id,
       tipo: Funcionalidades.values.firstWhere(
-            (e) => e.toString() == data['tipo'],
+            (e) => e.name == data['tipo'],
         orElse: () => Funcionalidades.passeiosDosCandeos,
       ),
     );
@@ -32,7 +65,7 @@ class Funcionalidade {
 
   Map<String, dynamic> toMap() {
     return {
-      'tipo': tipo.toString(),
+      'tipo': tipo,
     };
   }
 

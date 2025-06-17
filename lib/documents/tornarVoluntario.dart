@@ -62,7 +62,7 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
 
       await firestore.collection("pedidosENotificacoes").add({
         "uidUtilizador": uidUtilizador,
-        "oQuePretendeFazer": "TornarVoluntario",
+        "oQuePretendeFazer": "Tornar-se Voluntario",
         "associacao": uidAssociacao,
         "confirmouTodosOsRequisitos": aceitaRegras,
         "mensagemAdicional": mensagemAdicional,
@@ -166,7 +166,6 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
     "Ajuda na captura de animais em risco": false,
     "Limpeza das boxes e passear animais no nosso abrigo": false,
     "Boleias aos animais (de/para o abrigo ou clínicas/veterinários)": false,
-    "Ser FAT de cães": false,
     "Disponibilidade para fazer recobro de animais": false,
   };
 
@@ -174,7 +173,7 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Tornar-se Voluntário 🏠"),
+        title: Text("Tornar-se Voluntário "),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

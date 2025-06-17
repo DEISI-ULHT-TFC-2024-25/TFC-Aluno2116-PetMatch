@@ -143,7 +143,7 @@ class _TornarSocioScreenState extends State<TornarSocioScreen> {
 
       await firestore.collection("pedidosENotificacoes").add({
         "uidUtilizador": uidUtilizador,
-        "oQuePretendeFazer": "TornarSocio",
+        "oQuePretendeFazer": "Tornar-se Sócio",
         "associacao": uidAssociacao,
         "confirmouTodosOsRequisitos": aceitaRegras,
         "mensagemAdicional": mensagemAdicional,

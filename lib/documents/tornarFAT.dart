@@ -39,7 +39,7 @@ class _TornarFATState extends State<TornarFAT> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Ficha de Candidatura 🐱"),
+        title: Text("Ficha de Candidatura"),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -158,7 +158,7 @@ class _TornarFATState extends State<TornarFAT> {
 
       await firestore.collection("pedidosENotificacoes").add({
         "uidUtilizador": uidUtilizador,
-        "oQuePretendeFazer": "FamiliaAcolhimentoTemporario",
+        "oQuePretendeFazer": "Tornar-se em Família de Acolhimento Temporária",
         "associacao": uidAssociacao,
         "confirmouTodosOsRequisitos": true,
         "mensagemAdicional": mensagemAdicional,

@@ -131,6 +131,7 @@ class _CriarAssociacaoState extends State<CriarAssociacao> {
       final data = docSnap.data();
 
       if (data != null) {
+        print(data);
         final minhaAssociacao = Associacao.fromMap(uid, data);
         Provider.of<AssociacaoProvider>(context, listen: false).setAssociation(minhaAssociacao);
       }

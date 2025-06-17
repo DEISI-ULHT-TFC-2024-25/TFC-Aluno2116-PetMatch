@@ -92,6 +92,8 @@ class _LoginScreenState extends State<LoginScreen> {
         if (data == null) {
           throw Exception("Dados da associação não encontrados.");
         }
+        print("AAAAAAAAAAAAAAAAAA");
+
         final minhaAssociacao = Associacao.fromMap(user.uid, data);
 
         Provider.of<AssociacaoProvider>(context, listen: false).setAssociation(

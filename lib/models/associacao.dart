@@ -18,7 +18,7 @@ class Associacao {
   String address;
   String site;
   int nif;
-  List<Funcionalidades> funcionalidades; // Ajustado para corresponder ao enum
+  List<Funcionalidades> funcionalidades;
   List<String> animais;
   List<String> pedidosRealizados;
   List<Eventos> eventos;
@@ -62,8 +62,12 @@ class Associacao {
       nif: map['nif'] ?? 0,
       funcionalidades: (map['funcionalidades'] as List<dynamic>?)
           ?.map((f) => Funcionalidades.values.firstWhere(
-              (element) => element.toString().split('.').last == f)).toList() ??
-          [],
+            (e) => e.name == f,
+        orElse: () {
+          return Funcionalidades.voluntariado;
+        },
+      ))
+          .toList() ?? [],
       animais: List<String>.from(map['animais'] ?? []),
       pedidosRealizados: (List<String>.from(map['pedidosRealizados'] ?? [])),
       eventos: (map['eventos'] as List<dynamic>?)
@@ -87,7 +91,7 @@ class Associacao {
       'morada': address,
       'site': site,
       'nif': nif,
-      'funcionalidades': funcionalidades.map((f) => f.toString().split('.').last).toList(),
+      'funcionalidades': funcionalidades.map((f) => f).toList(),
       'animais': animais,
       'pedidosRealizados': pedidosRealizados,
       'eventos': eventos.map((e) => e.toMap()).toList(),
@@ -110,7 +114,7 @@ class Associacao {
         if (data is Map<String, dynamic>) {
           animals.add(Animal.fromMap(data));
         } else {
-          print("⚠️ Erro: Documento $uid não contém um Map válido. Tipo: ${data.runtimeType}, Conteúdo: $data");
+          print("Erro: Documento $uid não contém um Map válido. Tipo: ${data.runtimeType}, Conteúdo: $data");
         }
       }
     }

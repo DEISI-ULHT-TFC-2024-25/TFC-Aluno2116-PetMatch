@@ -51,7 +51,7 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
 
 
       final docRef = await firestore.collection("pedidosENotificacoes").add({
-        "oQuePretendeFazer": "PassearCao",
+        "oQuePretendeFazer": "Ir passear um Cão",
         "utilizadorUid": uidUtilizador,
         "associacao": uidAssociacao,
         "confirmouTodosOsRequisitos": aceitaRegras,
@@ -224,7 +224,7 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
                         setState(() {
                           aceitaRegras = value!;
                         });
-                        setStateDialog(() {}); // <- Atualiza só o conteúdo do popup
+                        setStateDialog(() {}); //  Atualiza só o conteúdo do popup
                       },
                     );
                   },
@@ -243,8 +243,8 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
             ElevatedButton(
               onPressed: aceitaRegras
                   ? () async {
-                Navigator.of(context).pop(); // 🔄 Fecha o popup de regras
-                _mostrarPopupFinal();       // ✨ Abre o popup para submeter (com mensagem opcional)
+                Navigator.of(context).pop();
+                _mostrarPopupFinal();
 
               }
                   : null,
