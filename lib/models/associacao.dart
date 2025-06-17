@@ -18,7 +18,7 @@ class Associacao {
   String address;
   String site;
   int nif;
-  List<Funcionalidades> funcionalidades;
+  List<String> funcionalidades;
   List<String> animais;
   List<String> pedidosRealizados;
   List<Eventos> eventos;
@@ -60,14 +60,7 @@ class Associacao {
       address: map['morada'] ?? '',
       site: map['site'] ?? '',
       nif: map['nif'] ?? 0,
-      funcionalidades: (map['funcionalidades'] as List<dynamic>?)
-          ?.map((f) => Funcionalidades.values.firstWhere(
-            (e) => e.name == f,
-        orElse: () {
-          return Funcionalidades.voluntariado;
-        },
-      ))
-          .toList() ?? [],
+      funcionalidades: List<String>.from(map['funcionalidades'] ?? []),
       animais: List<String>.from(map['animais'] ?? []),
       pedidosRealizados: (List<String>.from(map['pedidosRealizados'] ?? [])),
       eventos: (map['eventos'] as List<dynamic>?)
@@ -91,7 +84,7 @@ class Associacao {
       'morada': address,
       'site': site,
       'nif': nif,
-      'funcionalidades': funcionalidades.map((f) => f).toList(),
+      'funcionalidades': funcionalidades,
       'animais': animais,
       'pedidosRealizados': pedidosRealizados,
       'eventos': eventos.map((e) => e.toMap()).toList(),

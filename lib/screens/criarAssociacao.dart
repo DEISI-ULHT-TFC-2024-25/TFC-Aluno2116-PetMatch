@@ -29,10 +29,12 @@ class _CriarAssociacaoState extends State<CriarAssociacao> {
   final TextEditingController moradaController = TextEditingController();
   final TextEditingController distritoController = TextEditingController();
 
-  List<Funcionalidades> funcionalidadesSelecionadas = [];
+  List<String> funcionalidadesSelecionadas = [];
 
   void _mostrarPopUpFuncionalidades() async {
-    List<Funcionalidades> selecionadasTemp = List.from(funcionalidadesSelecionadas);
+    List<String> selecionadasTemp = List.from(funcionalidadesSelecionadas);
+    List<String> funcionalidades = ["Voluntariado", "Ir passear um Cão", "Apadrinhamento de um animal", "Tornar-se Sócio", "Partilha de Eventos", "Tornar-se em Família de Acolhimento Temporária", "Lista de Necessidades"];
+
 
     bool? resultado = await showDialog(
       context: context,
@@ -45,7 +47,7 @@ class _CriarAssociacaoState extends State<CriarAssociacao> {
             child: StatefulBuilder(
               builder: (context, setStateDialog) {
                 return ListView(
-                  children: Funcionalidades.values.map((func) {
+                  children: funcionalidades.map((func) {
                     return CheckboxListTile(
                       title: Text(func.toString().split('.').last),
                       value: selecionadasTemp.contains(func),

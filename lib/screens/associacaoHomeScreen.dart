@@ -165,13 +165,13 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
             children: [
               SizedBox(height: 16.0),
               Text("Pedidos:", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, decoration: TextDecoration.none)),
-              SizedBox(height: 20.0),
+              SizedBox(height: 10.0),
 
               // Notifications List
               ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: pedidos.length > 3 ? 3 : pedidos.length,
+                itemCount: pedidos.length > 2 ? 2 : pedidos.length,
                 itemBuilder: (context, index) {
                   final pedido = pedidos[index];
                   return Card(
@@ -191,12 +191,14 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                 },
               ),
 
-              SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AllPedidosList(pedidos: pedidos)));
-                },
-                child: Text("Ver todos os pedidos pendentes"),
+              SizedBox(height: 16.0),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AllPedidosList(pedidos: pedidos)));
+                  },
+                  child: Text("Ver todos os pedidos pendentes (${pedidos.length})"),
+                ),
               ),
               SizedBox(height: 20.0),
 
@@ -208,15 +210,14 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
               SizedBox(height: 20.0),
 
               // Animals Grid
-
               GridView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
 
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
-                  crossAxisSpacing: 8.0,
-                  mainAxisSpacing: 8.0,
+                  crossAxisSpacing: 0.0,
+                  mainAxisSpacing: 0.0,
                   childAspectRatio: 0.8,
                 ),
                 itemCount: animais.length> 9? 9: animais.length,
@@ -251,18 +252,7 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                 },
               ),
 
-              SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AllAnimalsList(animais: animais, isAssociacao: true, uidAssociacao: associacao.uid),
-                    ),
-                  );
-                },
-                child: Text("Ver Todos ($numberOfAnimals)"),
-              ),
+              SizedBox(height: 8.0),
 
               Padding(
                 padding: const EdgeInsets.all(4.0),
@@ -271,19 +261,34 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => AllAnimalsList(animais: animais, isAssociacao: true, uidAssociacao: associacao.uid)));
+                      },
+                      child: Text("Ver Todos ($numberOfAnimals)"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => AdicionarAnimalScreen()));
                       },
                       child: Text("Adicionar Animal"),
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => EditarPerfilAssociacao()));
-                      },
-                      child: Text("Editar perfil"),
-                    ),
                   ],
                 ),
               ),
+              SizedBox(height: 20.0),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditarPerfilAssociacao(),
+                      ),
+                    );
+                  },
+                  child: Text("Editar Perfil"),
+                ),
+              )
             ],
           ),
         ),

@@ -13,7 +13,7 @@ class EditarFuncionalidades extends StatefulWidget {
 }
 
 class _EditarFuncionalidadesState extends State<EditarFuncionalidades> {
-  List<Funcionalidades> funcionalidadesSelecionadas = [];
+  List<String> funcionalidadesSelecionadas = [];
 
 
   @override
@@ -26,19 +26,20 @@ class _EditarFuncionalidadesState extends State<EditarFuncionalidades> {
     funcionalidadesSelecionadas = Provider.of<AssociacaoProvider>(context, listen: false).association!.funcionalidades;
 
     await FirebaseFirestore.instance.collection('associacao').doc(associacao?.uid).update({
-      'funcionalidades': funcionalidadesSelecionadas.map((f) => f.toString().split('.').last).toList(),
+      'funcionalidades': funcionalidadesSelecionadas,
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Funcionalidades atualizadas com sucesso!')),
     );
-    Navigator.pop(context); // opcional: volta atrás
+    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
     final associacao = Provider.of<AssociacaoProvider>(context).association;
     funcionalidadesSelecionadas = Provider.of<AssociacaoProvider>(context).association!.funcionalidades;
+    List<String> funcionalidades = ["Voluntariado", "Ir passear um Cão", "Apadrinhamento de um animal", "Tornar-se Sócio", "Partilha de Eventos", "Tornar-se em Família de Acolhimento Temporária", "Lista de Necessidades"];
 
     return Scaffold(
       appBar: AppBar(
@@ -56,16 +57,16 @@ class _EditarFuncionalidadesState extends State<EditarFuncionalidades> {
             const SizedBox(height: 16),
             Expanded(
               child: ListView(
-                children: Funcionalidades.values.map((func) {
+                children: funcionalidades.map((f) {
                   return CheckboxListTile(
-                    title: Text(func.toString().split('.').last),
-                    value: funcionalidadesSelecionadas.contains(func),
+                    title: Text(f),
+                    value: funcionalidadesSelecionadas.any((fs) => fs == f),
                     onChanged: (bool? value) {
                       setState(() {
                         if (value == true) {
-                          funcionalidadesSelecionadas.add(func);
+                          funcionalidadesSelecionadas.add(f);
                         } else {
-                          funcionalidadesSelecionadas.remove(func);
+                          funcionalidadesSelecionadas.remove(f);
                         }
                       });
                     },

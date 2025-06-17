@@ -126,7 +126,10 @@ class _AllAssociacoesListState extends State<AllAssociacoesList> {
                           SizedBox(height: 8),
                           Text("Distrito: ${associacao.distrito}"),
                           Text("Número de Animais: ${associacao.animais.length}"),
-                          Text("Tarefas Necessárias: ${associacao.funcionalidades}"),
+                          Text("Tarefas Necessárias:\n"
+                              "${associacao.funcionalidades.map((f) => "  • $f").join("\n")}",
+                            style: TextStyle(fontSize: 16),
+                          ),
                           SizedBox(height: 12),
                           ElevatedButton.icon(
                             onPressed: () {

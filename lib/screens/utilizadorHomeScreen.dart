@@ -372,7 +372,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: 16.0),
+                SizedBox(height: 20.0),
                 Text(
                   "Notificações: ",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -387,6 +387,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                       Expanded(
                         child: ListView.builder(
                           shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
                           itemCount: pedidosAceites.length > 2 ? 2 : pedidosAceites.length,
                           itemBuilder: (context, index) {
                             final pedido = pedidosAceites[index];
@@ -404,16 +405,18 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                     ],
                   ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AllPedidosAceitesList(pedidos: pedidosAceites),
-                      ),
-                    );
-                  },
-                  child: Text("Ver todos os pedidos aceites"),
+                Center(
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AllPedidosAceitesList(pedidos: pedidosAceites),
+                        ),
+                      );
+                    },
+                    child: Text("Ver todos os pedidos aceites (${pedidosAceites.length})"),
+                  ),
                 ),
 
                 SizedBox(height: 16.0),
@@ -432,6 +435,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                       Expanded(
                         child: ListView.builder(
                           shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
                           itemCount: sugestoesAssociacoes.length > 4 ? 4 : sugestoesAssociacoes.length,
                           itemBuilder: (context, index) {
                             final associacao = sugestoesAssociacoes[index];
@@ -456,19 +460,21 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                     ],
                   ),
                 ),
-
-                TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          AllAssociacoesList(associacoes: todasAssociacoes),
-                    ),
-                  );
-                },
-                child: Text("Ver todas"),
-              ),
+                Center(
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AllAssociacoesList(associacoes: todasAssociacoes),
+                        ),
+                      );
+                    },
+                    child: Text("Ver todas"),
+                  ),
+                ),
+                SizedBox(height: 16.0),
 
               AnimatedContainer(
                   duration: Duration(milliseconds: 300),
@@ -507,19 +513,20 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                   ),
                 ),
                 SizedBox(height: 16.0),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditarPerfilUtilizador(),
-                      ),
-                    );
-                  },
-                  child: Text("Editar Perfil"),
-                ),
-
-
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditarPerfilUtilizador(),
+                        ),
+                      );
+                    },
+                    child: Text("Editar Perfil"),
+                  ),
+                )
               ],
             ),
           ),
