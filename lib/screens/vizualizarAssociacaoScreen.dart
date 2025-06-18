@@ -179,12 +179,6 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
 
           ElevatedButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AllAnimalsList(animais: animals, isAssociacao: false, uidAssociacao: uid),
-                ),
-              );
             },
             child: Text("Contactar Associação"),
           ),

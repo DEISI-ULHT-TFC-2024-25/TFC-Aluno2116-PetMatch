@@ -380,7 +380,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                 SizedBox(height: 8.0),
                 SizedBox(
                   height: (pedidosAceites.length > 2)
-                      ? 300
+                      ? 200
                       : pedidosAceites.length * 100.0,
                   child: Column(
                     children: [

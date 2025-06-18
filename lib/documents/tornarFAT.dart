@@ -72,12 +72,12 @@ class _TornarFATState extends State<TornarFAT> {
 
               _buildTextField("Outros animais em casa (quantos e quais)", animaisCasaController),
 
-              _buildCheckbox("Já teve gatos ou lidou com gatos?", (value) => setState(() => teveGatos = value)),
-              _buildCheckbox("Está consciente que gatos fazem barulho?", (value) => setState(() => conscienteBarulho = value)),
-              _buildCheckbox("Aceita enviar fotos e vídeos por WhatsApp?", (value) => setState(() => aceitaWhatsApp = value)),
-              _buildCheckbox("Tem alguma condição física incompatível com gatos?", (value) => setState(() => condicaoFisica = value)),
+              _buildCheckbox("Já teve animais?", teveGatos, (value) => setState(() => teveGatos = value)),
+              _buildCheckbox("Está consciente que animais fazem barulho?", conscienteBarulho, (value) => setState(() => conscienteBarulho = value)),
+              _buildCheckbox("Aceita enviar fotos e vídeos por WhatsApp?", aceitaWhatsApp, (value) => setState(() => aceitaWhatsApp = value)),
+              _buildCheckbox("Tem alguma condição física incompatível com animais?", condicaoFisica, (value) => setState(() => condicaoFisica = value)),
 
-              _buildTextField("Motivação para ser família de acolhimento", motivacaoController, maxLines: 5),
+              _buildTextField("Motivação para ser família\nde acolhimento", motivacaoController, maxLines: 5),
               SizedBox(height: 20),
 
               Center(
@@ -138,12 +138,12 @@ class _TornarFATState extends State<TornarFAT> {
   }
 
 
-  Widget _buildCheckbox(String label, Function(bool) onChanged) {
+  Widget _buildCheckbox(String label, bool value, Function(bool) onChanged) {
     return CheckboxListTile(
       title: Text(label),
-      value: onChanged != null,
-      onChanged: (bool? value) {
-        onChanged(value ?? false);
+      value: value,
+      onChanged: (bool? newValue) {
+        onChanged(newValue ?? false);
       },
     );
   }
@@ -166,22 +166,20 @@ class _TornarFATState extends State<TornarFAT> {
         "dataCriacao": FieldValue.serverTimestamp(),
 
         "dadosPreenchidos": {
-          "nomeCompleto": nomeController.text,
-          "idade": int.tryParse(idadeController.text) ?? 0,
-          "morada": moradaController.text,
-          "codigoPostal": codigoPostalController.text,
-          "localidade": localidadeController.text,
-          "profissao": profissaoController.text,
-          "tipoHabitacao": tipoHabitacao,
-          "numPessoas": int.tryParse(numPessoasController.text) ?? 0,
-          "numCriancas": int.tryParse(numCriancasController.text) ?? 0,
-          "situacaoProfissional": situacaoProfissional,
-          "animaisCasa": animaisCasaController.text,
-          "teveGatos": teveGatos,
-          "conscienteBarulho": conscienteBarulho,
-          "aceitaWhatsApp": aceitaWhatsApp,
-          "condicaoFisica": condicaoFisica,
-          "motivacao": motivacaoController.text,
+          "Nome Completo": nomeController.text,
+          "Idade" : idadeController.text,
+          "Morada": moradaController.text,
+          "Codigo Postal": codigoPostalController.text,
+          "Localidade": localidadeController.text,
+          "Profissao": profissaoController.text,
+          "Número de pessoas no agregado familiar": int.tryParse(numPessoasController.text) ?? 0,
+          "Número de Criancas": int.tryParse(numCriancasController.text) ?? 0,
+          "Tem outros animais em casa": animaisCasaController.text,
+          "Teve outros animais": teveGatos,
+          "Está consciente do barulho": conscienteBarulho,
+          "Aceita enviar fotos e videos por WhatsApp": aceitaWhatsApp,
+          "Condicao fisica ou alergia que impeça de ter um animal": condicaoFisica,
+          "Motivação": motivacaoController.text,
         },
       });
 
@@ -208,25 +206,28 @@ class _TornarFATState extends State<TornarFAT> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: Text("🎉 Candidatura pronta a enviar"),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text("Deseja adicionar alguma mensagem adicional antes de submeter?"),
-                  if (mostrarCampoMensagem)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 12),
-                      child: TextField(
-                        controller: mensagemController,
-                        maxLines: 4,
-                        decoration: InputDecoration(
-                          labelText: "Mensagem adicional",
-                          border: OutlineInputBorder(),
+              title: Text("✨Candidatura pronta a enviar✨"),
+              content : SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text("Deseja adicionar alguma mensagem adicional antes de submeter?"),
+                    if (mostrarCampoMensagem)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 12),
+                        child: TextField(
+                          controller: mensagemController,
+                          maxLines: 4,
+                          decoration: InputDecoration(
+                            labelText: "Mensagem adicional",
+                            border: OutlineInputBorder(),
+                          ),
                         ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
+
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),

@@ -99,6 +99,11 @@ class _AllPedidosListState extends State<AllPedidosList> {
                         )
                       else if (entry.value is List && (entry.value as List).isNotEmpty)
                         Text('• ${entry.key}: ${(entry.value as List).join(", ")}')
+                      else if (entry.value is bool)
+                        if (entry.value == true)
+                          Text('• ${entry.key}: Sim')
+                        else
+                          Text('• ${entry.key}: Não')
                       else
                         Text('• ${entry.key}: ${entry.value}'),
                   ],
