@@ -71,7 +71,9 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
     }
 
     return Scaffold(
-      appBar: isFullScreen ? null : AppBar(title: Text(name)),
+      appBar: AppBar(
+        title: Text(name),
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [

@@ -19,12 +19,12 @@ class _TornarSocioScreenState extends State<TornarSocioScreen> {
   String mensagemAdicional = "";
 
 
-
   // Controladores dos campos de texto
   final TextEditingController nomeController = TextEditingController();
   final TextEditingController moradaController = TextEditingController();
   final TextEditingController codigoPostalController = TextEditingController();
   final TextEditingController localidadeController = TextEditingController();
+  final TextEditingController distritoController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController telemovelController = TextEditingController();
   final TextEditingController nifController = TextEditingController();
@@ -37,10 +37,6 @@ class _TornarSocioScreenState extends State<TornarSocioScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
         title: Text("Tornar-se Sócio"),
       ),
       body: SingleChildScrollView(
@@ -55,6 +51,7 @@ class _TornarSocioScreenState extends State<TornarSocioScreen> {
               _buildTextField("Morada", moradaController),
               _buildTextField("Código Postal", codigoPostalController),
               _buildTextField("Localidade", localidadeController),
+              _buildTextField("Distrito", distritoController),
               _buildTextField("E-mail", emailController),
               _buildTextField("Telemóvel", telemovelController),
               _buildTextField("NIF", nifController),
@@ -159,6 +156,7 @@ class _TornarSocioScreenState extends State<TornarSocioScreen> {
           "Morada Fiscal": moradaController.text,
           "Código Postal": codigoPostalController.text,
           "Localidade": localidadeController.text,
+          "Distrito" : distritoController.text,
           "Email": emailController.text,
           "Telemóvel": telemovelController.text,
           "NIF": nifController.text,

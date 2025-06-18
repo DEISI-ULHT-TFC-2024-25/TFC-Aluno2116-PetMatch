@@ -18,9 +18,9 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
   final TextEditingController nomeController = TextEditingController();
   final TextEditingController moradaController = TextEditingController();
   final TextEditingController localidadeController = TextEditingController();
+  final TextEditingController distritoController = TextEditingController();
   final TextEditingController codigoPostalController = TextEditingController();
   final TextEditingController telemovelController = TextEditingController();
-  final TextEditingController telefoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController ccController = TextEditingController();
   final TextEditingController validadeController = TextEditingController();
@@ -57,7 +57,6 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
     try {
       final firestore = FirebaseFirestore.instance;
       final currentUser = FirebaseAuth.instance.currentUser;
-
       final String uidUtilizador = currentUser?.uid ?? "desconhecido";
       final String uidAssociacao = widget.uidAssociacao;
 
@@ -71,19 +70,19 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
         "dataCriacao": FieldValue.serverTimestamp(),
 
         "dadosPreenchidos": {
-          "nomeCompleto": nomeController.text,
-          "morada": moradaController.text,
-          "localidade": localidadeController.text,
-          "codigoPostal": codigoPostalController.text,
-          "telemovel": telemovelController.text,
-
-          "email": emailController.text,
-          "cc": ccController.text,
-          "validade": validadeController.text,
-          "nif": nifController.text,
-          "temTransporte": hasTransport,
-          "tarefas": tasks.entries.where((entry) => entry.value).map((entry) => entry.key).toList(),
-          "outrasTarefas": outrasTarefasController.text,
+          "Nome Completo": nomeController.text,
+          "Morada": moradaController.text,
+          "Localidade": localidadeController.text,
+          "Distrito" : distritoController.text,
+          "Código Postal": codigoPostalController.text,
+          "Telemóvel": telemovelController.text,
+          "Email": emailController.text,
+          "Numero do Cartão de Cidadão": ccController.text,
+          "Validade": validadeController.text,
+          "NIF": nifController.text,
+          "Tem Transporte": hasTransport,
+          "Tarefas em que pretende fazer voluntariado": tasks.entries.where((entry) => entry.value).map((entry) => entry.key).toList(),
+          "Outras Tarefas Sugeridas": outrasTarefasController.text,
         },
       });
 
@@ -110,24 +109,27 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: Text("✨ Enviar Inscrição como Voluntário"),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text("Deseja adicionar uma mensagem adicional à inscrição?"),
-                  if (mostrarCampoMensagem)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 12),
-                      child: TextField(
-                        controller: mensagemController,
-                        maxLines: 4,
-                        decoration: InputDecoration(
-                          labelText: "Mensagem adicional",
-                          border: OutlineInputBorder(),
+              title: Text("✨Enviar Inscrição como Voluntário✨"),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text("Iremos contacta-lo/la assim que possivel?"),
+                    Text("Deseja adicionar uma mensagem adicional à inscrição?"),
+                    if (mostrarCampoMensagem)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 12),
+                        child: TextField(
+                          controller: mensagemController,
+                          maxLines: 4,
+                          decoration: InputDecoration(
+                            labelText: "Mensagem adicional",
+                            border: OutlineInputBorder(),
+                          ),
                         ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
               actions: [
                 TextButton(
@@ -159,10 +161,9 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
   }
 
 
-
   Map<String, bool> tasks = {
-    "Campanhas de Angariação de alimentação e outros produtos": false,
-    "Venda em Feiras de bens doados à Associação": false,
+    "Campanhas de angariação de alimentação e outros produtos": false,
+    "Venda em feiras de bens doados à Associação": false,
     "Conhecimentos de construção (arranjos no nosso abrigo)": false,
     "Ajuda na captura de animais em risco": false,
     "Limpeza das boxes e passear animais no nosso abrigo": false,
@@ -174,7 +175,7 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Tornar-se Voluntário "),
+        title: Text("Tornar-se Voluntário"),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -187,6 +188,7 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
               _buildTextField("Nome", nomeController),
               _buildTextField("Morada", moradaController),
               _buildTextField("Localidade", localidadeController),
+              _buildTextField("Distrito", distritoController),
               _buildTextField("Código Postal", codigoPostalController),
               _buildTextField("Telemóvel", telemovelController),
               _buildTextField("E-mail", emailController),
@@ -225,11 +227,11 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
                 }).toList(),
               ),
               SizedBox(height: 10),
-
-              _buildTextField("Outras tarefas", outrasTarefasController),
+              _buildTextField("Outras tarefas em que deseje participar", outrasTarefasController),
 
               CheckboxListTile(
                 title: Text("Confirmo que li e aceito as regras."),
+                subtitle: Text("Aceito partilhar os meus dados pessoais com a associação que estou a contactar\nAceito ser contactado pela associação"),
                 value: aceitaRegras,
                 onChanged: (bool? value) {
                   setState(() {

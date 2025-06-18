@@ -80,22 +80,33 @@ class _AllPedidosListState extends State<AllPedidosList> {
                   ),
 
                   Text("Pretende: ${pedido.funcionalidade}"),
-                  //Text("Associação: ${pedido.associacaoId}"),
                   Text("Estado atual: ${pedido.estado}"),
                   Text("Data em que foi realizado: ${pedido.dataCriacao.toString().split(' ')[0]}"),
 
-
                   if (isExpanded) ...[
                     SizedBox(height: 8),
-                    Text("Detalhes: ${pedido.mensagemAdicional ?? "Sem detalhes"}"),
+                    Text("Mensagem do Utilizador: ${pedido.mensagemAdicional ?? "Sem detalhes"}"),
+                    SizedBox(height: 8),
                     for (var entry in pedido.dadosPrenchidos.entries)
-                      Text('${entry.key}: ${entry.value}'),
+                      if (entry.value is Map)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('•${entry.key}:'),
+                            for (var subEntry in (entry.value as Map).entries)
+                              Text('• ${subEntry.key}: ${subEntry.value}'),
+                          ],
+                        )
+                      else if (entry.value is List && (entry.value as List).isNotEmpty)
+                        Text('• ${entry.key}: ${(entry.value as List).join(", ")}')
+                      else
+                        Text('• ${entry.key}: ${entry.value}'),
                   ],
 
                   SizedBox(height: 12),
                   Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
+                    spacing: 4,
+                    runSpacing: 4,
                     alignment: WrapAlignment.start,
                     children: [
                       SizedBox(
@@ -112,7 +123,7 @@ class _AllPedidosListState extends State<AllPedidosList> {
                         ),
                       ),
                       SizedBox(
-                        width: 130,
+                        width: 120,
                         child: ElevatedButton(
                           onPressed: () async {
                             await pedido.atualizarEstadoNoFirestore("Pendente");

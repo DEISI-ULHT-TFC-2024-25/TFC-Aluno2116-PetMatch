@@ -25,7 +25,7 @@ class _AllAnimalsListState extends State<AllAnimalsList> {
   String? filtroEspecie;
   String? filtroGenero;
   String termoPesquisa = '';
-  String filtroVisibilidade = 'Visíveis'; // Valor por defeito
+  String filtroVisibilidade = 'Todos'; // Valor por defeito
 
   final TextEditingController _pesquisaController = TextEditingController();
 
