@@ -391,11 +391,12 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                           itemCount: pedidosAceites.length > 2 ? 2 : pedidosAceites.length,
                           itemBuilder: (context, index) {
                             final pedido = pedidosAceites[index];
+                            //String nomeAssociacao = Associacao.getNomeAssociacao(pedido.associacaoId).toString();
                             return Card(
                               margin: EdgeInsets.symmetric(vertical: 4.0),
                               child: ListTile(
                                 title: Text(pedido.funcionalidade ?? 'Ação não disponivel'),
-                                subtitle: Text("Associação: ${pedido.estado ?? 'Desconhecida'}"),
+                                subtitle: Text("Estado: ${pedido.estado ?? 'Desconhecida'}"),
                               ),
                             );
                           },
@@ -415,7 +416,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                         ),
                       );
                     },
-                    child: Text("Ver todos os pedidos aceites (${pedidosAceites.length})"),
+                    child: Text("Ver todos os pedidos (${pedidosAceites.length})"),
                   ),
                 ),
 

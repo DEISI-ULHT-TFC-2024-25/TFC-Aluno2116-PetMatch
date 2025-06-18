@@ -152,7 +152,7 @@ class _TornarPadrinhoScreenState extends State<TornarPadrinhoScreen> {
       await firestore.collection("pedidosENotificacoes").add({
         "uidUtilizador": uidUtilizador,
         "oQuePretendeFazer": "Apadrinhamento de um animal",
-        "associacao": uidAssociacao,
+        "uidAssociacao": uidAssociacao,
         "confirmouTodosOsRequisitos": aceitaRegras,
         "mensagemAdicional": mensagemAdicional,
         "estado": "pendente",

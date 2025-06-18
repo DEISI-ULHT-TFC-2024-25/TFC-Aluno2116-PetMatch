@@ -23,9 +23,7 @@ class _AllPedidosAceitesListState extends State<AllPedidosAceitesList> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Pedidos Aceites"),
-        backgroundColor: Colors.green[200],
       ),
-      backgroundColor: Colors.green[50],
       body: widget.pedidos.isEmpty
           ? Center(child: Text("Não existem pedidos aceites."))
           : ListView.builder(

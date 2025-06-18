@@ -159,7 +159,7 @@ class _TornarFATState extends State<TornarFAT> {
       await firestore.collection("pedidosENotificacoes").add({
         "uidUtilizador": uidUtilizador,
         "oQuePretendeFazer": "Tornar-se em Família de Acolhimento Temporária",
-        "associacao": uidAssociacao,
+        "uidAssociacao": uidAssociacao,
         "confirmouTodosOsRequisitos": true,
         "mensagemAdicional": mensagemAdicional,
         "estado": "pendente",

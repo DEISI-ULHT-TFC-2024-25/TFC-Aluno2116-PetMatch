@@ -31,6 +31,7 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
   bool aceitaRegras = false;
   String mensagemAdicional = "";
 
+
   /// Função para capturar dados dos campos de texto
   Widget _buildTextField(String label, TextEditingController controller) {
     return Padding(
@@ -63,7 +64,7 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
       await firestore.collection("pedidosENotificacoes").add({
         "uidUtilizador": uidUtilizador,
         "oQuePretendeFazer": "Tornar-se Voluntario",
-        "associacao": uidAssociacao,
+        "uidAssociacao": uidAssociacao,
         "confirmouTodosOsRequisitos": aceitaRegras,
         "mensagemAdicional": mensagemAdicional,
         "estado": "pendente",

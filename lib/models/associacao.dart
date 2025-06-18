@@ -24,6 +24,7 @@ class Associacao {
   List<Eventos> eventos;
   List<String> necessidades;
   bool associacao;
+  String? iban;
 
   Associacao({
     required this.uid,
@@ -44,6 +45,8 @@ class Associacao {
     required this.eventos,
     required this.necessidades,
     this.associacao = true,
+    this.iban,
+
   });
 
   factory Associacao.fromMap(String documentId, Map<String, dynamic> map) {
@@ -68,6 +71,7 @@ class Associacao {
           .toList() ??
           [],
       necessidades: List<String>.from(map['necessidades'] ?? []),
+      iban: map['iban'] ?? '',
     );
   }
 
@@ -89,6 +93,7 @@ class Associacao {
       'pedidosRealizados': pedidosRealizados,
       'eventos': eventos.map((e) => e.toMap()).toList(),
       'necessidades': necessidades,
+      'iban': iban,
     };
   }
 
@@ -151,6 +156,22 @@ class Associacao {
         .map((doc) => Associacao.fromFirestore(doc))
         .where((associacao) => associacao.distrito == distrito)
         .toList();
+  }
+
+  static Future <String> getNomeAssociacao(String uid) async {
+    final snapshot = await FirebaseFirestore.instance.collection('associacao').get();
+    final associacao = snapshot.docs
+        .map((doc) => Associacao.fromFirestore(doc))
+        .firstWhere((a) => a.uid == uid);
+    return associacao.name;
+  }
+
+    static Future <String?> getIbanAssociacao(String uid) async {
+    final snapshot = await FirebaseFirestore.instance.collection('associacao').get();
+    final associacao = snapshot.docs
+        .map((doc) => Associacao.fromFirestore(doc))
+        .firstWhere((a) => a.uid == uid);
+    return associacao.iban;
   }
 
 

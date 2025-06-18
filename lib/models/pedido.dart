@@ -1,11 +1,13 @@
 
-import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseFirestore;
+import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseFirestore, Timestamp;
 
 class Pedido {
   final String id;
   final String funcionalidade; // Ex: "Apadrinhar", "TornarSocio", etc.
   final String utilizadorUid;
-  final String associacaoId;
+  final String uidAssociacao;
+  final DateTime dataCriacao;
+  final String? nomeAssociacao;
   final bool confirmouTodosOsRequisitos;
   final String mensagemAdicional;
   String estado;
@@ -15,7 +17,9 @@ class Pedido {
     required this.id,
     required this.utilizadorUid,
     required this.funcionalidade,
-    required this.associacaoId,
+    required this.uidAssociacao,
+    required this.dataCriacao,
+    this.nomeAssociacao,
     required this.confirmouTodosOsRequisitos,
     required this.mensagemAdicional,
     required this.estado,
@@ -27,7 +31,9 @@ class Pedido {
       id: documentId,
       funcionalidade: map['oQuePretendeFazer'] ?? '',
       utilizadorUid: map['Uidutilizador'] ?? '',
-      associacaoId: map['associacao'] ?? '',
+      uidAssociacao: map['uidAssociacao'] ?? '',
+      dataCriacao: (map['dataCriacao'] as Timestamp).toDate(),
+      nomeAssociacao: map['nomeAssociacao']?? '',
       confirmouTodosOsRequisitos: map['confirmouTodosOsRequisitos'] ?? false,
       mensagemAdicional: map['mensagemAdicional'] ?? '',
       estado: map['estado'] ?? '',
@@ -39,7 +45,9 @@ class Pedido {
     return {
       'oQuePretendeFazer': funcionalidade,
       'Uidutilizador': utilizadorUid,
-      'associacao': associacaoId,
+      'uidAssociacao': uidAssociacao,
+      'dataCriacao': Timestamp.fromDate(dataCriacao),
+      'nomeAssociacao': nomeAssociacao,
       'confirmouTodosOsRequisitos': confirmouTodosOsRequisitos,
       'mensagemAdicional': mensagemAdicional,
       'estado': estado,

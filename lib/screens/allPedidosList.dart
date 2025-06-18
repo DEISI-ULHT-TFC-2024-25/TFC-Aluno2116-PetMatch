@@ -6,7 +6,6 @@ import 'package:tinder_para_caes/models/pedido.dart';
 
 class AllPedidosList extends StatefulWidget {
   final List<Pedido> pedidos;
-
   const AllPedidosList({super.key, required this.pedidos});
 
   @override
@@ -64,10 +63,10 @@ class _AllPedidosListState extends State<AllPedidosList> {
                     children: [
                       Expanded(
                         child: Text(
-                          "Utilizador: ${pedido.dadosPrenchidos['nomeCompleto']}",
+                          "Utilizador: ${pedido.dadosPrenchidos['Nome Completo']}",
                           softWrap: true,
                           overflow: TextOverflow.fade,
-                          maxLines: 3, // Limita o número de linhas se quiseres
+                          maxLines: 3, // Limita o número de linhas
                           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -80,11 +79,10 @@ class _AllPedidosListState extends State<AllPedidosList> {
                     ],
                   ),
 
-
-
                   Text("Pretende: ${pedido.funcionalidade}"),
                   //Text("Associação: ${pedido.associacaoId}"),
                   Text("Estado atual: ${pedido.estado}"),
+                  Text("Data em que foi realizado: ${pedido.dataCriacao.toString().split(' ')[0]}"),
 
 
                   if (isExpanded) ...[

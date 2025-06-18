@@ -62,10 +62,10 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
     try {
       final firestore = FirebaseFirestore.instance;
 
-      // Obtem todos os pedidos com associacao == UID da associação logada
+      // Obtem todos os pedidos com associacao == UID da associação
       final querySnapshot = await firestore
           .collection("pedidosENotificacoes")
-          .where("associacao", isEqualTo: associacao.uid)
+          .where("uidAssociacao", isEqualTo: associacao.uid)
           .get();
 
       // Extrai lista de documentos
@@ -137,7 +137,6 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
     final associacao = Provider.of<AssociacaoProvider>(context).association;
     numberOfAnimals = associacao!.animais.length;
 
-
     if (associacao == null || isLoading) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
@@ -164,7 +163,7 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 16.0),
-              Text("Pedidos:", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, decoration: TextDecoration.none)),
+              Text("Pedidos Pendentes:", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, decoration: TextDecoration.none)),
               SizedBox(height: 10.0),
 
               // Notifications List
@@ -178,12 +177,11 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                     margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
                     child: ListTile(
 
-                      title: Text("Pedido de: ${pedido.dadosPrenchidos['nomeCompleto']}"),
+                      title: Text("Pretende: ${pedido.funcionalidade}"),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Animal: ${pedido.utilizadorUid}", maxLines: 2, overflow: TextOverflow.ellipsis),
-                          Text("Pretende: ${pedido.funcionalidade}"),
+                          Text("Pedido de: ${pedido.dadosPrenchidos['Nome Completo']}"),
                         ],
                       ),
                     ),
@@ -197,7 +195,7 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                   onPressed: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => AllPedidosList(pedidos: pedidos)));
                   },
-                  child: Text("Ver todos os pedidos pendentes (${pedidos.length})"),
+                  child: Text("Ver todos os pedidos (${pedidos.length})"),
                 ),
               ),
               SizedBox(height: 20.0),
@@ -279,11 +277,7 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditarPerfilAssociacao(),
-                      ),
+                    Navigator.push(context,MaterialPageRoute(builder: (context) => EditarPerfilAssociacao(),),
                     );
                   },
                   child: Text("Editar Perfil"),
