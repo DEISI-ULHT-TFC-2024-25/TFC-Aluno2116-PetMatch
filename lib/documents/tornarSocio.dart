@@ -78,7 +78,6 @@ class _TornarSocioScreenState extends State<TornarSocioScreen> {
                   onPressed: () async {
                     if (_formKey.currentState!.validate() && aceitaRegras) {
                       _mostrarPopupMensagemFinal();
-
                     }
                   },
                   child: Text("Submeter Inscrição ✅"),

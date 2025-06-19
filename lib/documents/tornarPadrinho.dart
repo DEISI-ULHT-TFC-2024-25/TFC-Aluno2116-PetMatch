@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:tinder_para_caes/models/associacao.dart';
 import 'package:tinder_para_caes/screens/vizualizarAssociacaoScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import '../models/animal.dart';
 
 class TornarPadrinhoScreen extends StatefulWidget {
   final String uidAssociacao;
@@ -17,6 +20,8 @@ class _TornarPadrinhoScreenState extends State<TornarPadrinhoScreen> {
   final _formKey = GlobalKey<FormState>();
   bool aceitaRegras = false;
   String mensagemAdicional = "";
+  List <Animal> opcoesDeAnimais = [];
+  Animal? selectedDog ;
 
   // Controladores dos campos
   final TextEditingController nomeController = TextEditingController();
@@ -25,24 +30,38 @@ class _TornarPadrinhoScreenState extends State<TornarPadrinhoScreen> {
   final TextEditingController localidadeController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController telemovelController = TextEditingController();
-  final TextEditingController nomeAnimalController = TextEditingController();
+
 
   // Dropdown de apadrinhamento
   List<String> opcoesApadrinhamento = ["Ajuda financeira", "Apoio com alimentação", "Custos veterinários", "Outro"];
   String selectedOpcao = "Ajuda financeira";
 
+  Future<void> _fetchAnimals() async {
+    final snapshot = await FirebaseFirestore.instance.collection('associacao').get();
+    final associacao = snapshot.docs
+        .map((doc) => Associacao.fromFirestore(doc))
+        .firstWhere((a) => a.uid == widget.uidAssociacao);
+
+    if (associacao != null) {
+      List<Animal> fetchedAnimals = await associacao.fetchAnimals(associacao.animais);
+      setState(() {
+        opcoesDeAnimais = fetchedAnimals;
+      });
+    }
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchAnimals();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        //leading: IconButton(
-         // icon: Icon(Icons.arrow_back),
-          //onPressed: () => Navigator.pushReplacement(
-            //context,
-            //MaterialPageRoute(builder: (context) => VizualizarAssociacaoScreen()),
-          //),
-        //),
-        title: Text("Tornar-se Padrinho 🐶"),
+        title: Text("🐱 Tornar-se Padrinho 🐶"),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -60,13 +79,14 @@ class _TornarPadrinhoScreenState extends State<TornarPadrinhoScreen> {
               _buildTextField("Telemóvel", telemovelController),
               SizedBox(height: 20),
 
-              Text("🐕 Escolha do Animal", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              _buildTextField("Nome do Animal que deseja apadrinhar", nomeAnimalController),
+              Text("🐕 Escolha do Animal 🐈", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              _buildDropdownAnimal(),
               _buildDropdownApadrinhamento(),
               SizedBox(height: 20),
 
               CheckboxListTile(
-                title: Text("Aceito os termos e condições"),
+                title: Text("Termos e condições"),
+                subtitle: Text("Aceito partilhar os meus dados pessoais com a associação que estou a contactar\nAceito ser contactado pela associação"),
                 value: aceitaRegras,
                 onChanged: (bool? value) {
                   setState(() {
@@ -80,16 +100,11 @@ class _TornarPadrinhoScreenState extends State<TornarPadrinhoScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate() && aceitaRegras) {
-                      _mostrarPopupMensagemFinal(); // ← Mostra o popup com opção de mensagem
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Por favor, preencha todos os campos e aceite os termos. ❗")),
-                      );
+                      _mostrarPopupMensagemFinal();
                     }
                   },
                   child: Text("Submeter Pedido ✅"),
                 ),
-
               ),
             ],
           ),
@@ -140,6 +155,29 @@ class _TornarPadrinhoScreenState extends State<TornarPadrinhoScreen> {
     );
   }
 
+  //Dropdown do animal que quer escolher para apadrinhar
+  Widget _buildDropdownAnimal() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: DropdownButtonFormField<Animal>(
+        decoration: InputDecoration(labelText: "Escolha o animal que pretende apadrinhar",border: OutlineInputBorder()),
+        value: selectedDog,
+        items: opcoesDeAnimais.map((animal) {
+          return DropdownMenuItem<Animal>(
+            value: animal,
+            child: Text("${animal.fullName} (${animal.breed}) - ${animal.calcularIdade()}"),
+          );
+        }).toList(),
+        onChanged: (Animal? newAnimal) {
+          setState(() {
+            selectedDog = newAnimal!;
+          });
+        },
+        menuMaxHeight: 400,
+      ),
+    );
+  }
+
   /// Função para guardar no Firebase Firestore
   Future<void> _submeterFormulario() async {
     try {
@@ -159,14 +197,14 @@ class _TornarPadrinhoScreenState extends State<TornarPadrinhoScreen> {
         "dataCriacao": FieldValue.serverTimestamp(),
 
         "dadosPreenchidos": {
-          "nomeCompleto": nomeController.text,
-          "morada": moradaController.text,
-          "codigoPostal": codigoPostalController.text,
-          "localidade": localidadeController.text,
-          "email": emailController.text,
-          "telemovel": telemovelController.text,
-          "nomeAnimal": nomeAnimalController.text,
-          "tipoApadrinhamento": selectedOpcao,
+          "Nome Completo": nomeController.text,
+          "Morada": moradaController.text,
+          "Código Postal": codigoPostalController.text,
+          "Localidade": localidadeController.text,
+          "Email": emailController.text,
+          "Telemóvel": telemovelController.text,
+          "Animal que pretende apadrinhar": selectedDog?.fullName,
+          "Tipo de apadrinhamento": selectedOpcao,
         }
       });
 
@@ -193,7 +231,7 @@ class _TornarPadrinhoScreenState extends State<TornarPadrinhoScreen> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: Text("✨ Enviar Pedido de Apadrinhamento"),
+              title: Text("✨ Enviar Pedido de Apadrinhamento ✨"),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [

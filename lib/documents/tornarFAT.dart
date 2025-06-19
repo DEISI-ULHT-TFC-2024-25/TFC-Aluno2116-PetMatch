@@ -211,6 +211,7 @@ class _TornarFATState extends State<TornarFAT> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    Text("Ao submeter esta candidatura concorda com os seus dados serem partilhados com a associação e concorda em ser contactado pela mesma."),
                     Text("Deseja adicionar alguma mensagem adicional antes de submeter?"),
                     if (mostrarCampoMensagem)
                       Padding(
