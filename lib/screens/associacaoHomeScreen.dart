@@ -24,6 +24,7 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
   List<Animal> animais = []; // Store fetched animals
   bool isLoading = true;// Track loading state
   List<Pedido> pedidos = [];
+  List<Pedido> pedidosPendentes = [];
   int numberOfAnimals = 0;
 
   @override
@@ -31,6 +32,7 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
     super.initState();
     _fetchAnimals();
     _fetchPedidos();
+    _fetchPedidosPendentes();
   }
 
   Future<void> _fetchAnimals() async {
@@ -51,18 +53,15 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
 
   Future<void> _fetchPedidos() async {
     final associacao = Provider.of<AssociacaoProvider>(context, listen: false).association;
-
     if (associacao == null) {
       setState(() {
         isLoading = false;
       });
       return;
     }
-
     try {
       final firestore = FirebaseFirestore.instance;
-
-      // Obtem todos os pedidos com associacao == UID da associação
+      // Obtem todos os pedidos com associacao == UID da associação e estado pendente
       final querySnapshot = await firestore
           .collection("pedidosENotificacoes")
           .where("uidAssociacao", isEqualTo: associacao.uid)
@@ -82,6 +81,50 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
 
       setState(() {
         pedidos = fetchedPedidos;
+        isLoading = false;
+      });
+    } catch (e) {
+      print("Erro nos pedidos: $e");
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _fetchPedidosPendentes() async {
+    final associacao = Provider.of<AssociacaoProvider>(context, listen: false).association;
+
+    if (associacao == null) {
+      setState(() {
+        isLoading = false;
+      });
+      return;
+    }
+
+    try {
+      final firestore = FirebaseFirestore.instance;
+
+      // Obtem todos os pedidos com associacao == UID da associação e estado pendente
+      final querySnapshot = await firestore
+          .collection("pedidosENotificacoes")
+          .where("uidAssociacao", isEqualTo: associacao.uid)
+          .where("estado", isEqualTo: 'Pendente')
+          .get();
+
+      // Extrai lista de documentos
+      final documentos = querySnapshot.docs;
+
+      // Extrai os IDs e guarda na associação
+      List<String> idsPedidos = documentos.map((doc) => doc.id).toList();
+      associacao.pedidosRealizados = idsPedidos;
+
+      // Converte os documentos em objetos Pedido
+      List<Pedido> fetchedPedidos = documentos.map((doc) {
+        return Pedido.fromMap(doc.data() as Map<String, dynamic>, doc.id);
+      }).toList();
+
+      setState(() {
+        pedidosPendentes = fetchedPedidos;
         isLoading = false;
       });
     } catch (e) {
@@ -166,13 +209,13 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
               Text("Pedidos Pendentes:", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, decoration: TextDecoration.none)),
               SizedBox(height: 10.0),
 
-              // Notifications List
+              // Notificacoes e pedidos pendentes List
               ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: pedidos.length > 2 ? 2 : pedidos.length,
+                itemCount: pedidosPendentes.length > 2 ? 2 : pedidosPendentes.length,
                 itemBuilder: (context, index) {
-                  final pedido = pedidos[index];
+                  final pedido = pedidosPendentes[index];
                   return Card(
                     margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
                     child: ListTile(

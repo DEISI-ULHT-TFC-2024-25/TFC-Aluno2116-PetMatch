@@ -26,7 +26,6 @@ class _AllAnimalsListState extends State<AllAnimalsList> {
   String? filtroGenero;
   String termoPesquisa = '';
   String filtroVisibilidade = 'Todos'; // Valor por defeito
-
   final TextEditingController _pesquisaController = TextEditingController();
 
   @override
@@ -141,6 +140,7 @@ class _AllAnimalsListState extends State<AllAnimalsList> {
                 aplicarFiltros();
               },
             ),
+
             //limpar filtros
             if (filtrosAtivos()) ...[
               SizedBox(height: 8),

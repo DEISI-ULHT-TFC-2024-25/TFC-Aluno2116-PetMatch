@@ -105,23 +105,18 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
 
     try {
       final firestore = FirebaseFirestore.instance;
-
       // Obtem todos os pedidos com utilizador == UID da associação logada
       final querySnapshot = await firestore
           .collection("pedidosENotificacoes")
           .where("uidUtilizador", isEqualTo: utilizador.uid)
           .where("estado", isEqualTo: "Aceite")
           .get();
-
       // Extrai lista de documentos
       final documentos = querySnapshot.docs;
-
-
       // Converte os documentos em objetos Pedido
       List<Pedido> fetchedPedidos = documentos.map((doc) {
         return Pedido.fromMap(doc.data() as Map<String, dynamic>, doc.id);
       }).toList();
-
       setState(() {
         pedidosAceites = fetchedPedidos;
         isLoading = false;

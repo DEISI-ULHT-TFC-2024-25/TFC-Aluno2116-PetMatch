@@ -51,7 +51,35 @@ final ThemeData lightTheme = ThemeData(
     thickness: 1,
   ),
 
+  inputDecorationTheme: InputDecorationTheme(
+    labelStyle: TextStyle(fontSize: 16, color: Colors.brown[800]),
+    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+    border: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.brown, width: 1.5),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.brown.shade400, width: 1.2),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.brown.shade700, width: 2.0),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.red.shade700, width: 1.5),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.red.shade900, width: 2.0),
+    ),
+  ),
+
+  dropdownMenuTheme: DropdownMenuThemeData(
+    textStyle: TextStyle(fontSize: 16, color: Colors.brown[900]),
+    inputDecorationTheme: InputDecorationTheme(
+      border: OutlineInputBorder(),
+    ),
+
+  ),
 );
+
 
 // Dark Theme (Dark Browns & Black)
 final ThemeData darkTheme = ThemeData(
