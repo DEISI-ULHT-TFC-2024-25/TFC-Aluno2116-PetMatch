@@ -44,7 +44,7 @@ class _AllPedidosListState extends State<AllPedidosList> {
     setState(() {
       pedidosFiltrados = widget.pedidos.where((pedido) {
         final nomeMatch = pedido.dadosPrenchidos['Nome Completo'].toLowerCase().contains(termoPesquisa.toLowerCase());
-        final dataMatch = filtroData == null || pedido.dataCriacao == filtroData;
+        final dataMatch = filtroData == null || pedido.dataCriacao.isAfter(filtroData!) || pedido.dataCriacao.isAtSameMomentAs(filtroData!);
         final tipoMatch = filtroTipo == null || pedido.funcionalidade == filtroTipo;
         return nomeMatch && dataMatch && tipoMatch;
       }).toList();
@@ -140,9 +140,9 @@ class _AllPedidosListState extends State<AllPedidosList> {
                     } else if (value == "Últimos 7 dias") {
                       filtroData = DateTime.now().subtract(Duration(days: 7));
                     } else if (value == "Este mês") {
-                      filtroData = DateTime.now().subtract(Duration(days: 30));
+                      filtroData = DateTime.now().subtract(Duration(days: 31));
                     } else if (value == "Este ano") {
-                      filtroData = DateTime.now().subtract(Duration(days: 360));
+                      filtroData = DateTime.now().subtract(Duration(days: 365));
                     }
                   });
                   aplicarFiltros();
