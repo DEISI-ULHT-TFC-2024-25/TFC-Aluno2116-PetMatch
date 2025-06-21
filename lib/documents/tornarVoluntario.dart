@@ -218,6 +218,7 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
                   return CheckboxListTile(
                     title: Text(key),
                     value: tasks[key],
+                    tileColor: Colors.transparent,
                     onChanged: (bool? value) {
                       setState(() {
                         tasks[key] = value ?? false;
@@ -227,12 +228,19 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
                 }).toList(),
               ),
               SizedBox(height: 10),
-              _buildTextField("Outras tarefas em que deseje participar", outrasTarefasController),
+              TextField(
+                controller: outrasTarefasController,
+                decoration: InputDecoration(
+                  labelText: "Outras tarefas em que deseje participar",
+                  border: OutlineInputBorder(),
+                ),
+              ),
 
               CheckboxListTile(
                 title: Text("Confirmo que li e aceito as regras."),
                 subtitle: Text("Aceito partilhar os meus dados pessoais com a associação que estou a contactar\nAceito ser contactado pela associação"),
                 value: aceitaRegras,
+                tileColor: Colors.transparent,
                 onChanged: (bool? value) {
                   setState(() {
                     aceitaRegras = value ?? false;

@@ -28,6 +28,14 @@ class Authenticationservice {
 
   Future<User?> registerAssociacao(String email, String password, Map<String, dynamic> associacaoData) async {
     try {
+      print("Iniciando criação de conta para: $email");
+
+      // Debug do conteúdo enviado para o Firestore
+      print(" Dados enviados para Firestore:");
+      associacaoData.forEach((key, value) {
+        print("  $key: $value (${value.runtimeType})");
+      });
+
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
@@ -35,15 +43,19 @@ class Authenticationservice {
 
       User? user = userCredential.user;
       if (user != null) {
+        print("Utilizador criado: ${user.uid}");
+
         await _firestore.collection("associacao").doc(user.uid).set(associacaoData);
+        print("Dados guardados no Firestore com sucesso.");
       }
 
       return user;
     } catch (e) {
-      print("Erro ao registrar associação: $e");
+      print("❌ Erro ao registrar associação: $e");
       return null;
     }
   }
+
 
 
   // LOGIN

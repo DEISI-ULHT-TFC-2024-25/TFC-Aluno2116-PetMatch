@@ -173,7 +173,7 @@ class _AllPedidosAceitesListState extends State<AllPedidosAceitesList> {
                     final isExpanded = _expandedStates[pedido.id] ?? false;
 
                     return Card(
-                      color: Colors.white,
+                      color: Theme.of(context).cardColor,
                       elevation: 3,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),

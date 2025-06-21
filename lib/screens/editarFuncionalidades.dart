@@ -61,6 +61,7 @@ class _EditarFuncionalidadesState extends State<EditarFuncionalidades> {
                   return CheckboxListTile(
                     title: Text(f),
                     value: funcionalidadesSelecionadas.any((fs) => fs == f),
+                    tileColor: Colors.transparent,
                     onChanged: (bool? value) {
                       setState(() {
                         if (value == true) {

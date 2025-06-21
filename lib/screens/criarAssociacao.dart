@@ -29,6 +29,7 @@ class _CriarAssociacaoState extends State<CriarAssociacao> {
   final TextEditingController moradaController = TextEditingController();
   final TextEditingController distritoController = TextEditingController();
   final TextEditingController localidadeController = TextEditingController();
+  final TextEditingController ibanController = TextEditingController();
 
   List<String> funcionalidadesSelecionadas = [];
 
@@ -52,6 +53,7 @@ class _CriarAssociacaoState extends State<CriarAssociacao> {
                     return CheckboxListTile(
                       title: Text(func.toString().split('.').last),
                       value: selecionadasTemp.contains(func),
+                      tileColor: Colors.transparent,
                       onChanged: (bool? value) {
                         setStateDialog(() {
                           if (value == true) {
@@ -91,7 +93,25 @@ class _CriarAssociacaoState extends State<CriarAssociacao> {
     }
   }
 
+  bool _formularioValido() {
+    return nomeController.text.trim().isNotEmpty &&
+        passwordController.text.isNotEmpty &&
+        confirmPasswordController.text.isNotEmpty &&
+        telefone1Controller.text.trim().isNotEmpty &&
+        email1Controller.text.trim().isNotEmpty &&
+        distritoController.text.trim().isNotEmpty &&
+        localidadeController.text.trim().isNotEmpty &&
+        (!shareLocation || moradaController.text.trim().isNotEmpty);
+  }
+
+
   void register() async {
+    if (!_formularioValido()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Preencha todos os campos obrigatórios!")),
+      );
+      return;
+    }
     if (passwordController.text != confirmPasswordController.text) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("❌ As palavras-passe não coincidem!")),
@@ -112,9 +132,11 @@ class _CriarAssociacaoState extends State<CriarAssociacao> {
       "telemovelPrincipal": telefone1Controller.text,
       "telemovelSecundario": telefone2Controller.text,
       "morada": shareLocation ? moradaController.text : null, // Morada apenas se shareLocation for true
-      "distrito": distritoController.text, // Distrito sempre presente
+      "distrito": distritoController.text, // Distrito
       "localidade" : localidadeController.text,
       "tipo": "associacao",
+      "iban": ibanController.text ?? "",
+      "site": "",
       "animais": [],
       "pedidos": [],
       "eventos": [],
@@ -130,6 +152,7 @@ class _CriarAssociacaoState extends State<CriarAssociacao> {
 
     if (firebaseUser != null) {
       final uid = firebaseUser.uid;
+      print(uid);
       final docRef = FirebaseFirestore.instance.collection('associacao').doc(uid);
       final docSnap = await docRef.get();
       final data = docSnap.data();
@@ -141,7 +164,6 @@ class _CriarAssociacaoState extends State<CriarAssociacao> {
       }
 
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AssociacaoHomeScreen()),);
-
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("✅ Associação registada com sucesso!")),
       );
@@ -186,6 +208,7 @@ class _CriarAssociacaoState extends State<CriarAssociacao> {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
+            const SizedBox(height: 20),
             TextField(
               controller: nomeController,
               decoration: InputDecoration(labelText: 'Nome'),
@@ -226,6 +249,7 @@ class _CriarAssociacaoState extends State<CriarAssociacao> {
             CheckboxListTile(
               title: const Text('Partilhar localização?'),
               value: shareLocation,
+              tileColor: Colors.transparent,
               onChanged: (bool? value) {
                 setState(() {
                   shareLocation = value ?? false;
@@ -264,12 +288,18 @@ class _CriarAssociacaoState extends State<CriarAssociacao> {
                 decoration: const InputDecoration(labelText: 'Morada'),
               ),
             ],
+            const SizedBox(height: 10),
+            TextField(
+              controller: ibanController,
+              decoration: InputDecoration(labelText: 'Iban para o qual recebem donativos (opcional)'),
+            ),
             const SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: theme.primaryColor),
               onPressed: _mostrarPopUpFuncionalidades,
               child: const Text("Escolher Funcionalidades"),
             ),
+
             const SizedBox(height: 10),
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: theme.primaryColor),

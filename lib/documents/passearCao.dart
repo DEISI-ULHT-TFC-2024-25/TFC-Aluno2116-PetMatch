@@ -130,6 +130,7 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
             CheckboxListTile(
               title: Text("Alergias ou restrições"),
               value: temAlergias,
+              tileColor: Colors.transparent,
               onChanged: (bool? value) {
                 setState(() {
                   temAlergias = value!;
@@ -143,6 +144,7 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
             CheckboxListTile(
               title: Text("Castrado/Esterelizada"),
               value: estaEsterilizado,
+              tileColor: Colors.transparent,
               onChanged: (bool? value) {
                 setState(() {
                   estaEsterilizado = value!;
@@ -193,6 +195,7 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
                     return CheckboxListTile(
                       title: Text("Confirmo que li e aceito as regras."),
                       value: aceitaRegras,
+                      tileColor: Colors.transparent,
                       onChanged: (bool? value) {
                         setState(() {
                           aceitaRegras = value!;

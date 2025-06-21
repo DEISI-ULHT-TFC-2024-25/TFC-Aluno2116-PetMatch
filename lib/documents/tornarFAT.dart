@@ -142,6 +142,7 @@ class _TornarFATState extends State<TornarFAT> {
     return CheckboxListTile(
       title: Text(label),
       value: value,
+      tileColor: Colors.transparent,
       onChanged: (bool? newValue) {
         onChanged(newValue ?? false);
       },

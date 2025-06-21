@@ -29,11 +29,31 @@ class UtilizadorFormScreenState extends State<CriarUtilizador> {
   final TextEditingController telefoneController = TextEditingController();
   final TextEditingController moradaController = TextEditingController();
   final TextEditingController distritoController = TextEditingController();
+  final TextEditingController localidadeController = TextEditingController();
   final TextEditingController zipcodeController = TextEditingController();
 
 
+  bool _formularioValido() {
+    return nomeController.text.trim().isNotEmpty &&
+        passwordController.text.isNotEmpty &&
+        confirmPasswordController.text.isNotEmpty &&
+        telefoneController.text.trim().isNotEmpty &&
+        emailController.text.trim().isNotEmpty &&
+        moradaController.text.trim().isNotEmpty &&
+        zipcodeController.text.trim().isNotEmpty &&
+        distritoController.text.trim().isNotEmpty &&
+        localidadeController.text.trim().isNotEmpty &&
+        isAdult == true;
+  }
+
 
   Future<void> register() async {
+    if (!_formularioValido()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Preencha todos os campos, são todos obrigatórios!")),
+      );
+      return;
+    }
     if (passwordController.text != confirmPasswordController.text) {
       print("❌ As palavras-passe não coincidem!");
       return;
@@ -46,10 +66,11 @@ class UtilizadorFormScreenState extends State<CriarUtilizador> {
     Map<String, dynamic> userData = {
       "nome": nomeController.text,
       "email": emailController.text,
-      "nif": nifController.text,
+      "nif": nifController.text ?? '',
       "telefone": telefoneController.text,
       "morada": moradaController.text,
       "distrito": distritoController.text,
+      "localidade": localidadeController.text,
       "zipcode": zipcodeController.text,
       "genero": gender,
       "maior_de_idade": isAdult,
@@ -94,6 +115,7 @@ class UtilizadorFormScreenState extends State<CriarUtilizador> {
     final String response = await rootBundle.loadString('assets/distritos.txt');
     return response.split('\n').map((line) => line.trim()).toList();
   }
+
   Future<void> _initializeDistritos() async {
     try {
       final distritosLista = await loadDistritos();
@@ -115,6 +137,7 @@ class UtilizadorFormScreenState extends State<CriarUtilizador> {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
+            const SizedBox(height: 20),
             TextField(
               controller: nomeController,
               decoration: const InputDecoration(labelText: 'Nome'),
@@ -150,6 +173,7 @@ class UtilizadorFormScreenState extends State<CriarUtilizador> {
             CheckboxListTile(
               title: const Text('É maior de idade?'),
               value: isAdult,
+              tileColor: Colors.transparent,
               onChanged: (bool? value) {
                 setState(() {
                   isAdult = value ?? false;
@@ -201,6 +225,11 @@ class UtilizadorFormScreenState extends State<CriarUtilizador> {
               onSelected: (String selection) {
                 distritoController.text = selection;
               },
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              controller: localidadeController,
+              decoration: const InputDecoration(labelText: 'Localidade'),
             ),
 
             const SizedBox(height: 20),

@@ -42,6 +42,7 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
   List<String> _racasFiltradas = [];
 
 
+
   @override
   void initState() {
     super.initState();
@@ -73,6 +74,7 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                SizedBox(height: 10),
                 TextField(
                   controller: _nomeController,
                   decoration: InputDecoration(
@@ -260,7 +262,7 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
                 SizedBox(height: 10),
 
                 ElevatedButton(
-                  onPressed: _especie != null && _nomeController.text.isNotEmpty ? guardarAnimal : null,
+                  onPressed: guardarAnimal,
                   child: Text("Registar animal"),
                 ),
               ],
@@ -271,7 +273,25 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
     );
   }
 
+  bool _todosCamposObrigatoriosPreenchidos() {
+    return _nomeController.text.trim().isNotEmpty &&
+        _dataNascimento != null &&
+        _genero != null &&
+        _porte != null &&
+        _comportamentoController.text.trim().isNotEmpty &&
+        _especie != null &&
+        _racaController.text.trim().isNotEmpty;
+  }
+
+
   void guardarAnimal() async {
+    if (!_todosCamposObrigatoriosPreenchidos()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Por favor preencha todos os campos obrigatórios!")),
+      );
+      return;
+    }
+
     final associacao = Provider.of<AssociacaoProvider>(context, listen: false).association;
     final utilizador = Provider.of<UtilizadorProvider>(context, listen: false).user;
 

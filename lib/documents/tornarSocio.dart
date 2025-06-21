@@ -65,6 +65,7 @@ class _TornarSocioScreenState extends State<TornarSocioScreen> {
                 title: Text("Termos e condições"),
                 subtitle: Text("Aceito partilhar os meus dados pessoais com a associação que estou a contactar\nAceito ser contactado pela associação"),
                 value: aceitaRegras,
+                tileColor: Colors.transparent,
                 onChanged: (bool? value) {
                   setState(() {
                     aceitaRegras = value ?? false;

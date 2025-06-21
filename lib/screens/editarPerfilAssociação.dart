@@ -129,6 +129,7 @@ class _EditarPerfilAssociacaoState extends State<EditarPerfilAssociacao> {
         child: ListView(
           children: [
             Text("Preencha apenas os campos em que pretende alterar os seus dados"),
+            const SizedBox(height: 10),
             TextField(
               controller: nomeController,
               decoration: InputDecoration(labelText: 'Nome'),
@@ -169,6 +170,7 @@ class _EditarPerfilAssociacaoState extends State<EditarPerfilAssociacao> {
             CheckboxListTile(
               title: const Text('Partilhar localização?'),
               value: shareLocation,
+              tileColor: Colors.transparent,
               onChanged: (bool? value) {
                 setState(() {
                   shareLocation = value ?? false;
