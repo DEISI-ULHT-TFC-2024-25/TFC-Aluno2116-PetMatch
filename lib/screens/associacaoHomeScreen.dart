@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/models/pedido.dart';
@@ -6,6 +7,7 @@ import 'package:tinder_para_caes/screens/allAnimalsList.dart';
 import 'package:tinder_para_caes/screens/adicionarAnimalScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:tinder_para_caes/firebaseLogic/associacaoProvider.dart';
+import 'package:tinder_para_caes/firebaseLogic/utilizadorProvider.dart';
 import 'package:tinder_para_caes/screens/allPedidosList.dart';
 import 'package:tinder_para_caes/screens/animalDetailsScreen.dart';
 import 'package:tinder_para_caes/screens/loginScreen.dart';
@@ -157,10 +159,18 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                   child: Text("Cancelar"),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
+                  onPressed: () async {
+                    // Fazer logout do Firebase
+                    await FirebaseAuth.instance.signOut();
+
+                    // Limpar Providers se necessário
+                    Provider.of<UtilizadorProvider>(context, listen: false).clearUser();
+                    Provider.of<AssociacaoProvider>(context, listen: false).clearAssociation();
+
+                    // Navegar para o LoginScreen e limpar a pilha de navegação
+                    Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (context) => const LoginScreen()),
+                          (Route<dynamic> route) => false,
                     );
                   },
                   child: Text("Terminar"),
@@ -178,13 +188,14 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
   @override
   Widget build(BuildContext context) {
     final associacao = Provider.of<AssociacaoProvider>(context).association;
-    numberOfAnimals = associacao!.animais.length;
 
     if (associacao == null || isLoading) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
       );
     }
+
+    numberOfAnimals = associacao!.animais.length ?? 0;
 
     return Scaffold(
       appBar: AppBar(

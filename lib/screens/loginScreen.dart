@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
 
       if (userType == null) {
-        throw Exception("⚠️ User type not found in Firestore!");
+        throw Exception("User type not found in Firestore!");
       }
       print(" User type: $userType");
 
@@ -75,8 +75,6 @@ class _LoginScreenState extends State<LoginScreen> {
           throw Exception("Dados do utilizador não encontrados.");
         }
         final meuUtilizador = Utilizador.fromMap(user.uid, data);
-
-
         Provider.of<UtilizadorProvider>(context, listen: false).setUser(
             meuUtilizador);
 
@@ -95,9 +93,9 @@ class _LoginScreenState extends State<LoginScreen> {
         print("AAAAAAAAAAAAAAAAAA");
 
         final minhaAssociacao = Associacao.fromMap(user.uid, data);
-
         Provider.of<AssociacaoProvider>(context, listen: false).setAssociation(
             minhaAssociacao);
+        await Future.delayed(Duration.zero);
 
         Navigator.pushReplacement(
           context,
