@@ -123,7 +123,7 @@ class AnimalDetailsScreen extends StatelessWidget {
               _buildInfoRow(context, Icons.directions_walk, 'Passeios dados:', '$numeroDePasseiosDados'),
               _buildInfoRow(context, Icons.family_restroom, 'Pode apadrinhar:', asGoFather ? 'Não' : 'Sim'),
 
-              if (!isAssoci && animal.hasGodFather )
+              if (!isAssoci && !animal.hasGodFather )
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: ElevatedButton(
@@ -138,7 +138,7 @@ class AnimalDetailsScreen extends StatelessWidget {
                 ),
 
               const SizedBox(height: 10),
-              if (isAssoci)
+              if (uidAtual == uidAssociacao)
                 Align(
                     alignment: Alignment.center,
                     child: TextButton(

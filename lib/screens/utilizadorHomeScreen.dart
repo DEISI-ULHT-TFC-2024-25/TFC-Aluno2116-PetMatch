@@ -184,12 +184,13 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
   }
 
 
+//passou a ser com a localidade
   Future<void> atualizarCenterComDistritoDoUtilizador() async {
     final utilizador = Provider.of<UtilizadorProvider>(context, listen: false).user;
 
-    if (utilizador != null && utilizador.distrito != null) {
+    if (utilizador != null && utilizador.localidade != null) {
       try {
-        List<Location> locations = await locationFromAddress('${utilizador.distrito}, Portugal');
+        List<Location> locations = await locationFromAddress('${utilizador.localidade}, Portugal');
         if (locations.isNotEmpty) {
           setState(() {
             _center = LatLng(locations.first.latitude, locations.first.longitude);
@@ -199,12 +200,10 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
           mapController.animateCamera(CameraUpdate.newLatLng(_center));
         }
         //print("DEBUG: Coordenadas obtidas para ${utilizador.distrito}: ${locations.first.latitude}, ${locations.first.longitude}");
-
       } catch (e) {
         print("Erro ao obter coordenadas do distrito do utilizador: $e");
       }
     }
-
     await Future.delayed(Duration(milliseconds: 10));
   }
 
@@ -346,7 +345,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                             ),
                           );
                         },
-                        child: Text("Ver todos"),
+                        child: Text("Ver todos (${animais.length})"),
                       ),
                     ),
                     SizedBox(width: 8), // Espaçamento entre os botões
@@ -421,16 +420,16 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
 
                 SizedBox(height: 8.0),
                 SizedBox(
-                  height: (sugestoesAssociacoes.length > 4)
-                    ? 300
-                    : sugestoesAssociacoes.length * 100.0,
+                  height: (sugestoesAssociacoes.length > 3)
+                    ? 325
+                    : sugestoesAssociacoes.length * 125.0,
                   child: Column(
                     children: [
                       Expanded(
                         child: ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: sugestoesAssociacoes.length > 4 ? 4 : sugestoesAssociacoes.length,
+                          itemCount: sugestoesAssociacoes.length > 3 ? 3 : sugestoesAssociacoes.length,
                           itemBuilder: (context, index) {
                             final associacao = sugestoesAssociacoes[index];
                             return Card(

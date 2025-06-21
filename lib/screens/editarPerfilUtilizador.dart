@@ -125,6 +125,7 @@ class _EditarPerfilUtilizadorState extends State<EditarPerfilUtilizador> {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
+            Text("Preencha apenas os campos em que pretende alterar os seus dados"),
             TextField(
               controller: nomeController,
               decoration: InputDecoration(labelText: 'Nome'),

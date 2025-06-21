@@ -12,6 +12,7 @@ class Utilizador {
     String email;
     String address;
     String distrito;
+    String localidade;
     String zipCode;
     String password;
 
@@ -30,6 +31,7 @@ class Utilizador {
         required this.email,
         required this.address,
         required this.distrito,
+        required this.localidade,
         required this.zipCode,
         required this.password,
         required this.associacoesEmQueEstaEnvolvido,
@@ -49,6 +51,7 @@ class Utilizador {
             email: map['email'] ?? '',
             address: map['address'] ?? '',
             distrito: map['distrito'] ?? '',
+            localidade: map['localidade'] ?? '',
             zipCode: map['zipCode'] ?? '',
             password: map['password'] ?? '',
             associacoesEmQueEstaEnvolvido: map['associacoesEmQueEstaEnvolvido'] != null
@@ -71,6 +74,7 @@ class Utilizador {
             'email': email,
             'address': address,
             'distrito': distrito,
+            'localidade': localidade,
             'zipCode': zipCode,
             'password': password,
             'associacoesEmQueEstaEnvolvido': associacoesEmQueEstaEnvolvido.map((a) => a.toMap()).toList(),
