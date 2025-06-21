@@ -11,7 +11,6 @@ import 'package:tinder_para_caes/firebaseLogic/utilizadorProvider.dart';
 import 'package:tinder_para_caes/screens/allPedidosList.dart';
 import 'package:tinder_para_caes/screens/animalDetailsScreen.dart';
 import 'package:tinder_para_caes/screens/loginScreen.dart';
-
 import 'package:tinder_para_caes/screens/editarFuncionalidades.dart';
 import 'package:tinder_para_caes/screens/editarPerfilAssociação.dart';
 

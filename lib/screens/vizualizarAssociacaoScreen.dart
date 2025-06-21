@@ -27,10 +27,11 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
   bool isLoading = true;
   List<Animal> animals = [];
   List<Eventos> events = [];
-  List<String> needs = [];
+  String needs = "";
   String name = "";
   int numberOfAnimals = 0;
   String uid = "";
+  String iban = "";
 
 
 //cordenadas a substituir pelas da associação
@@ -55,6 +56,7 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
       numberOfAnimals = assoE.animais.length;
       isLoading = false;
       uid = assoE.uid;
+      iban = assoE.iban ?? "";
 
     });
   }
@@ -163,20 +165,22 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
             child: Text("Ver Todos ($numberOfAnimals)"),
           ),
 
-          SizedBox(height: 30),
-
-
-          Text(
-            "Donativos e necessidades:",
-            style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 10),
-          if (needs.isNotEmpty)
-            ...needs.map((need) => Text("- $need", style: textTheme.bodyMedium))
-          else
-            Text("De momento não existem informações", style: textTheme.bodyMedium),
           SizedBox(height: 20),
 
+          Text("Donativos e necessidades:", style: textTheme.bodyMedium),
+          SizedBox(height: 10),
+          if (needs.isNotEmpty)
+            Text(needs)
+          else
+            Text("De momento não existem informações", style: textTheme.bodyMedium),
+          SizedBox(height: 10),
+          if (iban != "")
+            Text("Caso queira fazer um donativo:", style: textTheme.bodyMedium),
+            Text("IBAN: $iban", style: textTheme.bodyMedium),
+          SizedBox(height: 20),
+
+
+          //botões de açoes
           ElevatedButton(
             onPressed: () {
             },

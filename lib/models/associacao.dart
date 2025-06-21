@@ -23,7 +23,7 @@ class Associacao {
   List<String> animais;
   List<String> pedidosRealizados;
   List<Eventos> eventos;
-  List<String> necessidades;
+  String necessidades;
   bool associacao;
   String? iban;
 
@@ -73,7 +73,7 @@ class Associacao {
           ?.map((e) => Eventos.fromMap(e as Map<String, dynamic>, e['id'] ?? 'id_desconhecido'))
           .toList() ??
           [],
-      necessidades: List<String>.from(map['necessidades'] ?? []),
+      necessidades: map['necessidades'] ?? '',
       iban: map['iban'] ?? '',
     );
   }

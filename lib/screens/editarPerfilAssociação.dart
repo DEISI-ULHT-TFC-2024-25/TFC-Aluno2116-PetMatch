@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:tinder_para_caes/firebaseLogic/associacaoProvider.dart';
 import 'package:tinder_para_caes/screens/editarFuncionalidades.dart';
 import '../theme/theme.dart';
+import 'package:tinder_para_caes/screens/associacaoHomeScreen.dart';
 
 class EditarPerfilAssociacao extends StatefulWidget {
   const EditarPerfilAssociacao({super.key});
@@ -26,6 +27,9 @@ class _EditarPerfilAssociacaoState extends State<EditarPerfilAssociacao> {
   final TextEditingController telefone2Controller = TextEditingController();
   final TextEditingController moradaController = TextEditingController();
   final TextEditingController distritoController = TextEditingController();
+  final TextEditingController localidadeController = TextEditingController();
+  final TextEditingController necessidadesController = TextEditingController();
+  final TextEditingController ibanController = TextEditingController();
 
 
   void atualizar() async {
@@ -36,8 +40,8 @@ class _EditarPerfilAssociacaoState extends State<EditarPerfilAssociacao> {
 
     final Map<String, dynamic> dadosAtualizados = {};
 
-    if (nomeController.text.trim().isNotEmpty) {
-      dadosAtualizados['nome'] = nomeController.text.trim();
+    if (nomeController.text.isNotEmpty) {
+      dadosAtualizados['nome'] = nomeController.text;
     }
     if (email1Controller.text.trim().isNotEmpty) {
       dadosAtualizados['email1'] = email1Controller.text.trim();
@@ -53,6 +57,15 @@ class _EditarPerfilAssociacaoState extends State<EditarPerfilAssociacao> {
     }
     if (distritoController.text.trim().isNotEmpty) {
       dadosAtualizados['distrito'] = distritoController.text.trim();
+    }
+    if (localidadeController.text.isNotEmpty) {
+      dadosAtualizados['localidade'] = localidadeController.text;
+    }
+    if (necessidadesController.text.isNotEmpty) {
+      dadosAtualizados['necessidades'] = necessidadesController.text;
+    }
+    if (ibanController.text.isNotEmpty) {
+      dadosAtualizados['iban'] = ibanController.text;
     }
     if (shareLocation) {
       dadosAtualizados['partilharLocalizacao'] = true;
@@ -129,6 +142,15 @@ class _EditarPerfilAssociacaoState extends State<EditarPerfilAssociacao> {
         child: ListView(
           children: [
             Text("Preencha apenas os campos em que pretende alterar os seus dados"),
+            const SizedBox(height: 20),
+            TextField(
+              controller: necessidadesController,
+              decoration: InputDecoration(labelText: 'Lista das necessidades da associação'),
+              keyboardType: TextInputType.multiline,
+              maxLines: null, // permite número ilimitado de linhas
+              minLines: 3,    // número mínimo de linhas visíveis
+              textInputAction: TextInputAction.newline, // insere nova linha ao carregar "Enter"
+            ),
             const SizedBox(height: 10),
             TextField(
               controller: nomeController,
@@ -204,6 +226,16 @@ class _EditarPerfilAssociacaoState extends State<EditarPerfilAssociacao> {
                 decoration: const InputDecoration(labelText: 'Morada'),
               ),
             ],
+            const SizedBox(height: 10),
+            TextField(
+              controller: localidadeController,
+              decoration: InputDecoration(labelText: 'Localidade'),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: ibanController,
+              decoration: InputDecoration(labelText: 'IBAN para o qual recebem donativos'),
+            ),
             const SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: theme.primaryColor),
@@ -215,7 +247,11 @@ class _EditarPerfilAssociacaoState extends State<EditarPerfilAssociacao> {
             const SizedBox(height: 10),
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: theme.primaryColor),
-              onPressed: atualizar,
+              onPressed: (){
+                atualizar;
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const AssociacaoHomeScreen()));
+              },
+
               child: const Text("Atualizar Perfil"),
             ),
           ],
