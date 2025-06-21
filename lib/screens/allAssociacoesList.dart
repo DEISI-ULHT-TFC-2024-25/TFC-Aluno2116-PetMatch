@@ -125,6 +125,7 @@ class _AllAssociacoesListState extends State<AllAssociacoesList> {
                           ),
                           SizedBox(height: 8),
                           Text("Distrito: ${associacao.distrito}"),
+                          Text("Localidade: ${associacao.localidade}"),
                           Text("Número de Animais: ${associacao.animais.length}"),
                           Text("Tarefas Necessárias:\n"
                               "${associacao.funcionalidades.map((f) => "  • $f").join("\n")}",

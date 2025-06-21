@@ -14,6 +14,7 @@ class Associacao {
   String mainCellphone;
   String secundaryCellphone;
   String distrito;
+  String localidade;
   bool showAddress;
   String address;
   String site;
@@ -35,6 +36,7 @@ class Associacao {
     required this.mainCellphone,
     required this.secundaryCellphone,
     required this.distrito,
+    required this.localidade,
     required this.showAddress,
     required this.address,
     required this.site,
@@ -59,6 +61,7 @@ class Associacao {
       mainCellphone: map['telemovelPrincipal'] ?? '',
       secundaryCellphone: map['telemovelSecundario'] ?? '',
       distrito: map['distrito'] ?? '',
+      localidade: map['localidade'] ?? '',
       showAddress: map['mostrarMorada'] ?? false,
       address: map['morada'] ?? '',
       site: map['site'] ?? '',
@@ -84,6 +87,7 @@ class Associacao {
       'telemovelPrincipal': mainCellphone,
       'telemovelSecundario': secundaryCellphone,
       'distrito': distrito,
+      'localidade': localidade,
       'mostrarMorada': showAddress,
       'morada': address,
       'site': site,

@@ -149,12 +149,11 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
     Set<Marker> novosMarcadores = {};
     for (final associacao in todasAssociacoes) {
       try {
-        // Obter localização a partir do distrito
-        List<Location> locations = await locationFromAddress('${associacao.distrito}, Portugal');
+        // Obter localização a partir da localidade
+        List<Location> locations = await locationFromAddress('${associacao.localidade}, Portugal');
 
         if (locations.isNotEmpty) {
           final loc = locations.first;
-
           final marker = Marker(
             markerId: MarkerId(associacao.name),
             position: LatLng(loc.latitude, loc.longitude),
@@ -171,11 +170,10 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
               },
             ),
           );
-
           novosMarcadores.add(marker);
         }
       } catch (e) {
-        print('Erro ao geocodificar ${associacao.distrito}: $e');
+        print('Erro ao geocodificar ${associacao.localidade}: $e');
       }
     }
 
@@ -439,7 +437,7 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                               margin: EdgeInsets.symmetric(vertical: 4.0),
                               child: ListTile(
                                 title: Text(associacao.name),
-                                subtitle: Text("Distrito: ${associacao.distrito}"),
+                                subtitle: Text("Distrito: ${associacao.distrito}\nLocalidade: ${associacao.localidade}"),
                                 onTap: () {
                                   Navigator.push(
                                     context,

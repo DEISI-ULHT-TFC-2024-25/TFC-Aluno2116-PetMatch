@@ -37,7 +37,7 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
       final firestore = FirebaseFirestore.instance;
       final currentUser = FirebaseAuth.instance.currentUser;
       final String uidUtilizador = currentUser?.uid ?? "desconhecido";
-      final Future<String> nomeAssociacao = Associacao.getNomeAssociacao(uidUtilizador);
+      final Future<String> nomeAssociacao = Associacao.getNomeAssociacao(widget.uidAssociacao);
       final String uidAnimal = "uidAnimal123";
       final String uidAssociacao = widget.uidAssociacao;
 

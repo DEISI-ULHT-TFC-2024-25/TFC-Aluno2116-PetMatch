@@ -28,6 +28,7 @@ class _CriarAssociacaoState extends State<CriarAssociacao> {
   final TextEditingController telefone2Controller = TextEditingController();
   final TextEditingController moradaController = TextEditingController();
   final TextEditingController distritoController = TextEditingController();
+  final TextEditingController localidadeController = TextEditingController();
 
   List<String> funcionalidadesSelecionadas = [];
 
@@ -112,6 +113,7 @@ class _CriarAssociacaoState extends State<CriarAssociacao> {
       "telemovelSecundario": telefone2Controller.text,
       "morada": shareLocation ? moradaController.text : null, // Morada apenas se shareLocation for true
       "distrito": distritoController.text, // Distrito sempre presente
+      "localidade" : localidadeController.text,
       "tipo": "associacao",
       "animais": [],
       "pedidos": [],
@@ -249,6 +251,11 @@ class _CriarAssociacaoState extends State<CriarAssociacao> {
               onSelected: (String selection) {
                 distritoController.text = selection;
               },
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: localidadeController,
+              decoration: InputDecoration(labelText: 'Localidade'),
             ),
 
             if (shareLocation) ...[
