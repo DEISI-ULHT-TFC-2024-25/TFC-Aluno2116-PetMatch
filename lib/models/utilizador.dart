@@ -89,22 +89,21 @@ class Utilizador {
 
 
     Future<List<Animal>> fetchAnimals(List<String> animalUids) async {
-        List<Animal> animals = [];
-        for (String uid in animalUids) {
-            DocumentSnapshot doc =
-            await FirebaseFirestore.instance.collection('animal').doc(uid).get();
-            if (doc.exists) {
-                final data = doc.data();
-
-                if (data is Map<String, dynamic>) {
-                    animals.add(Animal.fromMap(data));
-                } else {
-                    print("⚠️ Erro: Documento $uid não contém um Map válido. Tipo: ${data.runtimeType}, Conteúdo: $data");
-                }
+        final futures = animalUids.map((uid) async {
+            final doc = await FirebaseFirestore.instance.collection('animal').doc(uid).get();
+            final data = doc.data();
+            if (doc.exists && data is Map<String, dynamic>) {
+                return Animal.fromMap(data);
+            } else {
+                print("Erro: Documento $uid inválido ou tipo errado.");
             }
-        }
-        return animals;
+            return null;
+        });
+
+        final animais = await Future.wait(futures);
+        return animais.whereType<Animal>().toList();
     }
+
 
 
 }

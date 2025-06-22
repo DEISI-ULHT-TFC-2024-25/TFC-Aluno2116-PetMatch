@@ -364,7 +364,13 @@ class _AdicionarAnimalScreenState extends State<AdicionarAnimalScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Animal adicionado com sucesso!")),
       );
-      Navigator.pop(context);
+
+      //atualizar os dados dos providers
+      await Provider.of<UtilizadorProvider>(context, listen: false).recarregarUtilizador();
+      await Provider.of<AssociacaoProvider>(context, listen: false).recarregarAssociacao();
+
+
+      Navigator.pop(context, true);
     } catch (e) {
       print("Erro ao guardar no Firestore: $e");
       ScaffoldMessenger.of(context).showSnackBar(

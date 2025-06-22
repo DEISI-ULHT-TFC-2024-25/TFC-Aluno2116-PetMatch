@@ -194,7 +194,7 @@ class _TornarPadrinhoScreenState extends State<TornarPadrinhoScreen> {
         "uidAssociacao": uidAssociacao,
         "confirmouTodosOsRequisitos": aceitaRegras,
         "mensagemAdicional": mensagemAdicional,
-        "estado": "pendente",
+        "estado": "Pendente",
         "dataCriacao": FieldValue.serverTimestamp(),
 
         "dadosPreenchidos": {

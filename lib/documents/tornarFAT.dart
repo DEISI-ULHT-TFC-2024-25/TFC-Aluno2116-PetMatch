@@ -163,7 +163,7 @@ class _TornarFATState extends State<TornarFAT> {
         "uidAssociacao": uidAssociacao,
         "confirmouTodosOsRequisitos": true,
         "mensagemAdicional": mensagemAdicional,
-        "estado": "pendente",
+        "estado": "Pendente",
         "dataCriacao": FieldValue.serverTimestamp(),
 
         "dadosPreenchidos": {

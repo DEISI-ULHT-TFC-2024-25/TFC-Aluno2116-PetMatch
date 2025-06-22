@@ -147,7 +147,7 @@ class _TornarSocioScreenState extends State<TornarSocioScreen> {
         "uidAssociacao": uidAssociacao,
         "confirmouTodosOsRequisitos": aceitaRegras,
         "mensagemAdicional": mensagemAdicional,
-        "estado": "pendente",
+        "estado": "Pendente",
         "dataCriacao": FieldValue.serverTimestamp(),
 
         "dadosPreenchidos": {

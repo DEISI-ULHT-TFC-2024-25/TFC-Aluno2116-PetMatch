@@ -1,18 +1,26 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/screens/animalDetailsScreen.dart';
 import 'package:tinder_para_caes/screens/adicionarAnimalScreen.dart';
 
+import '../models/associacao.dart';
+import '../models/utilizador.dart';
+
 class AllAnimalsList extends StatefulWidget {
   final String uidAssociacao;
-  final List<Animal?> animais;
   final bool isAssociacao;
+  final Associacao? associacao;
+  final Utilizador? utilizador;
+  
 
   const AllAnimalsList({
     super.key,
-    required this.animais,
     required this.isAssociacao,
     required this.uidAssociacao,
+    this.associacao,
+    this.utilizador,
   });
 
   @override
@@ -28,11 +36,44 @@ class _AllAnimalsListState extends State<AllAnimalsList> {
   String filtroVisibilidade = 'Todos'; // Valor por defeito
   final TextEditingController _pesquisaController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    animaisFiltrados = widget.animais;
+
+  Future<void> _carregarAnimais() async {
+    List<Animal> novaLista = [];
+
+    if (widget.isAssociacao) {
+      // Buscar dados atualizados da associação
+      final doc = await FirebaseFirestore.instance
+          .collection('associacao')
+          .doc(widget.uidAssociacao)
+          .get();
+      final associacaoAtualizada = Associacao.fromFirestore(doc);
+      novaLista = await associacaoAtualizada.fetchAnimals(associacaoAtualizada.animais);
+    } else {
+      // Utilizador ver os próprios animais
+      if (widget.utilizador != null && widget.uidAssociacao.trim().isEmpty) {
+        final doc = await FirebaseFirestore.instance
+            .collection('utilizador')
+            .doc(widget.utilizador!.uid)
+            .get();
+        final utilizadorAtualizado = Utilizador.fromFirestore(doc);
+        novaLista = await utilizadorAtualizado.fetchAnimals(utilizadorAtualizado.osSeusAnimais);
+      }
+      // Utilizador ver animais de uma associação
+      else if (widget.uidAssociacao.trim().isNotEmpty) {
+        final doc = await FirebaseFirestore.instance
+            .collection('associacao')
+            .doc(widget.uidAssociacao)
+            .get();
+        final associacao = Associacao.fromFirestore(doc);
+        novaLista = await associacao.fetchAnimals(associacao.animais);
+      }
+    }
+
+    setState(() {
+      animaisFiltrados = novaLista;
+    });
   }
+
 
   bool filtrosAtivos() {
     return termoPesquisa.isNotEmpty || filtroEspecie != null || filtroGenero != null;
@@ -40,7 +81,7 @@ class _AllAnimalsListState extends State<AllAnimalsList> {
 
   void aplicarFiltros() {
     setState(() {
-      animaisFiltrados = widget.animais.where((animal) {
+      animaisFiltrados = animaisFiltrados.where((animal) {
         if (animal == null) return false;
 
         final nomeMatch = animal.fullName.toLowerCase().contains(termoPesquisa.toLowerCase());
@@ -74,12 +115,32 @@ class _AllAnimalsListState extends State<AllAnimalsList> {
 
 
   @override
+  void initState() {
+    super.initState();
+    _carregarAnimais();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final uidAtual = FirebaseAuth.instance.currentUser?.uid;
+    bool isDono = true;
+    if (animaisFiltrados.isNotEmpty && animaisFiltrados[0] != null) {
+      isDono = animaisFiltrados[0]!.donoID == uidAtual;
+    }
+
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
 
     return Scaffold(
-      appBar: AppBar(title: Text("Todos os Animais")),
+      appBar: AppBar(
+        title: Text("Todos os Animais"),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context, true);
+          },
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -207,20 +268,24 @@ class _AllAnimalsListState extends State<AllAnimalsList> {
                                 Text("Castrado: ${animal.sterilized ? "Sim" : "Não"}"),
                                 SizedBox(height: 12),
                                 ElevatedButton.icon(
-                                  onPressed: () {
-                                    Navigator.push(
+                                  onPressed: () async {
+                                    final resultado = await Navigator.push<Map>(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => AnimalDetailsScreen(
                                           animal: animal,
                                           isAssoci: widget.isAssociacao,
                                           uidAssociacao: widget.uidAssociacao,
+                                          origem: 'allAnimalsList', // identifica a origem
                                         ),
                                       ),
                                     );
+                                    if (resultado?['apagado'] == true && resultado?['origem'] == 'allAnimalsList') {
+                                      await _carregarAnimais();
+                                    }
                                   },
                                   icon: Icon(Icons.info_outline),
-                                  label: Text("Ver mais informações "),
+                                  label: Text("Ver mais informações"),
                                 ),
                               ],
                             ),
@@ -268,16 +333,14 @@ class _AllAnimalsListState extends State<AllAnimalsList> {
         ),
       ),
 
-      // Apenas Associações podem adicionar animais neste screen
-      floatingActionButton: widget.isAssociacao
+      // o dono dos animais podem adicionar animais neste screen
+      floatingActionButton: isDono
           ? FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AdicionarAnimalScreen(),
-            ),
-          );
+        onPressed: () async {
+          final resultado = await Navigator.push(context,MaterialPageRoute(builder: (context) => AdicionarAnimalScreen()));
+          if (resultado == true) {
+            await _carregarAnimais(); // recarrega lista
+          }
         },
         tooltip: "Adicionar Animal",
         child: const Icon(Icons.add, size: 30),

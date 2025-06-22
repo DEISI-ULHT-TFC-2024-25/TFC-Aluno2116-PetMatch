@@ -140,7 +140,7 @@ class _CriarAssociacaoState extends State<CriarAssociacao> {
       "animais": [],
       "pedidos": [],
       "eventos": [],
-      "necessidades": [],
+      "necessidades": "",
       "funcionalidades": funcionalidadesSelecionadas.map((f) => f.toString().split('.').last).toList(),
     };
 

@@ -12,6 +12,7 @@ class AnimalDetailsScreen extends StatelessWidget {
   final Animal animal;
   final bool isAssoci;
   final String uidAssociacao;
+  final String origem;
 
 
   const AnimalDetailsScreen({
@@ -19,6 +20,7 @@ class AnimalDetailsScreen extends StatelessWidget {
     required this.animal,
     required this.isAssoci,
     required this.uidAssociacao,
+    required this.origem,
   });
 
   @override
@@ -121,7 +123,6 @@ class AnimalDetailsScreen extends StatelessWidget {
               _buildInfoRow(context, Icons.rule, 'Porte:', size),
               _buildInfoRow(context, Icons.emoji_emotions, 'Comportamento:', behavior),
               _buildInfoRow(context, Icons.directions_walk, 'Passeios dados:', '$numeroDePasseiosDados'),
-              _buildInfoRow(context, Icons.family_restroom, 'Pode apadrinhar:', asGoFather ? 'Não' : 'Sim'),
 
               if (!isAssoci && !animal.hasGodFather )
                 Padding(
@@ -306,14 +307,7 @@ class AnimalDetailsScreen extends StatelessWidget {
           TextButton(
             child: Text('Eliminar', style: TextStyle(color: Colors.red[300])),
             onPressed: () async {
-
               await apagarAnimal(animal, context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => UtilizadorHomeScreen(),
-                ),
-              );
             },
           ),
         ],
@@ -324,6 +318,7 @@ class AnimalDetailsScreen extends StatelessWidget {
 
   Future<void> apagarAnimal(Animal animal, BuildContext context) async {
     final firestore = FirebaseFirestore.instance;
+    final uidAtual = FirebaseAuth.instance.currentUser?.uid;
 
     try {
       // Apaga imagens no Firebase Storage
@@ -338,14 +333,35 @@ class AnimalDetailsScreen extends StatelessWidget {
 
       // Apaga documento Firestore
       await firestore.collection('animal').doc(animal.uid.toString()).delete();
+      // Remover o UID do animal da lista de animais da associação ou do utilizador
+      if (isAssoci) {
+        await firestore.collection('associacao').doc(uidAtual).update({
+          'animais': FieldValue.arrayRemove([animal.uid])
+
+        });
+      } else {
+        await firestore.collection('utilizador').doc(uidAtual).update({
+          'osSeusAnimais': FieldValue.arrayRemove([animal.uid])
+        });
+      }
+
+      if (!context.mounted) return;
+
+      // Fecha o diálogo explicitamente (caso ainda esteja aberto)
+      Navigator.of(context, rootNavigator: true).pop();
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Animal eliminado com sucesso.')),
       );
 
-      Navigator.pop(context); // Volta ao ecrã anterior
+      Navigator.pop(context, {
+        'apagado': true,
+        'origem': origem,
+      });
+
     } catch (e) {
       print('Erro ao eliminar animal: $e');
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Erro ao eliminar o animal.')),
       );

@@ -48,7 +48,7 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
         "nomeAssociacao": nomeAssociacao,
         "confirmouTodosOsRequisitos": aceitaRegras,
         "mensagemAdicional": mensagemAdicional,
-        "estado": "pendente",
+        "estado": "Pendente",
         "dataCriacao": FieldValue.serverTimestamp(),
 
         "dadosPreenchidos": {

@@ -124,11 +124,16 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
               final animal = animals[index];
               String uidAssociacao = uid ?? ''  ;
               return InkWell(
-                onTap: () {
-                  Navigator.push(
+                onTap: () async {
+                  final resultado = await Navigator.push<Map>(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AnimalDetailsScreen(animal: animal, isAssoci:true, uidAssociacao: uidAssociacao ),
+                      builder: (context) => AnimalDetailsScreen(
+                        animal: animal,
+                        isAssoci: true,
+                        uidAssociacao: uidAssociacao,
+                        origem: "vizualizarAssociacaoScreen",
+                      ),
                     ),
                   );
                 },
@@ -157,7 +162,7 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => AllAnimalsList(animais: animals, isAssociacao: false, uidAssociacao: uid),
+                  builder: (context) => AllAnimalsList(isAssociacao: false, uidAssociacao: uid),
                 ),
               );
             },

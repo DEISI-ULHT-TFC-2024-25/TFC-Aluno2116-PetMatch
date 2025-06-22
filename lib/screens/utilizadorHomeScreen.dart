@@ -316,13 +316,21 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                   children: [
                     ...animais.take(3).map((animal) => Expanded(
                       child: InkWell(
-                        onTap: () {
-                          Navigator.push(
+                        onTap: () async {
+                          final resultado = await Navigator.push<Map>(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => AnimalDetailsScreen(animal: animal, isAssoci: false, uidAssociacao: ""),
+                              builder: (context) => AnimalDetailsScreen(
+                                animal: animal,
+                                isAssoci: false,
+                                uidAssociacao: '',
+                                origem: "utilizadorHomePage",
+                              ),
                             ),
                           );
+                          if (resultado?['apagado'] == true && resultado?['origem'] == 'utilizadorHomePage') {
+                            await fetchAnimals();
+                          }
                         },
                       child: Card(
                         child: Padding(
@@ -347,13 +355,21 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                   children: [
                     Expanded(
                       child: TextButton(
-                        onPressed: () {
-                          Navigator.push(
+                        onPressed: () async {
+                          final resultado = await Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => AllAnimalsList(animais: animais,isAssociacao: false,uidAssociacao: " "),
+                              builder: (context) => AllAnimalsList(
+                                isAssociacao: false,
+                                uidAssociacao: '',
+                                utilizador: utilizador,
+                              ),
                             ),
                           );
+                          if (resultado == true) {
+                            await Provider.of<UtilizadorProvider>(context, listen: false).recarregarUtilizador();
+                            await fetchAnimals();
+                          }
                         },
                         child: Text("Ver todos (${animais.length})"),
                       ),
@@ -361,13 +377,14 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                     SizedBox(width: 8), // Espaçamento entre os botões
                     Expanded(
                       child: TextButton(
-                        onPressed: () {
-                          Navigator.push(
+                        onPressed: () async {
+                          final resultado = await Navigator.push(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => AdicionarAnimalScreen(),
-                            ),
-                          );
+                            MaterialPageRoute(builder: (context) => AdicionarAnimalScreen()),);
+                          if (resultado == true) {
+                            await Provider.of<UtilizadorProvider>(context, listen: false).recarregarUtilizador();
+                            await fetchAnimals(); // Atualiza a lista se adicionar com sucesso
+                          }
                         },
                         child: Text("Adicionar patudo"),
                       ),

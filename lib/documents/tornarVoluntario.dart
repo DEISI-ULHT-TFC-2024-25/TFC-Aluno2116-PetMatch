@@ -66,7 +66,7 @@ class _TornarVoluntarioScreenState extends State<TornarVoluntarioScreen> {
         "uidAssociacao": uidAssociacao,
         "confirmouTodosOsRequisitos": aceitaRegras,
         "mensagemAdicional": mensagemAdicional,
-        "estado": "pendente",
+        "estado": "Pendente",
         "dataCriacao": FieldValue.serverTimestamp(),
 
         "dadosPreenchidos": {

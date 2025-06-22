@@ -136,6 +136,8 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
     }
   }
 
+
+
   void _mostrarPopupConfirmarTerminarSessao(BuildContext context) {
     showDialog(
       context: context,
@@ -276,14 +278,23 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                   final animal = animais[index];
                   String uidAssociacao = associacao?.uid ?? ''  ;
                   return InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AnimalDetailsScreen(animal: animal, isAssoci:true, uidAssociacao: uidAssociacao ),
+                    onTap: () async {
+                      final resultado = await Navigator.push<Map>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AnimalDetailsScreen(
+                            animal: animal,
+                            isAssoci: true,
+                            uidAssociacao: uidAssociacao,
+                            origem: "associacaoHomePage", // origem identificada
                           ),
-                        );
-                      },
+                        ),
+                      );
+
+                      if (resultado?['apagado'] == true && resultado?['origem'] == 'associacaoHomePage') {
+                        await _fetchAnimals();
+                      }
+                    },
                     child: Card(
                       child: Padding(
                         padding: const EdgeInsets.all(2.0),
@@ -311,14 +322,32 @@ class _AssociacaoHomeScreenState extends State<AssociacaoHomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => AllAnimalsList(animais: animais, isAssociacao: true, uidAssociacao: associacao.uid)));
+                      onPressed: () async {
+                        final resultado = await Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => AllAnimalsList(
+                                isAssociacao: true,
+                                uidAssociacao: associacao.uid,
+                                associacao: associacao)));
+                        if (resultado == true){
+                          await Provider.of<AssociacaoProvider>(context, listen: false).recarregarAssociacao();
+                          await _fetchAnimals();
+                        }
                       },
-                      child: Text("Ver Todos ($numberOfAnimals)"),
+                      child: Text("Ver Todos (${animais.length})"),
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => AdicionarAnimalScreen()));
+                      onPressed: () async {
+                        final resultado = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AdicionarAnimalScreen(),
+                          ),
+                        );
+                        if (resultado == true) {
+                          await Provider.of<AssociacaoProvider>(context, listen: false).recarregarAssociacao();
+                          await _fetchAnimals();// Atualiza a lista se adicionar com sucesso
+                        }
                       },
                       child: Text("Adicionar Animal"),
                     ),
