@@ -16,9 +16,12 @@ import 'package:provider/provider.dart';
 import 'package:tinder_para_caes/firebaseLogic/utilizadorProvider.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:tinder_para_caes/screens/editarPerfilUtilizador.dart';
-
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import '../firebaseLogic/associacaoProvider.dart';
 import '../models/funcionalidades.dart';
+
+
 
 class UtilizadorHomeScreen extends StatefulWidget {
   const UtilizadorHomeScreen({super.key});
@@ -40,7 +43,6 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
 
   BitmapDescriptor? _iconePatinha;
   final Set<Marker> _marcadores = {};
-
   LatLng _center = LatLng(38.7169, -9.1399); // Valor por defeito, será substituído
 
 
@@ -472,42 +474,49 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                 ),
                 SizedBox(height: 16.0),
 
-              AnimatedContainer(
+                AnimatedSize(
                   duration: Duration(milliseconds: 300),
-                  height: isFullScreen ? MediaQuery.of(context).size.height * 0.8 : 200,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: theme.dividerColor),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Stack(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(6),
-                        child: GoogleMap(
-                          onMapCreated: _onMapCreated,
-                          initialCameraPosition: CameraPosition(
-                            target: _center,
-                            zoom: 15.0,
+                  curve: Curves.easeInOut,
+                  child: Container(
+                    height: isFullScreen ? MediaQuery.of(context).size.height * 0.8 : 200,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: theme.dividerColor),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(6),
+                          child: GoogleMap(
+                            onMapCreated: _onMapCreated,
+                            initialCameraPosition: CameraPosition(
+                              target: _center,
+                              zoom: 15.0,
+                            ),
+                            markers: _marcadores,
+                            gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+                              Factory<OneSequenceGestureRecognizer>(() => EagerGestureRecognizer()),
+                            },
                           ),
-                          markers: _marcadores,
                         ),
-                      ),
-                      Positioned(
-                        top: 8,
-                        right: 8,
-                        child: FloatingActionButton(
-                          mini: true,
-                          onPressed: () {
-                            setState(() {
-                              isFullScreen = !isFullScreen;
-                            });
-                          },
-                          child: Icon(isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen),
+                        Positioned(
+                          top: 8,
+                          right: 8,
+                          child: FloatingActionButton(
+                            mini: true,
+                            onPressed: () {
+                              setState(() {
+                                isFullScreen = !isFullScreen;
+                              });
+                            },
+                            child: Icon(isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
+
                 SizedBox(height: 16.0),
                 Align(
                   alignment: Alignment.centerRight,
