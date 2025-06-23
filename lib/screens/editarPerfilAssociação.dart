@@ -102,8 +102,6 @@ class _EditarPerfilAssociacaoState extends State<EditarPerfilAssociacao> {
     // Atualizar o provider local
     await associacaoProvider.recarregarAssociacao();
 
-    // Voltar atrás
-    Navigator.pop(context);
   }
 
 
@@ -242,13 +240,13 @@ class _EditarPerfilAssociacaoState extends State<EditarPerfilAssociacao> {
               onPressed: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const EditarFuncionalidades()));
               },
-              child: Text("Escolher Funcionalidades"),
+              child: Text("Editar as suas Funcionalidades"),
             ),
             const SizedBox(height: 10),
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: theme.primaryColor),
               onPressed: (){
-                atualizar;
+                atualizar();
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const AssociacaoHomeScreen()));
               },
 

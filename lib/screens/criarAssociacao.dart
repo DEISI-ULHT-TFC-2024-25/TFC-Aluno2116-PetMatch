@@ -136,11 +136,11 @@ class _CriarAssociacaoState extends State<CriarAssociacao> {
       "localidade" : localidadeController.text,
       "tipo": "associacao",
       "iban": ibanController.text ?? "",
-      "site": "",
+      "site": '',
       "animais": [],
       "pedidos": [],
       "eventos": [],
-      "necessidades": "",
+      "necessidades": '',
       "funcionalidades": funcionalidadesSelecionadas.map((f) => f.toString().split('.').last).toList(),
     };
 

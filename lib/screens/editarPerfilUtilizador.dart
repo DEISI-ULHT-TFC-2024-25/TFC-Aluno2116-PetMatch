@@ -4,6 +4,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:tinder_para_caes/firebaseLogic/utilizadorProvider.dart';
 import 'package:tinder_para_caes/firebaseLogic/authenticationService.dart';
 import 'package:provider/provider.dart';
+import 'package:tinder_para_caes/screens/utilizadorHomeScreen.dart';
 import '../theme/theme.dart';
 
 class EditarPerfilUtilizador extends StatefulWidget {
@@ -25,6 +26,7 @@ class _EditarPerfilUtilizadorState extends State<EditarPerfilUtilizador> {
   final TextEditingController generoController = TextEditingController();
   final TextEditingController moradaController = TextEditingController();
   final TextEditingController distritoController = TextEditingController();
+  final TextEditingController localidadeController = TextEditingController();
   final TextEditingController codigoPostalController = TextEditingController();
 
   String gender = 'Feminino';
@@ -57,6 +59,12 @@ class _EditarPerfilUtilizadorState extends State<EditarPerfilUtilizador> {
     if (distritoController.text.trim().isNotEmpty) {
       dadosAtualizados['distrito'] = distritoController.text.trim();
     }
+    if (moradaController.text.trim().isNotEmpty) {
+      dadosAtualizados['morada'] = moradaController.text.trim();
+    }
+    if (localidadeController.text.trim().isNotEmpty) {
+      dadosAtualizados['localidade'] = localidadeController.text.trim();
+    }
     if (codigoPostalController.text.trim().isNotEmpty) {
       dadosAtualizados['zipcode'] = codigoPostalController.text.trim();
     }
@@ -86,8 +94,6 @@ class _EditarPerfilUtilizadorState extends State<EditarPerfilUtilizador> {
     // Atualizar o provider local
     await utilizadorProvider.recarregarUtilizador();
 
-    // Voltar atrás
-    Navigator.pop(context);
   }
 
 
@@ -180,6 +186,16 @@ class _EditarPerfilUtilizadorState extends State<EditarPerfilUtilizador> {
               decoration: InputDecoration(labelText: 'CodigoPostal'),
             ),
             const SizedBox(height: 10),
+            TextField(
+              controller: localidadeController,
+              decoration: InputDecoration(labelText: 'Localidade'),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: moradaController,
+              decoration: InputDecoration(labelText: 'Morada'),
+            ),
+            const SizedBox(height: 10),
 
             Autocomplete<String>(
               optionsBuilder: (TextEditingValue textEditingValue) {
@@ -206,7 +222,10 @@ class _EditarPerfilUtilizadorState extends State<EditarPerfilUtilizador> {
 
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: theme.primaryColor),
-              onPressed: atualizar,
+              onPressed: (){
+                atualizar();
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const UtilizadorHomeScreen()));
+              },
               child: const Text("Atualizar Perfil"),
             ),
           ],

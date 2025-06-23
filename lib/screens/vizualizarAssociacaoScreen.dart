@@ -32,11 +32,10 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
   int numberOfAnimals = 0;
   String uid = "";
   String iban = "";
-
+  late Associacao assoE;
 
 //cordenadas a substituir pelas da associação
   final LatLng _center = const LatLng(38.7169, -9.1399);
-
 
   @override
   void initState() {
@@ -45,7 +44,7 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
   }
 
   Future<void> _fetchData() async {
-    Associacao assoE = widget.associacao;
+    assoE = widget.associacao;
     List<Animal> fetchedAnimals = await assoE.fetchAnimals(assoE.animais);
 
     setState(() {
@@ -179,74 +178,91 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
           else
             Text("De momento não existem informações", style: textTheme.bodyMedium),
           SizedBox(height: 10),
-          if (iban != "")
+          if (iban != "")...[
             Text("Caso queira fazer um donativo:", style: textTheme.bodyMedium),
             Text("IBAN: $iban", style: textTheme.bodyMedium),
+          ],
           SizedBox(height: 20),
 
 
           //botões de açoes
+
           ElevatedButton(
             onPressed: () {
             },
             child: Text("Contactar Associação"),
           ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => TornarPadrinhoScreen(uidAssociacao: uid),
-                ),
-              );
-            },
-            child: Text("Apadrinhar"),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PassearCaoScreen(uidAssociacao: uid),
-                ),
-              );
-            },
-            child: Text("Ir Passear Cão"),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => TornarVoluntarioScreen(uidAssociacao: uid),
-                ),
-              );
-            },
-            child: Text("Inscrever em Voluntariado"),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => TornarSocioScreen(uidAssociacao: uid),
-                ),
-              );
-            },
-            child: Text("Tornar-se Sócio"),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => TornarFAT(uidAssociacao: uid),
-                ),
-              );
-            },
-            child: Text("Tornar-se Família de Acolhimento Temporário"),
-          ),
 
+
+          if(assoE!.funcionalidades.contains("Apadrinhamento de um animal"))...[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TornarPadrinhoScreen(uidAssociacao: uid),
+                  ),
+                );
+              },
+              child: Text("Apadrinhar"),
+            ),
+          ],
+
+          if(assoE!.funcionalidades.contains("Ir passear um Cão"))...[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PassearCaoScreen(uidAssociacao: uid),
+                  ),
+                );
+              },
+              child: Text("Ir Passear Um Cão"),
+            ),
+          ],
+
+          if(assoE!.funcionalidades.contains("Voluntariado"))...[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TornarVoluntarioScreen(uidAssociacao: uid),
+                  ),
+                );
+              },
+              child: Text("Inscrever em Voluntariado"),
+            ),
+          ],
+
+          if(assoE!.funcionalidades.contains("Tornar-se Sócio"))...[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TornarSocioScreen(uidAssociacao: uid),
+                  ),
+                );
+              },
+              child: Text("Tornar-se Sócio"),
+            ),
+          ],
+
+          if(assoE!.funcionalidades.contains("Tornar-se em Família de Acolhimento Temporária"))...[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TornarFAT(uidAssociacao: uid),
+                  ),
+                );
+              },
+              child: Text("Tornar-se Família de Acolhimento Temporária"),
+            ),
+          ],
         ],
       ),
     );

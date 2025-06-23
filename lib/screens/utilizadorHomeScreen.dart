@@ -397,33 +397,20 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 8.0),
-                SizedBox(
-                  height: (pedidosAceites.length > 2)
-                      ? 200
-                      : pedidosAceites.length * 100.0,
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: pedidosAceites.length > 2 ? 2 : pedidosAceites.length,
-                          itemBuilder: (context, index) {
-                            final pedido = pedidosAceites[index];
-                            //String nomeAssociacao = Associacao.getNomeAssociacao(pedido.associacaoId).toString();
-                            return Card(
-                              margin: EdgeInsets.symmetric(vertical: 4.0),
-                              child: ListTile(
-                                title: Text(pedido.funcionalidade ?? 'Ação não disponivel'),
-                                subtitle: Text("Estado: ${pedido.estado ?? 'Desconhecida'}"),
-                              ),
-                            );
-                          },
-                        ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: pedidosAceites.length > 2 ? 2 : pedidosAceites.length,
+                  itemBuilder: (context, index) {
+                    final pedido = pedidosAceites[index];
+                    return Card(
+                      margin: EdgeInsets.symmetric(vertical: 4.0),
+                      child: ListTile(
+                        title: Text(pedido.funcionalidade ?? 'Ação não disponível'),
+                        subtitle: Text("Estado: ${pedido.estado ?? 'Desconhecid0'}"),
                       ),
-
-                    ],
-                  ),
+                    );
+                  },
                 ),
                 Center(
                   child: TextButton(
@@ -446,39 +433,28 @@ class _UtilizadorHomeScreenState extends State<UtilizadorHomeScreen> {
                 ),
 
                 SizedBox(height: 8.0),
-                SizedBox(
-                  height: (sugestoesAssociacoes.length > 3)
-                    ? 325
-                    : sugestoesAssociacoes.length * 125.0,
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: sugestoesAssociacoes.length > 3 ? 3 : sugestoesAssociacoes.length,
-                          itemBuilder: (context, index) {
-                            final associacao = sugestoesAssociacoes[index];
-                            return Card(
-                              margin: EdgeInsets.symmetric(vertical: 4.0),
-                              child: ListTile(
-                                title: Text(associacao.name),
-                                subtitle: Text("Distrito: ${associacao.distrito}\nLocalidade: ${associacao.localidade}"),
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => VizualizarAssociacaoScreen(associacao: associacao,),
-                                    ),
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                        ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: sugestoesAssociacoes.length > 3 ? 3 : sugestoesAssociacoes.length,
+                  itemBuilder: (context, index) {
+                    final associacao = sugestoesAssociacoes[index];
+                    return Card(
+                      margin: EdgeInsets.symmetric(vertical: 4.0),
+                      child: ListTile(
+                        title: Text(associacao.name),
+                        subtitle: Text("Distrito: ${associacao.distrito}\nLocalidade: ${associacao.localidade}"),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => VizualizarAssociacaoScreen(associacao: associacao),
+                            ),
+                          );
+                        },
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
                 Center(
                   child: TextButton(
