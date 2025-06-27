@@ -187,11 +187,11 @@ class _VizualizarAssociacaoScreenState extends State<VizualizarAssociacaoScreen>
 
           //botões de açoes
 
-          ElevatedButton(
-            onPressed: () {
-            },
-            child: Text("Contactar Associação"),
-          ),
+          //ElevatedButton(
+            //onPressed: () {
+          //},
+            //child: Text("Contactar Associação"),
+          //),
 
 
           if(assoE!.funcionalidades.contains("Apadrinhamento de um animal"))...[

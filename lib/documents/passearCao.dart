@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:tinder_para_caes/screens/vizualizarAssociacaoScreen.dart';
 import 'package:tinder_para_caes/models/associacao.dart';
 
+import '../models/animal.dart';
+
 class PassearCaoScreen extends StatefulWidget {
   final String uidAssociacao;
   const PassearCaoScreen({Key? key, required this.uidAssociacao}) : super(key: key);
@@ -19,25 +21,25 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
   final TextEditingController validadeCCController = TextEditingController();
   final TextEditingController tlmController = TextEditingController();
   final TextEditingController idadeController = TextEditingController();
-  final TextEditingController nomeCaoController = TextEditingController();
-  final TextEditingController chipController = TextEditingController();
-  final TextEditingController comportamentoController = TextEditingController();
-  final TextEditingController alergiasController = TextEditingController();
-  final TextEditingController portePesoController = TextEditingController();
   final TextEditingController matriculaVeiculoController = TextEditingController();
   final TextEditingController local = TextEditingController();
 
-  bool temAlergias = false;
-  bool estaEsterilizado = false;
   bool aceitaRegras = false;
   String mensagemAdicional = "";
+  List <Animal> opcoesDeAnimais = [];
+  Animal? selectedDog ;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchAnimals();
+  }
 
   Future<void> _submeterFormulario() async {
     try {
       final firestore = FirebaseFirestore.instance;
       final currentUser = FirebaseAuth.instance.currentUser;
       final String uidUtilizador = currentUser?.uid ?? "desconhecido";
-      final Future<String> nomeAssociacao = Associacao.getNomeAssociacao(widget.uidAssociacao);
       final String uidAnimal = "uidAnimal123";
       final String uidAssociacao = widget.uidAssociacao;
 
@@ -45,7 +47,6 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
         "oQuePretendeFazer": "Ir passear um Cão",
         "utilizadorUid": uidUtilizador,
         "uidAssociacao": uidAssociacao,
-        "nomeAssociacao": nomeAssociacao,
         "confirmouTodosOsRequisitos": aceitaRegras,
         "mensagemAdicional": mensagemAdicional,
         "estado": "Pendente",
@@ -60,13 +61,7 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
           "Matricula do Veiculo usado para Transporte": matriculaVeiculoController.text,
           "Local do Passeio": local.text,
           "Idade": int.tryParse(idadeController.text) ?? 0,
-          "Nome do Cão": nomeCaoController.text,
-          "Chip": chipController.text,
-          "Comportamento": comportamentoController.text,
-          "Tem Alergias ou Problemas de Saúde": temAlergias,
-          "Descrição": alergiasController.text,
-          "Porte": portePesoController.text,
-          "Esterizada/Castrado": estaEsterilizado,
+          "Nome do Cão": selectedDog?.fullName,
 
         },
       });
@@ -83,7 +78,42 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
     }
   }
 
+  Future<void> _fetchAnimals() async {
+    final snapshot = await FirebaseFirestore.instance.collection('associacao').get();
+    final associacao = snapshot.docs
+        .map((doc) => Associacao.fromFirestore(doc))
+        .firstWhere((a) => a.uid == widget.uidAssociacao);
 
+    if (associacao != null) {
+      List<Animal> fetchedAnimals = await associacao.fetchAnimals(associacao.animais);
+      setState(() {
+        opcoesDeAnimais = fetchedAnimals;
+      });
+    }
+  }
+
+  //Dropdown do animal que quer escolher para apadrinhar
+  Widget _buildDropdownAnimal() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: DropdownButtonFormField<Animal>(
+        decoration: InputDecoration(labelText: "Escolha o animal que pretende passear",border: OutlineInputBorder()),
+        value: selectedDog,
+        items: opcoesDeAnimais.map((animal) {
+          return DropdownMenuItem<Animal>(
+            value: animal,
+            child: Text("${animal.fullName} (${animal.breed}) - ${animal.calcularIdade()}"),
+          );
+        }).toList(),
+        onChanged: (Animal? newAnimal) {
+          setState(() {
+            selectedDog = newAnimal!;
+          });
+        },
+        menuMaxHeight: 400,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,15 +127,19 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
 
             Text("📌 Dados Pessoais", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             TextField(controller: nomePasseadorController, decoration: InputDecoration(labelText: "Nome*")),
+            SizedBox(height: 20),
             TextField(controller: moradaFiscalController, decoration: InputDecoration(labelText: "Morada Fiscal*")),
+            SizedBox(height: 20),
             TextField(controller: ccBiController, decoration: InputDecoration(labelText: "CC/BI*")),
+            SizedBox(height: 20),
             TextField(controller: validadeCCController, decoration: InputDecoration(labelText: "Data de Validade*")),
+            SizedBox(height: 20),
             TextField(
               controller: tlmController,
               keyboardType: TextInputType.phone,
               decoration: InputDecoration(labelText: "Telemóvel*"),
             ),
-
+            SizedBox(height: 20),
             TextField(
               controller: idadeController,
               keyboardType: TextInputType.number,
@@ -113,51 +147,14 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
             ),
 
             SizedBox(height: 20),
-            Text("🐕 Dados do Canídeo", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            TextField(controller: nomeCaoController, decoration: InputDecoration(labelText: "Nome do Canídeo*")),
-            TextField(
-              controller: chipController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: "Nº CHIP*"),
-            ),
-
-            SizedBox(height: 20),
-
-
-            Text("📋 Características do Cão", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            TextField(controller: comportamentoController, decoration: InputDecoration(labelText: "Descrição do Comportamento")),
-
-            CheckboxListTile(
-              title: Text("Alergias ou restrições"),
-              value: temAlergias,
-              tileColor: Colors.transparent,
-              onChanged: (bool? value) {
-                setState(() {
-                  temAlergias = value!;
-                });
-              },
-            ),
-            TextField(controller: alergiasController, decoration: InputDecoration(labelText: "Descrição das alergias ou restrições")),
-
-            TextField(controller: portePesoController, decoration: InputDecoration(labelText: "Porte/Peso")),
-
-            CheckboxListTile(
-              title: Text("Castrado/Esterelizada"),
-              value: estaEsterilizado,
-              tileColor: Colors.transparent,
-              onChanged: (bool? value) {
-                setState(() {
-                  estaEsterilizado = value!;
-                });
-              },
-            ),
-
+            Text("🐕 Escolha do Animal 🐈", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            _buildDropdownAnimal(),
             SizedBox(height: 20),
 
             Text("📍 Local onde se vai realizar o passeio", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            TextField(controller: matriculaVeiculoController, decoration: InputDecoration(labelText: "Matrícula do veículo:")),
             TextField(controller: local, decoration: InputDecoration(labelText: "Local onde o vai passear:")),
-
+            SizedBox(height: 20),
+            TextField(controller: matriculaVeiculoController, decoration: InputDecoration(labelText: "Matrícula do veículo:")),
             SizedBox(height: 20),
 
             Center(
@@ -244,11 +241,10 @@ class _PassearCaoScreenState extends State<PassearCaoScreen> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: Text("🐶 Passeio Registado com Sucesso!"),
+              title: Text("🐶 Pedido de Passeio Registado com Sucesso!"),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text("Obrigado por registar o passeio!"),
                   SizedBox(height: 10),
                   Text(
                     "📸 Lembra-te de tirar fotos do passeio!\nPodes enviá-las para partilhar a experiência.",

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:tinder_para_caes/models/animal.dart';
 import 'package:tinder_para_caes/documents/tornarPadrinho.dart';
 import 'dart:io';
@@ -124,7 +125,7 @@ class AnimalDetailsScreen extends StatelessWidget {
               _buildInfoRow(context, Icons.emoji_emotions, 'Comportamento:', behavior),
               _buildInfoRow(context, Icons.directions_walk, 'Passeios dados:', '$numeroDePasseiosDados'),
 
-              if (!isAssoci && !animal.hasGodFather )
+              if (isAssoci )
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: ElevatedButton(
@@ -238,7 +239,7 @@ class AnimalDetailsScreen extends StatelessWidget {
                 ElevatedButton.icon(
                   onPressed: () async {
                     Navigator.pop(context); // fecha o popup
-                    await selecionarEGuardarFotos(context,animalId);
+                    await selecionarEGuardarFotos(animalId);
                   },
                   icon: Icon(Icons.photo),
                   label: Text('Adicionar fotos agora'),
@@ -259,7 +260,7 @@ class AnimalDetailsScreen extends StatelessWidget {
   }
 
 
-  Future<void> selecionarEGuardarFotos(BuildContext context, String animalId) async {
+  Future<void> selecionarEGuardarFotos(String animalId) async {
     final picker = ImagePicker();
     final pickedFiles = await picker.pickMultiImage(); // permite selecionar várias imagens
 
@@ -286,9 +287,6 @@ class AnimalDetailsScreen extends StatelessWidget {
         'imagens': FieldValue.arrayUnion(downloadUrls),
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Fotos adicionadas com sucesso!")),
-      );
     }
   }
 

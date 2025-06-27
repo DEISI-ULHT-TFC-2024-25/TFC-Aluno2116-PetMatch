@@ -184,7 +184,6 @@ class _TornarPadrinhoScreenState extends State<TornarPadrinhoScreen> {
     try {
       final firestore = FirebaseFirestore.instance;
       final currentUser = FirebaseAuth.instance.currentUser;
-
       final String uidUtilizador = currentUser?.uid ?? "desconhecido";
       final String uidAssociacao = widget.uidAssociacao;
 

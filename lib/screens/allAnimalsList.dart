@@ -109,6 +109,7 @@ class _AllAnimalsListState extends State<AllAnimalsList> {
       filtroGenero = null;
       filtroVisibilidade = 'Visíveis';
       _pesquisaController.clear();
+      _carregarAnimais();
       aplicarFiltros();
     });
   }

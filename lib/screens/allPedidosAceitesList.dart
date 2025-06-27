@@ -12,9 +12,8 @@ class AllPedidosAceitesList extends StatefulWidget {
 
 class _AllPedidosAceitesListState extends State<AllPedidosAceitesList> {
   Map<String, bool> _expandedStates = {}; // controla se o card está expandido
-
   List<Pedido?> pedidosFiltrados = [];
-  String nomeAssociacao = "";
+  Map<String, String> nomesAssociacoes = {};
   String? filtroTipo;
   DateTime? filtroData;
   String? filtroDataTexto;
@@ -27,11 +26,19 @@ class _AllPedidosAceitesListState extends State<AllPedidosAceitesList> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    pedidosFiltrados = widget.pedidos;
+  Future<void> carregarNomesDasAssociacoes() async {
+    final uids = widget.pedidos.map((p) => p.uidAssociacao).toSet();
+    for (var uid in uids) {
+      try {
+        final nome = await Associacao.getNomeAssociacao(uid);
+        nomesAssociacoes[uid] = nome;
+      } catch (e) {
+        nomesAssociacoes[uid] = "Erro ao carregar";
+      }
+    }
+    setState(() {});
   }
+
 
   bool filtrosAtivos() {
     return termoPesquisa.isNotEmpty || filtroData != null || filtroTipo != null;
@@ -58,6 +65,13 @@ class _AllPedidosAceitesListState extends State<AllPedidosAceitesList> {
     });
   }
 
+
+  @override
+  void initState() {
+    super.initState();
+    pedidosFiltrados = widget.pedidos;
+    carregarNomesDasAssociacoes();
+  }
 
 
   @override
@@ -171,6 +185,7 @@ class _AllPedidosAceitesListState extends State<AllPedidosAceitesList> {
                   itemBuilder: (context, index) {
                     final pedido = pedidosFiltrados[index]!;
                     final isExpanded = _expandedStates[pedido.id] ?? false;
+                    final nomeAssociacao = nomesAssociacoes[pedido.uidAssociacao] ?? "A carregar...";
 
                     return Card(
                       color: Theme.of(context).cardColor,
@@ -190,7 +205,7 @@ class _AllPedidosAceitesListState extends State<AllPedidosAceitesList> {
                               children: [
                                 Expanded(
                                   child: Text(
-                                    "Associação: ${Associacao.getNomeAssociacao(pedido.uidAssociacao)}",
+                                    "Associação: ${nomeAssociacao}",
                                     softWrap: true,
                                     overflow: TextOverflow.fade,
                                     maxLines: 3, // Limita o número de linhas
