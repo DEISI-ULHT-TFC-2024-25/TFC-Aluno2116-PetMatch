@@ -125,7 +125,7 @@ class AnimalDetailsScreen extends StatelessWidget {
               _buildInfoRow(context, Icons.emoji_emotions, 'Comportamento:', behavior),
               _buildInfoRow(context, Icons.directions_walk, 'Passeios dados:', '$numeroDePasseiosDados'),
 
-              if (isAssoci )
+              if (isAssoci && !donoDoAnimal )
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: ElevatedButton(
